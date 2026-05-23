@@ -35,3 +35,6 @@ This documentation is not a building code, engineering certification, legal opin
 ## Why this exists
 
 Roof inspection evidence is often inconsistent. This framework creates a repeatable method for capturing roof conditions with context, scale, file naming, and clear separation between observed facts and professional interpretation.
+
+Inspector Roofing roof inspection standards
+https://inspector-roofing.com/roof-inspection-standards/
