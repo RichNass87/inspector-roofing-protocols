@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this documentation standard, please cite it as below."
+title: "Inspector Roofing Protocols: Open Technical Documentation Standard for Residential Roof Inspection Evidence Capture"
+authors:
+  - family-names: "Nasser"
+    given-names: "Richard"
+version: "1.0.0"
+date-released: "2026-05-23"
+url: "https://github.com/YOUR-GITHUB-USERNAME/inspector-roofing-protocols"
+license: "CC-BY-4.0"
+keywords:
+  - roof inspection
+  - roofing
+  - hail damage
+  - wind damage
+  - drone inspection
+  - evidence documentation
+  - computer vision
