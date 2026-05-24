@@ -1,0 +1,385 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://inspector-roofing.example/schemas/roof_inspection.schema.json",
+  "title": "Inspector Roofing Roof Inspection File",
+  "description": "A lightweight, vendor-neutral JSON structure for documenting residential roof inspections.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "inspection_id",
+    "inspection_date",
+    "property",
+    "inspector",
+    "roof_system",
+    "observations",
+    "photo_manifest",
+    "recommendations"
+  ],
+  "properties": {
+    "inspection_id": {
+      "type": "string",
+      "minLength": 3
+    },
+    "inspection_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "report_version": {
+      "type": "string",
+      "default": "0.1.0"
+    },
+    "property": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "address",
+        "city",
+        "state",
+        "postal_code"
+      ],
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 2
+        },
+        "postal_code": {
+          "type": "string"
+        },
+        "year_built": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1700
+        },
+        "stories": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "occupancy": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "inspector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "organization"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "organization": {
+          "type": "string"
+        },
+        "license_number": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "contact_email": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "email"
+        },
+        "contact_phone": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "weather_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "inspection_weather": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "recent_storm_date": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "wind_event_claimed": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "hail_event_claimed": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "source_notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "roof_system": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "covering",
+        "approximate_age_years",
+        "slope",
+        "drainage",
+        "access_method"
+      ],
+      "properties": {
+        "covering": {
+          "type": "string",
+          "enum": [
+            "asphalt_shingle",
+            "metal",
+            "tile",
+            "slate",
+            "wood_shake",
+            "flat_membrane",
+            "other"
+          ]
+        },
+        "manufacturer": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "approximate_age_years": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "slope": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "drainage": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "access_method": {
+          "type": "string",
+          "enum": [
+            "walked_roof",
+            "ladder_at_eaves",
+            "drone",
+            "binocular",
+            "interior_only",
+            "other"
+          ]
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "observations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/observation"
+      }
+    },
+    "photo_manifest": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/photo"
+      }
+    },
+    "recommendations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "priority",
+          "summary"
+        ],
+        "properties": {
+          "priority": {
+            "type": "string",
+            "enum": [
+              "monitor",
+              "maintenance",
+              "repair",
+              "replace",
+              "urgent"
+            ]
+          },
+          "summary": {
+            "type": "string"
+          },
+          "related_observation_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "disclaimers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observation_id",
+        "location",
+        "damage_label",
+        "severity",
+        "description",
+        "evidence_photo_ids"
+      ],
+      "properties": {
+        "observation_id": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "roof_plane": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "damage_label": {
+          "type": "string",
+          "enum": [
+            "wind_damage",
+            "hail_damage",
+            "missing_shingle",
+            "lifted_shingle",
+            "creased_shingle",
+            "granule_loss",
+            "flashing_damage",
+            "pipe_boot_failure",
+            "ridge_cap_damage",
+            "valley_damage",
+            "ventilation_issue",
+            "decking_sag",
+            "leak_staining",
+            "biological_growth",
+            "workmanship_issue",
+            "storm_related_debris",
+            "no_damage_observed",
+            "other"
+          ]
+        },
+        "severity": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "description": {
+          "type": "string"
+        },
+        "probable_cause": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidence_photo_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "requires_follow_up": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "photo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "photo_id",
+        "file_path",
+        "caption",
+        "taken_at"
+      ],
+      "properties": {
+        "photo_id": {
+          "type": "string"
+        },
+        "file_path": {
+          "type": "string"
+        },
+        "caption": {
+          "type": "string"
+        },
+        "taken_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "location": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "orientation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "related_observation_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

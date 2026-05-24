@@ -1,0 +1,2 @@
+photo_id,file_path,caption,taken_at,location,orientation,related_observation_ids
+PH-001,photos/example.jpg,Example context photo,YYYY-MM-DDTHH:MM:SSZ,front slope,north,OBS-001

@@ -1,9 +1,9 @@
 # Changelog
 
-## v1.0.0 — 2026-05-23
+## 0.1.0
 
-- Initial public release of Inspector Roofing Protocols™.
-- Added VerifiFrame 4K™ Standard.
-- Added hail-impact and wind-uplift documentation guides.
-- Added inspection report and photo-log templates.
-- Added dataset card starter for public roof-condition image datasets.
+- Initial JSON schema for a roof inspection file.
+- Initial damage label taxonomy.
+- Report checklist and Markdown templates.
+- Python and npm CLI command: `roof-file init`.
+- Basic inspection completeness score command.

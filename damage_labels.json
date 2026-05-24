@@ -1,0 +1,132 @@
+{
+  "version": "0.1.0",
+  "maintainer": "Inspector Roofing",
+  "labels": [
+    {
+      "id": "wind_damage",
+      "display_name": "Wind damage",
+      "category": "storm",
+      "severity_scale": "0-5",
+      "evidence_hint": "Look for creasing, lifted tabs, displaced shingles, torn seal strips, and directional patterns."
+    },
+    {
+      "id": "hail_damage",
+      "display_name": "Hail damage",
+      "category": "storm",
+      "severity_scale": "0-5",
+      "evidence_hint": "Look for impact marks, granule displacement, soft bruising, collateral metal marks, and matching elevations."
+    },
+    {
+      "id": "missing_shingle",
+      "display_name": "Missing shingle",
+      "category": "covering",
+      "severity_scale": "0-5",
+      "evidence_hint": "Document exposed underlayment, attachment pattern, adjacent lifting, and roof plane."
+    },
+    {
+      "id": "lifted_shingle",
+      "display_name": "Lifted shingle",
+      "category": "covering",
+      "severity_scale": "0-5",
+      "evidence_hint": "Document seal failure, fastener exposure, brittleness, and whether lift is mechanical or wind-related."
+    },
+    {
+      "id": "creased_shingle",
+      "display_name": "Creased shingle",
+      "category": "covering",
+      "severity_scale": "0-5",
+      "evidence_hint": "Photograph crease line, tab position, directionality, and surrounding field condition."
+    },
+    {
+      "id": "granule_loss",
+      "display_name": "Granule loss",
+      "category": "wear",
+      "severity_scale": "0-5",
+      "evidence_hint": "Separate uniform aging from impact-related displacement; include close-up and context photos."
+    },
+    {
+      "id": "flashing_damage",
+      "display_name": "Flashing damage",
+      "category": "penetrations",
+      "severity_scale": "0-5",
+      "evidence_hint": "Capture step flashing, counter flashing, apron flashing, exposed fasteners, rust, and sealant condition."
+    },
+    {
+      "id": "pipe_boot_failure",
+      "display_name": "Pipe boot failure",
+      "category": "penetrations",
+      "severity_scale": "0-5",
+      "evidence_hint": "Document cracked neoprene, separation, fastener issues, and signs of leakage below."
+    },
+    {
+      "id": "ridge_cap_damage",
+      "display_name": "Ridge cap damage",
+      "category": "covering",
+      "severity_scale": "0-5",
+      "evidence_hint": "Capture ridge orientation, cap cracks, missing caps, exposed nails, and ventilation condition."
+    },
+    {
+      "id": "valley_damage",
+      "display_name": "Valley damage",
+      "category": "drainage",
+      "severity_scale": "0-5",
+      "evidence_hint": "Capture debris, abrasion, open seams, fastener placement, and water flow path."
+    },
+    {
+      "id": "ventilation_issue",
+      "display_name": "Ventilation issue",
+      "category": "system",
+      "severity_scale": "0-5",
+      "evidence_hint": "Document intake, exhaust, blocked vents, attic evidence, and moisture/heat indicators."
+    },
+    {
+      "id": "decking_sag",
+      "display_name": "Decking sag",
+      "category": "structure",
+      "severity_scale": "0-5",
+      "evidence_hint": "Photograph plane deflection, attic framing if accessible, and moisture indicators."
+    },
+    {
+      "id": "leak_staining",
+      "display_name": "Leak staining",
+      "category": "interior",
+      "severity_scale": "0-5",
+      "evidence_hint": "Connect interior staining to exterior roof areas where possible; include room/location context."
+    },
+    {
+      "id": "biological_growth",
+      "display_name": "Biological growth",
+      "category": "maintenance",
+      "severity_scale": "0-5",
+      "evidence_hint": "Document moss, algae, lichen, shaded areas, drainage patterns, and surface deterioration."
+    },
+    {
+      "id": "workmanship_issue",
+      "display_name": "Workmanship issue",
+      "category": "installation",
+      "severity_scale": "0-5",
+      "evidence_hint": "Document fastening, nailing pattern, starter course, offset, flashing integration, and manufacturer deviations."
+    },
+    {
+      "id": "storm_related_debris",
+      "display_name": "Storm-related debris",
+      "category": "storm",
+      "severity_scale": "0-5",
+      "evidence_hint": "Photograph debris position, impact risk, nearby tree damage, and roof plane distribution."
+    },
+    {
+      "id": "no_damage_observed",
+      "display_name": "No damage observed",
+      "category": "finding",
+      "severity_scale": "0",
+      "evidence_hint": "Use context photos to document inspected areas and limitations."
+    },
+    {
+      "id": "other",
+      "display_name": "Other",
+      "category": "uncategorized",
+      "severity_scale": "0-5",
+      "evidence_hint": "Use only when no specific label applies; describe the condition clearly."
+    }
+  ]
+}

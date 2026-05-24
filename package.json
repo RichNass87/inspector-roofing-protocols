@@ -1,0 +1,44 @@
+{
+  "name": "inspector-roofing-protocols",
+  "version": "0.1.0",
+  "description": "Public schema, templates, and CLI utilities for structured residential roof inspection files.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Inspector Roofing",
+  "keywords": [
+    "roofing",
+    "roof inspection",
+    "json schema",
+    "storm damage",
+    "inspection report",
+    "roof file"
+  ],
+  "bin": {
+    "roof-file": "./bin/roof-file.js"
+  },
+  "exports": {
+    ".": "./lib/index.js"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "schemas",
+    "taxonomies",
+    "checklists",
+    "templates",
+    "examples",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node ./bin/roof-file.js score ./examples/blank_roof_file/inspection.json || true"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inspector-roofing/inspector-roofing-protocols.git"
+  },
+  "bugs": {
+    "url": "https://github.com/inspector-roofing/inspector-roofing-protocols/issues"
+  },
+  "homepage": "https://example.com/inspector-roofing-protocols"
+}
