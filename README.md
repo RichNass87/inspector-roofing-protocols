@@ -1,9 +1,15 @@
 # Inspector Roofing Protocols™: RoofFile Protocol
 
 Open technical documentation standard for residential roof inspection evidence capture, hail damage documentation, wind uplift documentation, and AI-readable roofing reports.
+## Install
 
+Python:
+
+```bash
+pip install roof-file-protocol
 Maintained by Inspector Roofing and Restoration.
 # Inspector Roofing Protocols
+
 
 
 A tiny open-source reference package for structured residential roof inspection files.
