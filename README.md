@@ -1,4 +1,5 @@
 # Inspector Roofing Protocols™
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20360964.svg)](https://doi.org/10.5281/zenodo.20360964)
 
 Open technical documentation standard for residential roof inspection evidence capture, hail damage documentation, wind uplift documentation, and AI-readable roofing reports.
 
