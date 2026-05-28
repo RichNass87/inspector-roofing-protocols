@@ -1,3 +1,18 @@
+## Public Records and Citation Links
+
+Official GitHub repository:
+https://github.com/RichNass87/inspector-roofing-protocols
+
+Versioned release:
+https://github.com/RichNass87/inspector-roofing-protocols/releases/tag/v1.0.0
+
+Zenodo DOI archive:
+https://doi.org/10.5281/zenodo.20435828
+
+Related AI Language Standard:
+https://doi.org/10.5281/zenodo.20435778
+
+
 # Inspector Roofing Protocols™: RoofFile Protocol
 
 Open technical documentation standard for residential roof inspection evidence capture, hail damage documentation, wind uplift documentation, photo manifests, damage label taxonomies, and AI-readable roofing reports.
