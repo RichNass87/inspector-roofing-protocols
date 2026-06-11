@@ -1,47 +1,122 @@
 openapi: 3.1.0
 info:
-  title: Roof Damage Verification API
-  version: 0.1.0
-  summary: Callable API contract for the RoofFile Protocol
+  title: Inspector Roofing Roof Damage Verification API
+  version: 1.0.0
   description: >
-    A public agent-ready API contract for submitting roof evidence packages,
-    listing available protocols, and evaluating Local Enterprise AI Readiness
-    Index signals. This specification is for documentation and interoperability;
-    it is not a substitute for professional inspection, engineering, legal, or
-    insurance-policy judgment.
+    Public OpenAPI contract for the Inspector Roofing Roof Damage Verification Protocol.
+    This specification documents planned machine-readable operations for roof evidence packages,
+    protocol findings, evidence gaps, citations, and Local Enterprise AI Readiness Index evaluation.
 servers:
-  - url: https://REPLACE_WITH_DOMAIN/api
-    description: Production
-  - url: http://localhost:8787
-    description: Local starter server
+  - url: https://standards.inspector-roofing.com
+    description: Public standards documentation server
 paths:
   /v1/roof-damage/verify:
     post:
-      operationId: verifyRoofDamage
-      summary: Evaluate a roof damage evidence package
+      summary: Verify a roof damage evidence package
+      description: >
+        Accepts a structured roof evidence package and returns protocol findings,
+        evidence gaps, citations, and recommended documentation actions.
+      operationId: verifyRoofDamageEvidence
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RoofDamageVerificationRequest"
+              type: object
+              required:
+                - inspection_id
+                - property_context
+                - observations
+              properties:
+                inspection_id:
+                  type: string
+                  example: IR-2026-0001
+                property_context:
+                  type: object
+                  properties:
+                    city:
+                      type: string
+                      example: Alpharetta
+                    state:
+                      type: string
+                      example: GA
+                    roof_material:
+                      type: string
+                      example: architectural asphalt shingles
+                    roof_age_years:
+                      type: number
+                      example: 8
+                observations:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      roof_plane:
+                        type: string
+                        example: front slope
+                      condition_type:
+                        type: string
+                        example: lifted shingle
+                      observed_facts:
+                        type: string
+                        example: Shingle tab lifted with visible seal-strip separation.
+                      photo_references:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                          - IMG_0012
+                          - IMG_0013
+                limitations:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                    - Interior attic access was not available.
       responses:
         "200":
           description: Structured protocol findings
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/RoofDamageVerificationResponse"
-        "400":
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
+                type: object
+                properties:
+                  protocol_version:
+                    type: string
+                    example: "1.0.0"
+                  evidence_quality:
+                    type: string
+                    enum:
+                      - strong
+                      - moderate
+                      - weak
+                      - incomplete
+                    example: moderate
+                  findings:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - Visible roof condition documented with close and context photos.
+                      - Additional roof-plane context photo recommended.
+                  evidence_gaps:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - Missing wide-context elevation photo.
+                  recommended_actions:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - Add roof-plane map reference.
+                      - Label photos by slope and condition type.
   /v1/protocols:
     get:
-      operationId: listProtocols
       summary: List available public protocols
+      description: Returns public protocol names, versions, repositories, and DOI records.
+      operationId: listPublicProtocols
       responses:
         "200":
           description: Public protocol list
@@ -53,283 +128,66 @@ paths:
                   protocols:
                     type: array
                     items:
-                      $ref: "#/components/schemas/ProtocolSummary"
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        version:
+                          type: string
+                        repository:
+                          type: string
+                        doi:
+                          type: string
+              example:
+                protocols:
+                  - name: Roof Damage Verification Protocol
+                    version: "1.0.0"
+                    repository: https://github.com/RichNass87/inspector-roofing-protocols
+                    doi: https://doi.org/10.5281/zenodo.20435828
   /v1/trust-index/evaluate:
     post:
-      operationId: evaluateLocalEnterpriseAIReadiness
       summary: Evaluate Local Enterprise AI Readiness Index signals
+      description: >
+        Evaluates structured data, repositories, DOI records, datasets, author identity,
+        sameAs links, and public authority signals for a local service business.
+      operationId: evaluateLocalEnterpriseAIReadiness
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TrustIndexRequest"
+              type: object
+              properties:
+                business_name:
+                  type: string
+                  example: Inspector Roofing and Restoration
+                website:
+                  type: string
+                  example: https://inspector-roofing.com/
+                same_as:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                    - https://github.com/RichNass87/inspector-roofing-protocols
+                    - https://huggingface.co/InspectorRoofing
+                    - https://doi.org/10.5281/zenodo.20360964
       responses:
         "200":
-          description: Trust index scorecard
+          description: AI readiness evaluation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TrustIndexResponse"
-components:
-  schemas:
-    RoofDamageVerificationRequest:
-      type: object
-      required:
-        - inspectionContext
-        - roofSystem
-        - observations
-      properties:
-        inspectionContext:
-          $ref: "#/components/schemas/InspectionContext"
-        roofSystem:
-          $ref: "#/components/schemas/RoofSystem"
-        observations:
-          type: array
-          minItems: 1
-          items:
-            $ref: "#/components/schemas/Observation"
-        media:
-          type: array
-          items:
-            $ref: "#/components/schemas/MediaReference"
-    InspectionContext:
-      type: object
-      required:
-        - inspectionDate
-        - locationRegion
-      properties:
-        inspectionDate:
-          type: string
-          format: date
-        eventDate:
-          type: string
-          format: date
-        locationRegion:
-          type: string
-          example: Alpharetta, GA
-        inspectionType:
-          type: string
-          enum:
-            - homeowner_request
-            - storm_event_review
-            - insurance_scope_review
-            - quality_control
-            - other
-    RoofSystem:
-      type: object
-      properties:
-        roofCovering:
-          type: string
-          enum:
-            - asphalt_shingle
-            - metal
-            - tile
-            - slate
-            - flat_membrane
-            - unknown
-        approximateAgeYears:
-          type: number
-          minimum: 0
-        slope:
-          type: string
-          enum:
-            - low
-            - moderate
-            - steep
-            - unknown
-        knownPriorRepairs:
-          type: boolean
-    Observation:
-      type: object
-      required:
-        - location
-        - category
-        - description
-      properties:
-        location:
-          type: string
-        category:
-          type: string
-          enum:
-            - hail_candidate
-            - wind_candidate
-            - mechanical_mark
-            - wear_and_age
-            - manufacturing_condition
-            - installation_condition
-            - maintenance_condition
-            - documentation_gap
-            - other
-        description:
-          type: string
-        severity:
-          type: string
-          enum:
-            - low
-            - moderate
-            - high
-            - unknown
-        evidenceQuality:
-          type: string
-          enum:
-            - strong
-            - moderate
-            - weak
-            - insufficient
-        mediaIds:
-          type: array
-          items:
-            type: string
-    MediaReference:
-      type: object
-      required:
-        - id
-        - type
-        - uri
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-            - photo
-            - video
-            - transcript
-            - report
-            - diagram
-        uri:
-          type: string
-          format: uri
-        notes:
-          type: string
-    RoofDamageVerificationResponse:
-      type: object
-      properties:
-        protocolVersion:
-          type: string
-        result:
-          type: string
-          enum:
-            - consistent_with_storm_damage
-            - non_storm_indicators_present
-            - mixed_or_inconclusive
-            - insufficient_evidence
-            - field_review_required
-        confidence:
-          type: number
-          minimum: 0
-          maximum: 1
-        findings:
-          type: array
-          items:
-            $ref: "#/components/schemas/Finding"
-        evidenceGaps:
-          type: array
-          items:
-            type: string
-        recommendedActions:
-          type: array
-          items:
-            type: string
-        citations:
-          type: array
-          items:
-            $ref: "#/components/schemas/Citation"
-    Finding:
-      type: object
-      properties:
-        label:
-          type: string
-        rationale:
-          type: string
-        relatedObservationIndexes:
-          type: array
-          items:
-            type: integer
-        evidenceQuality:
-          type: string
-    Citation:
-      type: object
-      properties:
-        title:
-          type: string
-        url:
-          type: string
-          format: uri
-        identifier:
-          type: string
-    ProtocolSummary:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        version:
-          type: string
-        url:
-          type: string
-          format: uri
-        schema:
-          type: string
-          format: uri
-        doi:
-          type: string
-    TrustIndexRequest:
-      type: object
-      properties:
-        businessName:
-          type: string
-        website:
-          type: string
-          format: uri
-        signals:
-          type: object
-          properties:
-            hasStructuredData:
-              type: boolean
-            hasPublicRepository:
-              type: boolean
-            hasCitableRecords:
-              type: boolean
-            hasAuthorIdentity:
-              type: boolean
-            hasDatasetDocumentation:
-              type: boolean
-            hasApiContract:
-              type: boolean
-            hasPressOrThirdPartyReferences:
-              type: boolean
-    TrustIndexResponse:
-      type: object
-      properties:
-        score:
-          type: integer
-          minimum: 0
-          maximum: 100
-        grade:
-          type: string
-          enum:
-            - emerging
-            - documented
-            - citable
-            - agent_ready
-        missingSignals:
-          type: array
-          items:
-            type: string
-        recommendations:
-          type: array
-          items:
-            type: string
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          type: string
-        details:
-          type: array
-          items:
-            type: string
-
+                type: object
+                properties:
+                  readiness_score:
+                    type: number
+                    example: 92
+                  strengths:
+                    type: array
+                    items:
+                      type: string
+                  gaps:
+                    type: array
+                    items:
+                      type: string
