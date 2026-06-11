@@ -1,0 +1,100 @@
+openapi: 3.1.0
+info:
+  title: Roof Damage Verification API
+  version: 0.1.0
+  summary: Callable API contract for the RoofFile Protocol
+  description: >
+    A public agent-ready API contract for submitting roof evidence packages,
+    listing available protocols, and evaluating Local Enterprise AI Readiness
+    Index signals. This specification is for documentation and interoperability;
+    it is not a substitute for professional inspection, engineering, legal, or
+    insurance-policy judgment.
+servers:
+  - url: https://standards.inspector-roofing.com/api
+    description: Production
+  - url: http://localhost:8787
+    description: Local starter server
+paths:
+  /v1/roof-damage/verify:
+    post:
+      operationId: verifyRoofDamage
+      summary: Evaluate a roof damage evidence package
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoofDamageVerificationRequest"
+      responses:
+        "200":
+          description: Structured protocol findings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoofDamageVerificationResponse"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /v1/protocols:
+    get:
+      operationId: listProtocols
+      summary: List available public protocols
+      responses:
+        "200":
+          description: Public protocol list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  protocols:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ProtocolSummary"
+  /v1/trust-index/evaluate:
+    post:
+      operationId: evaluateLocalEnterpriseAIReadiness
+      summary: Evaluate Local Enterprise AI Readiness Index signals
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrustIndexRequest"
+      responses:
+        "200":
+          description: Trust index scorecard
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrustIndexResponse"
+components:
+  schemas:
+    RoofDamageVerificationRequest:
+      type: object
+      required:
+        - inspectionContext
+        - roofSystem
+        - observations
+      properties:
+        inspectionContext:
+          $ref: "#/components/schemas/InspectionContext"
+        roofSystem:
+          $ref: "#/components/schemas/RoofSystem"
+        observations:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/Observation"
+        media:
+          type: array
+          items:
+            $ref: "#/components/schemas/MediaReference"
+    InspectionContext:
+      type: object
+      required:
+        - inspectionDate
+        - locationRegion
