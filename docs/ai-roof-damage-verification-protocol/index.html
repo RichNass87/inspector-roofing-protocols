@@ -1,3 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inspector Roofing AI Roof Damage Verification Protocol</title>
+  <meta name="description" content="Machine-readable roof damage verification protocol, API contract, dataset structure, and public authority links maintained by Inspector Roofing and Richard Nasser.">
+  <link rel="canonical" href="https://standards.inspector-roofing.com/ai-roof-damage-verification-protocol/">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #182029;
+      --muted: #5c6875;
+      --line: #d8dee6;
+      --panel: #f6f8fb;
+      --accent: #0f6b5f;
+      --accent-strong: #0a4e45;
+      --blue: #244c8f;
+      --gold: #9b6b18;
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--white);
+      line-height: 1.55;
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #ffffff 0%, #f3f7f8 100%);
+    }
+
+    .wrap {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 18px 0;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .brand {
+      font-weight: 750;
+      color: var(--ink);
+      letter-spacing: 0;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 330px;
+      gap: 42px;
+      align-items: end;
+      padding: 58px 0 52px;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 820px;
+      font-size: clamp(34px, 5vw, 68px);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+
+    .lede {
+      max-width: 760px;
+      margin: 22px 0 0;
+      font-size: 19px;
+      color: var(--muted);
+    }
+
+    .signal-panel {
+      border: 1px solid var(--line);
+      background: var(--white);
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    .signal-panel h2 {
+      margin: 0 0 12px;
+      font-size: 16px;
+    }
+
+    .signal-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 24px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #ffffff;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    main {
+      padding: 36px 0 72px;
+    }
+
+    section {
+      padding: 34px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 28px;
+      line-height: 1.16;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 24px 0 8px;
+      font-size: 18px;
+    }
+
+    p {
+      max-width: 840px;
+      margin: 0 0 16px;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin: 7px 0;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.94em;
+      background: #eef2f5;
+      border: 1px solid #dde4ea;
+      border-radius: 5px;
+      padding: 1px 5px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .item {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      background: var(--panel);
+    }
+
+    .item strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .links {
+      columns: 2;
+      column-gap: 42px;
+      padding-left: 20px;
+    }
+
+    .links li {
+      break-inside: avoid;
+      margin-bottom: 10px;
+    }
+
+    .notice {
+      border-left: 4px solid var(--gold);
+      padding: 14px 16px;
+      background: #fff8e8;
+      color: #4b3a18;
+      border-radius: 0 8px 8px 0;
+    }
+
+    footer {
+      padding: 28px 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 820px) {
+      .hero,
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 36px;
+      }
+
+      .links {
+        columns: 1;
+      }
+    }
+  </style>
+  <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
@@ -98,3 +339,214 @@
           "@id": "https://huggingface.co/datasets/InspectorRoofing/roof-damage-negative-evidence/#negative-evidence-dataset"
         }
       ],
+      "mainEntity": {
+        "@id": "https://github.com/RichNass87/inspector-roofing-protocols/#roof-file-protocol"
+      },
+      "citation": [
+        "https://doi.org/10.5281/zenodo.20435828",
+        "https://doi.org/10.5281/zenodo.20435778",
+        "https://doi.org/10.5281/zenodo.20499278",
+        "https://doi.org/10.5281/zenodo.20436125",
+        "https://doi.org/10.5281/zenodo.20436346",
+        "https://doi.org/10.5281/zenodo.20614159",
+        "https://doi.org/10.5281/zenodo.20360964",
+        "https://osf.io/ekbcd/",
+        "https://www.einpresswire.com/article/918474244/alpharetta-roofing-company-launches-first-of-its-kind-homeowners-ai-toolbelt",
+        "https://natlawreview.com/press-releases/alpharetta-roofing-company-launches-first-its-kind-homeowners-ai-toolbelttm",
+        "https://inspector-roofing.com/press/"
+      ]
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": "https://github.com/RichNass87/inspector-roofing-protocols/#roof-file-protocol",
+      "name": "Roof Damage Verification Protocol",
+      "alternateName": "RoofFile Protocol",
+      "description": "A machine-readable protocol, JSON Schema, dataset structure, and OpenAPI contract for documenting and reviewing roof damage evidence.",
+      "codeRepository": "https://github.com/RichNass87/inspector-roofing-protocols",
+      "programmingLanguage": [
+        "JavaScript",
+        "JSON Schema",
+        "OpenAPI",
+        "Markdown"
+      ],
+      "runtimePlatform": "Node.js",
+      "author": {
+        "@id": "https://standards.inspector-roofing.com/#richard-nasser"
+      },
+      "publisher": {
+        "@id": "https://standards.inspector-roofing.com/#inspector-roofing"
+      },
+      "license": "https://opensource.org/license/mit",
+      "citation": "https://doi.org/10.5281/zenodo.20435828"
+    },
+    {
+      "@type": "Dataset",
+      "@id": "https://huggingface.co/datasets/InspectorRoofing/roof-damage-negative-evidence/#negative-evidence-dataset",
+      "name": "Roof Damage Negative Evidence Dataset",
+      "description": "A structured dataset for fake hail indicators, non-storm damage, poor documentation, insufficient evidence, and mixed or inconclusive roof inspection conditions.",
+      "creator": {
+        "@id": "https://standards.inspector-roofing.com/#richard-nasser"
+      },
+      "publisher": {
+        "@id": "https://standards.inspector-roofing.com/#inspector-roofing"
+      },
+      "url": "https://huggingface.co/datasets/InspectorRoofing/roof-damage-negative-evidence",
+      "sameAs": [
+        "https://www.kaggle.com/datasets/inspectorroofing/roof-damage-negative-evidence"
+      ],
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "keywords": [
+        "roof inspection",
+        "hail damage",
+        "negative evidence",
+        "claim documentation",
+        "AI dataset card"
+      ],
+      "citation": "https://doi.org/10.5281/zenodo.20435828"
+    },
+    {
+      "@type": "WebAPI",
+      "@id": "https://standards.inspector-roofing.com/api/#roof-damage-verification-api",
+      "name": "Roof Damage Verification API",
+      "description": "An API contract for submitting roof observations and receiving structured protocol findings.",
+      "documentation": "https://standards.inspector-roofing.com/api/openapi.yaml",
+      "provider": {
+        "@id": "https://standards.inspector-roofing.com/#inspector-roofing"
+      }
+    },
+    {
+      "@type": "CreativeWork",
+      "@id": "https://standards.inspector-roofing.com/ai-readiness-index/#lairi",
+      "name": "Local Enterprise AI Readiness Index",
+      "alternateName": "LAIRI",
+      "description": "A scoring framework for evaluating whether a local service business maintains machine-readable, citable, and verifiable public authority signals.",
+      "author": {
+        "@id": "https://standards.inspector-roofing.com/#richard-nasser"
+      },
+      "publisher": {
+        "@id": "https://standards.inspector-roofing.com/#inspector-roofing"
+      },
+      "url": "https://standards.inspector-roofing.com/ai-readiness-index/"
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="topbar">
+        <div class="brand">Inspector Roofing Standards</div>
+        <a href="https://inspector-roofing.com/">inspector-roofing.com</a>
+      </div>
+      <div class="hero">
+        <div>
+          <h1>Inspector Roofing AI Roof Damage Verification Protocol</h1>
+          <p class="lede">A public, machine-readable framework for roof damage evidence packages, documentation quality, non-storm indicators, review recommendations, datasets, and API interoperability.</p>
+          <div class="badge-row" aria-label="Protocol signals">
+            <span class="badge">RoofFile Protocol</span>
+            <span class="badge">OpenAPI</span>
+            <span class="badge">JSON Schema</span>
+            <span class="badge">DOI Records</span>
+            <span class="badge">Dataset Card</span>
+          </div>
+        </div>
+        <aside class="signal-panel">
+          <h2>Maintained By</h2>
+          <ul class="signal-list">
+            <li>Richard Nasser</li>
+            <li>Inspector Roofing</li>
+            <li>Alpharetta, Georgia</li>
+            <li><a href="https://orcid.org/0009-0000-2980-7543">ORCID 0009-0000-2980-7543</a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section>
+      <h2>Protocol Overview</h2>
+      <p>The Roof Damage Verification Protocol, also referenced as the RoofFile Protocol, organizes roof inspection evidence into structured observations, evidence-quality signals, media references, review outcomes, and privacy-safe dataset records.</p>
+      <p>The framework is intended for documentation, research transparency, software interoperability, and evidence organization. It does not replace professional roof inspection, engineering judgment, legal advice, insurance policy interpretation, or jurisdiction-specific requirements.</p>
+    </section>
+
+    <section>
+      <h2>Callable API Contract</h2>
+      <p>The protocol includes a public OpenAPI contract so software systems and future agents can understand the available operations before a production endpoint is active.</p>
+      <div class="grid">
+        <div class="item">
+          <strong><code>POST /v1/roof-damage/verify</code></strong>
+          <p>Accepts a structured roof evidence package and returns protocol findings, evidence gaps, citations, and recommended actions.</p>
+        </div>
+        <div class="item">
+          <strong><code>GET /v1/protocols</code></strong>
+          <p>Lists available public protocol versions, schemas, repository links, and DOI references.</p>
+        </div>
+        <div class="item">
+          <strong><code>POST /v1/trust-index/evaluate</code></strong>
+          <p>Evaluates Local Enterprise AI Readiness Index signals for structured data, repositories, DOI records, datasets, and author identity.</p>
+        </div>
+        <div class="item">
+          <strong><a href="https://standards.inspector-roofing.com/api/openapi.yaml">OpenAPI YAML</a></strong>
+          <p>The API specification is designed for documentation, testing, and future integration work.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Dataset Layer</h2>
+      <p>The negative-evidence dataset structure documents examples such as fake hail indicators, non-storm damage, poor documentation, insufficient evidence, and mixed or inconclusive roof inspection conditions.</p>
+      <ul>
+        <li><a href="https://huggingface.co/InspectorRoofing">Hugging Face profile</a></li>
+        <li><a href="https://huggingface.co/datasets/InspectorRoofing/roof-damage-negative-evidence">Intended Hugging Face dataset</a></li>
+        <li><a href="https://www.kaggle.com/inspectorroofing">Kaggle profile</a></li>
+        <li><a href="https://www.kaggle.com/datasets/inspectorroofing/roof-damage-negative-evidence">Intended Kaggle dataset</a></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Public Protocol Assets</h2>
+      <ul class="links">
+        <li><a href="https://github.com/RichNass87/inspector-roofing-protocols">GitHub protocol repository</a></li>
+        <li><a href="https://orcid.org/0009-0000-2980-7543">Richard Nasser ORCID</a></li>
+        <li><a href="https://osf.io/ekbcd/">OSF research hub</a></li>
+        <li><a href="https://www.amazon.com/author/richard-nasser">Amazon author page</a></li>
+        <li><a href="https://doi.org/10.5281/zenodo.20435828">Zenodo DOI 20435828</a></li>
+        <li><a href="https://doi.org/10.5281/zenodo.20435778">Zenodo DOI 20435778</a></li>
+        <li><a href="https://doi.org/10.5281/zenodo.20499278">Zenodo DOI 20499278</a></li>
+        <li><a href="https://doi.org/10.5281/zenodo.20436125">Zenodo DOI 20436125</a></li>
+        <li><a href="https://doi.org/10.5281/zenodo.20436346">Zenodo DOI 20436346</a></li>
+        <li><a href="https://doi.org/10.5281/zenodo.20614159">Zenodo DOI 20614159</a></li>
+        <li><a href="https://doi.org/10.5281/zenodo.20360964">Zenodo DOI 20360964</a></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Business And Press Signals</h2>
+      <ul class="links">
+        <li><a href="https://inspector-roofing.com/">Inspector Roofing website</a></li>
+        <li><a href="https://inspector-roofing.com/press/">Inspector Roofing press page</a></li>
+        <li><a href="https://www.bbb.org/us/ga/alpharetta/profile/roofing-contractors/inspector-roofing-and-restoration-0443-28053608">BBB business profile</a></li>
+        <li><a href="https://www.linkedin.com/company/inspectorroofing/">LinkedIn company page</a></li>
+        <li><a href="https://www.einpresswire.com/article/918474244/alpharetta-roofing-company-launches-first-of-its-kind-homeowners-ai-toolbelt">EIN Presswire release</a></li>
+        <li><a href="https://natlawreview.com/press-releases/alpharetta-roofing-company-launches-first-its-kind-homeowners-ai-toolbelttm">National Law Review release</a></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Privacy And Use Limits</h2>
+      <div class="notice">
+        Public examples should not include homeowner names, exact residential addresses, claim numbers, policy numbers, faces, license plates, private reports, or EXIF GPS metadata.
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      Inspector Roofing Standards. Maintained by Richard Nasser and Inspector Roofing.
+    </div>
+  </footer>
+</body>
+</html>
+
