@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://standards.inspector-roofing.com/sitemap.xml
