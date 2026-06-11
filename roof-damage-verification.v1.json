@@ -1,0 +1,59 @@
+{
+  "protocol_id": "roof-damage-verification",
+  "version": "0.1.0",
+  "name": "Roof Damage Verification Protocol",
+  "alternate_name": "RoofFile Protocol",
+  "maintainer": {
+    "name": "Richard Nasser",
+    "organization": "Inspector Roofing",
+    "orcid": "REPLACE_WITH_ORCID_URL"
+  },
+  "purpose": "Provide a structured method for documenting roof damage observations, evidence quality, non-storm indicators, documentation defects, and recommended review actions.",
+  "evidence_categories": [
+    "hail_candidate",
+    "wind_candidate",
+    "mechanical_mark",
+    "wear_and_age",
+    "manufacturing_condition",
+    "installation_condition",
+    "maintenance_condition",
+    "documentation_gap",
+    "other"
+  ],
+  "review_results": [
+    "consistent_with_storm_damage",
+    "non_storm_indicators_present",
+    "mixed_or_inconclusive",
+    "insufficient_evidence",
+    "field_review_required"
+  ],
+  "minimum_documentation": [
+    "inspection_date",
+    "location_region",
+    "roof_covering",
+    "slope_or_area_location",
+    "observation_description",
+    "evidence_quality",
+    "photo_or_media_reference_when_available"
+  ],
+  "privacy_rules": [
+    "Do not include homeowner names in public examples.",
+    "Do not include claim numbers in public examples.",
+    "Do not include exact residential addresses in public examples.",
+    "Remove EXIF location metadata from public media.",
+    "Do not publish third-party reports unless you have permission and have redacted sensitive details."
+  ],
+  "citations": [
+    {
+      "title": "Roof Damage Verification Protocol DOI",
+      "url": "REPLACE_WITH_ZENODO_DOI_URL",
+      "identifier": "REPLACE_WITH_DOI"
+    },
+    {
+      "title": "Inspector Roofing AI Protocol Authority Page",
+      "url": "https://REPLACE_WITH_DOMAIN/ai-roof-damage-verification-protocol/",
+      "identifier": "website"
+    }
+  ]
+}
+

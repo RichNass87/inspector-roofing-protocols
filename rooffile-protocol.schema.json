@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://REPLACE_WITH_DOMAIN/schemas/rooffile-protocol.schema.json",
+  "title": "RoofFile Protocol Evidence Package",
+  "type": "object",
+  "required": [
+    "inspectionContext",
+    "roofSystem",
+    "observations"
+  ],
+  "properties": {
+    "inspectionContext": {
+      "type": "object",
+      "required": [
+        "inspectionDate",
+        "locationRegion"
+      ],
+      "properties": {
+        "inspectionDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "eventDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "locationRegion": {
+          "type": "string"
+        },
+        "inspectionType": {
+          "type": "string",
+          "enum": [
+            "homeowner_request",
+            "storm_event_review",
+            "insurance_scope_review",
+            "quality_control",
+            "other"
+          ]
+        }
+      }
+    },
+    "roofSystem": {
+      "type": "object",
+      "properties": {
+        "roofCovering": {
+          "type": "string",
+          "enum": [
+            "asphalt_shingle",
+            "metal",
+            "tile",
+            "slate",
+            "flat_membrane",
+            "unknown"
+          ]
+        },
+        "approximateAgeYears": {
+          "type": "number",
+          "minimum": 0
+        },
+        "slope": {
+          "type": "string",
+          "enum": [
+            "low",
+            "moderate",
+            "steep",
+            "unknown"
+          ]
+        },
+        "knownPriorRepairs": {
+          "type": "boolean"
+        }
+      }
+    },
+    "observations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "location",
+          "category",
+          "description"
+        ],
+        "properties": {
+          "location": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "hail_candidate",
+              "wind_candidate",
+              "mechanical_mark",
+              "wear_and_age",
+              "manufacturing_condition",
+              "installation_condition",
+              "maintenance_condition",
+              "documentation_gap",
+              "other"
+            ]
+          },
+          "description": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "low",
+              "moderate",
+              "high",
+              "unknown"
+            ]
+          },
+          "evidenceQuality": {
+            "type": "string",
+            "enum": [
+              "strong",
+              "moderate",
+              "weak",
+              "insufficient"
+            ]
+          },
+          "mediaIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "media": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "uri"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "photo",
+              "video",
+              "transcript",
+              "report",
+              "diagram"
+            ]
+          },
+          "uri": {
+            "type": "string",
+            "format": "uri"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
+

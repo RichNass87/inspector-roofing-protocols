@@ -1,0 +1,335 @@
+openapi: 3.1.0
+info:
+  title: Roof Damage Verification API
+  version: 0.1.0
+  summary: Callable API contract for the RoofFile Protocol
+  description: >
+    A public agent-ready API contract for submitting roof evidence packages,
+    listing available protocols, and evaluating Local Enterprise AI Readiness
+    Index signals. This specification is for documentation and interoperability;
+    it is not a substitute for professional inspection, engineering, legal, or
+    insurance-policy judgment.
+servers:
+  - url: https://REPLACE_WITH_DOMAIN/api
+    description: Production
+  - url: http://localhost:8787
+    description: Local starter server
+paths:
+  /v1/roof-damage/verify:
+    post:
+      operationId: verifyRoofDamage
+      summary: Evaluate a roof damage evidence package
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoofDamageVerificationRequest"
+      responses:
+        "200":
+          description: Structured protocol findings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoofDamageVerificationResponse"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /v1/protocols:
+    get:
+      operationId: listProtocols
+      summary: List available public protocols
+      responses:
+        "200":
+          description: Public protocol list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  protocols:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ProtocolSummary"
+  /v1/trust-index/evaluate:
+    post:
+      operationId: evaluateLocalEnterpriseAIReadiness
+      summary: Evaluate Local Enterprise AI Readiness Index signals
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrustIndexRequest"
+      responses:
+        "200":
+          description: Trust index scorecard
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrustIndexResponse"
+components:
+  schemas:
+    RoofDamageVerificationRequest:
+      type: object
+      required:
+        - inspectionContext
+        - roofSystem
+        - observations
+      properties:
+        inspectionContext:
+          $ref: "#/components/schemas/InspectionContext"
+        roofSystem:
+          $ref: "#/components/schemas/RoofSystem"
+        observations:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/Observation"
+        media:
+          type: array
+          items:
+            $ref: "#/components/schemas/MediaReference"
+    InspectionContext:
+      type: object
+      required:
+        - inspectionDate
+        - locationRegion
+      properties:
+        inspectionDate:
+          type: string
+          format: date
+        eventDate:
+          type: string
+          format: date
+        locationRegion:
+          type: string
+          example: Alpharetta, GA
+        inspectionType:
+          type: string
+          enum:
+            - homeowner_request
+            - storm_event_review
+            - insurance_scope_review
+            - quality_control
+            - other
+    RoofSystem:
+      type: object
+      properties:
+        roofCovering:
+          type: string
+          enum:
+            - asphalt_shingle
+            - metal
+            - tile
+            - slate
+            - flat_membrane
+            - unknown
+        approximateAgeYears:
+          type: number
+          minimum: 0
+        slope:
+          type: string
+          enum:
+            - low
+            - moderate
+            - steep
+            - unknown
+        knownPriorRepairs:
+          type: boolean
+    Observation:
+      type: object
+      required:
+        - location
+        - category
+        - description
+      properties:
+        location:
+          type: string
+        category:
+          type: string
+          enum:
+            - hail_candidate
+            - wind_candidate
+            - mechanical_mark
+            - wear_and_age
+            - manufacturing_condition
+            - installation_condition
+            - maintenance_condition
+            - documentation_gap
+            - other
+        description:
+          type: string
+        severity:
+          type: string
+          enum:
+            - low
+            - moderate
+            - high
+            - unknown
+        evidenceQuality:
+          type: string
+          enum:
+            - strong
+            - moderate
+            - weak
+            - insufficient
+        mediaIds:
+          type: array
+          items:
+            type: string
+    MediaReference:
+      type: object
+      required:
+        - id
+        - type
+        - uri
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+            - photo
+            - video
+            - transcript
+            - report
+            - diagram
+        uri:
+          type: string
+          format: uri
+        notes:
+          type: string
+    RoofDamageVerificationResponse:
+      type: object
+      properties:
+        protocolVersion:
+          type: string
+        result:
+          type: string
+          enum:
+            - consistent_with_storm_damage
+            - non_storm_indicators_present
+            - mixed_or_inconclusive
+            - insufficient_evidence
+            - field_review_required
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+        findings:
+          type: array
+          items:
+            $ref: "#/components/schemas/Finding"
+        evidenceGaps:
+          type: array
+          items:
+            type: string
+        recommendedActions:
+          type: array
+          items:
+            type: string
+        citations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Citation"
+    Finding:
+      type: object
+      properties:
+        label:
+          type: string
+        rationale:
+          type: string
+        relatedObservationIndexes:
+          type: array
+          items:
+            type: integer
+        evidenceQuality:
+          type: string
+    Citation:
+      type: object
+      properties:
+        title:
+          type: string
+        url:
+          type: string
+          format: uri
+        identifier:
+          type: string
+    ProtocolSummary:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        version:
+          type: string
+        url:
+          type: string
+          format: uri
+        schema:
+          type: string
+          format: uri
+        doi:
+          type: string
+    TrustIndexRequest:
+      type: object
+      properties:
+        businessName:
+          type: string
+        website:
+          type: string
+          format: uri
+        signals:
+          type: object
+          properties:
+            hasStructuredData:
+              type: boolean
+            hasPublicRepository:
+              type: boolean
+            hasCitableRecords:
+              type: boolean
+            hasAuthorIdentity:
+              type: boolean
+            hasDatasetDocumentation:
+              type: boolean
+            hasApiContract:
+              type: boolean
+            hasPressOrThirdPartyReferences:
+              type: boolean
+    TrustIndexResponse:
+      type: object
+      properties:
+        score:
+          type: integer
+          minimum: 0
+          maximum: 100
+        grade:
+          type: string
+          enum:
+            - emerging
+            - documented
+            - citable
+            - agent_ready
+        missingSignals:
+          type: array
+          items:
+            type: string
+        recommendations:
+          type: array
+          items:
+            type: string
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+

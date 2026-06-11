@@ -1,0 +1,14 @@
+{
+  "businessName": "Inspector Roofing",
+  "website": "https://REPLACE_WITH_DOMAIN/",
+  "signals": {
+    "hasStructuredData": true,
+    "hasPublicRepository": true,
+    "hasCitableRecords": false,
+    "hasAuthorIdentity": true,
+    "hasDatasetDocumentation": true,
+    "hasApiContract": true,
+    "hasPressOrThirdPartyReferences": false
+  }
+}
+

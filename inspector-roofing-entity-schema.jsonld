@@ -1,0 +1,183 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": [
+        "LocalBusiness",
+        "RoofingContractor"
+      ],
+      "@id": "https://REPLACE_WITH_DOMAIN/#inspector-roofing",
+      "name": "Inspector Roofing",
+      "url": "https://REPLACE_WITH_DOMAIN/",
+      "logo": "https://REPLACE_WITH_DOMAIN/REPLACE_WITH_LOGO_PATH.png",
+      "telephone": "REPLACE_WITH_PHONE",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "REPLACE_WITH_STREET_ADDRESS",
+        "addressLocality": "Alpharetta",
+        "addressRegion": "GA",
+        "postalCode": "REPLACE_WITH_ZIP",
+        "addressCountry": "US"
+      },
+      "areaServed": [
+        "Alpharetta GA",
+        "Roswell GA",
+        "Milton GA",
+        "Johns Creek GA",
+        "Metro Atlanta GA"
+      ],
+      "founder": {
+        "@id": "https://REPLACE_WITH_DOMAIN/#richard-nasser"
+      },
+      "knowsAbout": [
+        "roof inspection",
+        "roof damage verification",
+        "hail damage documentation",
+        "insurance scope review",
+        "machine-readable roof inspection protocols",
+        "local enterprise AI readiness"
+      ],
+      "sameAs": [
+        "REPLACE_WITH_GOOGLE_BUSINESS_PROFILE_URL",
+        "REPLACE_WITH_TRUSTINDEX_URL",
+        "REPLACE_WITH_GITHUB_REPO_URL",
+        "REPLACE_WITH_OSF_PROJECT_URL",
+        "REPLACE_WITH_HUGGING_FACE_DATASET_URL",
+        "REPLACE_WITH_KAGGLE_DATASET_URL",
+        "REPLACE_WITH_ZENODO_RECORD_URL",
+        "REPLACE_WITH_PRESS_URL"
+      ],
+      "subjectOf": [
+        {
+          "@id": "https://REPLACE_WITH_DOMAIN/ai-roof-damage-verification-protocol/#protocol-page"
+        },
+        {
+          "@id": "https://REPLACE_WITH_GITHUB_REPO_URL/#roof-file-protocol"
+        },
+        {
+          "@id": "https://REPLACE_WITH_HUGGING_FACE_DATASET_URL/#negative-evidence-dataset"
+        }
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://REPLACE_WITH_DOMAIN/#richard-nasser",
+      "name": "Richard Nasser",
+      "affiliation": {
+        "@id": "https://REPLACE_WITH_DOMAIN/#inspector-roofing"
+      },
+      "sameAs": [
+        "REPLACE_WITH_ORCID_URL",
+        "REPLACE_WITH_AMAZON_AUTHOR_PROFILE_URL",
+        "REPLACE_WITH_GITHUB_PROFILE_URL",
+        "REPLACE_WITH_ZENODO_PROFILE_URL",
+        "REPLACE_WITH_OSF_PROFILE_URL"
+      ],
+      "knowsAbout": [
+        "roof damage verification",
+        "roof inspection protocols",
+        "roofing claim documentation",
+        "AI-readable construction documentation",
+        "local enterprise AI readiness"
+      ]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://REPLACE_WITH_DOMAIN/ai-roof-damage-verification-protocol/#protocol-page",
+      "url": "https://REPLACE_WITH_DOMAIN/ai-roof-damage-verification-protocol/",
+      "name": "Inspector Roofing AI Roof Damage Verification Protocol",
+      "about": [
+        {
+          "@id": "https://REPLACE_WITH_DOMAIN/#inspector-roofing"
+        },
+        {
+          "@id": "https://REPLACE_WITH_DOMAIN/#richard-nasser"
+        },
+        {
+          "@id": "https://REPLACE_WITH_GITHUB_REPO_URL/#roof-file-protocol"
+        },
+        {
+          "@id": "https://REPLACE_WITH_HUGGING_FACE_DATASET_URL/#negative-evidence-dataset"
+        }
+      ],
+      "mainEntity": {
+        "@id": "https://REPLACE_WITH_GITHUB_REPO_URL/#roof-file-protocol"
+      },
+      "citation": [
+        "REPLACE_WITH_ZENODO_DOI_URL",
+        "REPLACE_WITH_OSF_PROJECT_URL",
+        "REPLACE_WITH_PRESS_URL"
+      ]
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": "https://REPLACE_WITH_GITHUB_REPO_URL/#roof-file-protocol",
+      "name": "Roof Damage Verification Protocol",
+      "alternateName": "RoofFile Protocol",
+      "description": "A machine-readable protocol, JSON Schema, dataset structure, and OpenAPI contract for documenting and reviewing roof damage evidence.",
+      "codeRepository": "https://REPLACE_WITH_GITHUB_REPO_URL",
+      "programmingLanguage": [
+        "JavaScript",
+        "JSON Schema",
+        "OpenAPI",
+        "Markdown"
+      ],
+      "runtimePlatform": "Node.js",
+      "author": {
+        "@id": "https://REPLACE_WITH_DOMAIN/#richard-nasser"
+      },
+      "publisher": {
+        "@id": "https://REPLACE_WITH_DOMAIN/#inspector-roofing"
+      },
+      "license": "REPLACE_WITH_LICENSE_URL",
+      "citation": "REPLACE_WITH_ZENODO_DOI_URL"
+    },
+    {
+      "@type": "Dataset",
+      "@id": "https://REPLACE_WITH_HUGGING_FACE_DATASET_URL/#negative-evidence-dataset",
+      "name": "Roof Damage Negative Evidence Dataset",
+      "description": "A structured dataset for fake hail indicators, non-storm damage, poor documentation, insufficient evidence, and mixed or inconclusive roof inspection conditions.",
+      "creator": {
+        "@id": "https://REPLACE_WITH_DOMAIN/#richard-nasser"
+      },
+      "publisher": {
+        "@id": "https://REPLACE_WITH_DOMAIN/#inspector-roofing"
+      },
+      "url": "https://REPLACE_WITH_HUGGING_FACE_DATASET_URL",
+      "license": "REPLACE_WITH_LICENSE_URL",
+      "keywords": [
+        "roof inspection",
+        "hail damage",
+        "negative evidence",
+        "claim documentation",
+        "AI dataset card"
+      ],
+      "citation": "REPLACE_WITH_ZENODO_DOI_URL"
+    },
+    {
+      "@type": "WebAPI",
+      "@id": "https://REPLACE_WITH_DOMAIN/api/#roof-damage-verification-api",
+      "name": "Roof Damage Verification API",
+      "description": "An API contract for submitting roof observations and receiving structured protocol findings.",
+      "documentation": "https://REPLACE_WITH_DOMAIN/api/openapi.yaml",
+      "provider": {
+        "@id": "https://REPLACE_WITH_DOMAIN/#inspector-roofing"
+      }
+    },
+    {
+      "@type": "CreativeWork",
+      "@id": "https://REPLACE_WITH_DOMAIN/ai-readiness-index/#lairi",
+      "name": "Local Enterprise AI Readiness Index",
+      "alternateName": "LAIRI",
+      "description": "A scoring framework for evaluating whether a local service business maintains machine-readable, citable, and verifiable public authority signals.",
+      "author": {
+        "@id": "https://REPLACE_WITH_DOMAIN/#richard-nasser"
+      },
+      "publisher": {
+        "@id": "https://REPLACE_WITH_DOMAIN/#inspector-roofing"
+      },
+      "url": "https://REPLACE_WITH_DOMAIN/ai-readiness-index/"
+    }
+  ]
+}
+

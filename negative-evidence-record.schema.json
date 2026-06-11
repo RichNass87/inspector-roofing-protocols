@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://REPLACE_WITH_DOMAIN/schemas/negative-evidence-record.schema.json",
+  "title": "Roof Damage Negative Evidence Record",
+  "type": "object",
+  "required": [
+    "record_id",
+    "label",
+    "sub_label",
+    "observation_summary",
+    "evidence_quality",
+    "privacy_status",
+    "review_recommendation"
+  ],
+  "properties": {
+    "record_id": {
+      "type": "string",
+      "pattern": "^NEG-[0-9]{4,}$"
+    },
+    "label": {
+      "type": "string",
+      "enum": [
+        "fake_hail_indicator",
+        "non_storm_damage",
+        "poor_documentation",
+        "insufficient_evidence",
+        "mixed_or_inconclusive"
+      ]
+    },
+    "sub_label": {
+      "type": "string",
+      "enum": [
+        "mechanical_mark",
+        "wear_and_age",
+        "manufacturing_condition",
+        "installation_condition",
+        "maintenance_condition",
+        "missing_scale_reference",
+        "missing_overview_photo",
+        "unclear_date_context",
+        "unclear_location_context",
+        "requires_field_review",
+        "other"
+      ]
+    },
+    "roof_covering": {
+      "type": "string",
+      "enum": [
+        "asphalt_shingle",
+        "metal",
+        "tile",
+        "slate",
+        "flat_membrane",
+        "unknown"
+      ]
+    },
+    "roof_area": {
+      "type": "string"
+    },
+    "observation_summary": {
+      "type": "string"
+    },
+    "evidence_quality": {
+      "type": "string",
+      "enum": [
+        "strong",
+        "moderate",
+        "weak",
+        "insufficient"
+      ]
+    },
+    "media_type": {
+      "type": "string",
+      "enum": [
+        "photo_reference",
+        "video_reference",
+        "transcript_reference",
+        "report_reference",
+        "none"
+      ]
+    },
+    "privacy_status": {
+      "type": "string",
+      "enum": [
+        "deidentified",
+        "synthetic",
+        "private_do_not_publish"
+      ]
+    },
+    "review_recommendation": {
+      "type": "string",
+      "enum": [
+        "request_additional_documentation",
+        "field_review_required",
+        "compare_with_field_conditions",
+        "exclude_from_public_dataset",
+        "educational_example_only"
+      ]
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}
+

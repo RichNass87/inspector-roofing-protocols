@@ -1,18 +1,27 @@
 cff-version: 1.2.0
-message: "If you use this documentation standard, please cite it as below."
-title: "Inspector Roofing Protocols: Open Technical Documentation Standard for Residential Roof Inspection Evidence Capture"
+message: "If you use this protocol, please cite it as below."
+title: "Roof Damage Verification Protocol"
+version: "0.1.0"
+date-released: "2026-06-11"
 authors:
   - family-names: "Nasser"
     given-names: "Richard"
-version: "1.0.0"
-date-released: "2026-05-23"
-url: "https://github.com/richnass87/inspector-roofing-protocols"
-license: "CC-BY-4.0"
+    affiliation: "Inspector Roofing"
+    orcid: "REPLACE_WITH_ORCID_URL"
+repository-code: "https://REPLACE_WITH_GITHUB_REPO_URL"
+url: "https://REPLACE_WITH_DOMAIN/ai-roof-damage-verification-protocol/"
+doi: "REPLACE_WITH_DOI_WITHOUT_HTTPS"
+license: "REPLACE_WITH_LICENSE_ID"
+abstract: >
+  A machine-readable protocol, callable API stub, JSON Schema, dataset
+  structure, and OpenAPI contract for documenting and reviewing roof damage
+  evidence.
 keywords:
   - roof inspection
-  - roofing
+  - roof damage verification
   - hail damage
-  - wind damage
-  - drone inspection
-  - evidence documentation
-  - computer vision
+  - insurance scope review
+  - JSON Schema
+  - OpenAPI
+  - negative evidence
+

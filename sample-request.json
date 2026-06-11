@@ -1,0 +1,41 @@
+{
+  "inspectionContext": {
+    "inspectionDate": "2026-06-11",
+    "eventDate": "2026-06-01",
+    "locationRegion": "Alpharetta, GA",
+    "inspectionType": "storm_event_review"
+  },
+  "roofSystem": {
+    "roofCovering": "asphalt_shingle",
+    "approximateAgeYears": 8,
+    "slope": "moderate",
+    "knownPriorRepairs": false
+  },
+  "observations": [
+    {
+      "location": "south slope field shingles",
+      "category": "hail_candidate",
+      "description": "Impact-like mark with localized granule displacement and surrounding field context.",
+      "severity": "moderate",
+      "evidenceQuality": "moderate",
+      "mediaIds": ["photo-001"]
+    },
+    {
+      "location": "front slope close-up",
+      "category": "documentation_gap",
+      "description": "Close-up image lacks scale reference and surrounding slope context.",
+      "severity": "low",
+      "evidenceQuality": "weak",
+      "mediaIds": ["photo-002"]
+    }
+  ],
+  "media": [
+    {
+      "id": "photo-001",
+      "type": "photo",
+      "uri": "https://example.com/deidentified/photo-001.jpg",
+      "notes": "Deidentified placeholder image reference."
+    }
+  ]
+}
+
