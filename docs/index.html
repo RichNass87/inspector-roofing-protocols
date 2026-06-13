@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inspector Roofing Standards</title>
+  <meta name="description" content="Machine-readable Inspector Roofing standards, protocol schemas, API contract, and roof damage verification documentation.">
+  <link rel="canonical" href="https://standards.inspector-roofing.com/">
+  <meta property="og:title" content="Inspector Roofing Standards">
+  <meta property="og:description" content="Public standards, API contract, and protocol documentation for inspection-first roof documentation.">
+  <meta property="og:url" content="https://standards.inspector-roofing.com/">
+  <meta property="og:type" content="website">
+  <style>
+    :root {
+      color-scheme: light;
+      --blue: #174f8f;
+      --deep: #0d2b4f;
+      --light: #eef7ff;
+      --line: #d6e5f5;
+      --text: #17243a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: #f7fbff;
+      line-height: 1.55;
+    }
+    main {
+      width: min(960px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 56px 0;
+    }
+    .hero {
+      background: linear-gradient(135deg, #ffffff, var(--light));
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 34px;
+      box-shadow: 0 18px 45px rgba(13, 43, 79, 0.08);
+    }
+    h1 {
+      margin: 0 0 12px;
+      color: var(--deep);
+      font-size: clamp(32px, 5vw, 54px);
+      line-height: 1.05;
+    }
+    p {
+      max-width: 720px;
+      margin: 0 0 18px;
+      font-size: 18px;
+    }
+    .links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-top: 26px;
+    }
+    a.card {
+      display: block;
+      min-height: 118px;
+      padding: 20px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--deep);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    a.card span {
+      display: block;
+      margin-top: 8px;
+      color: #3f5877;
+      font-size: 14px;
+      font-weight: 400;
+    }
+    .meta {
+      margin-top: 22px;
+      color: #506783;
+      font-size: 14px;
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "@id": "https://standards.inspector-roofing.com/#standards",
+    "headline": "Inspector Roofing Standards",
+    "description": "Machine-readable roof documentation standards, API contract, and protocol references for inspection-first roof documentation.",
+    "author": {
+      "@type": "Person",
+      "name": "Richard Nasser",
+      "sameAs": [
+        "https://orcid.org/0009-0000-2980-7543",
+        "https://github.com/RichNass87",
+        "https://www.amazon.com/author/richard-nasser"
+      ]
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Inspector Roofing and Restoration",
+      "url": "https://inspector-roofing.com/"
+    },
+    "mainEntityOfPage": "https://standards.inspector-roofing.com/",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Inspector Roofing Standards",
+      "url": "https://standards.inspector-roofing.com/"
+    },
+    "sameAs": [
+      "https://github.com/RichNass87/inspector-roofing-protocols",
+      "https://huggingface.co/InspectorRoofing",
+      "https://doi.org/10.5281/zenodo.20650542"
+    ]
+  }
+  </script>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <h1>Inspector Roofing Standards</h1>
+      <p>Public machine-readable standards, protocol schemas, API contract references, and roof damage verification documentation for inspection-first roofing workflows.</p>
+      <div class="links" aria-label="Standards resources">
+        <a class="card" href="/api/openapi.yaml">OpenAPI Contract<span>Callable protocol endpoints for roof damage verification, public protocols, and trust-index evaluation.</span></a>
+        <a class="card" href="/ai-roof-damage-verification-protocol/">AI Roof Damage Verification Protocol<span>Human-readable protocol page with structured data and authority references.</span></a>
+        <a class="card" href="https://github.com/RichNass87/inspector-roofing-protocols">GitHub Repository<span>Source schemas, examples, and protocol files.</span></a>
+        <a class="card" href="https://inspector-roofing.com/">Inspector Roofing<span>Inspection-first roofing company serving Alpharetta, North Atlanta, and Greater Atlanta.</span></a>
+      </div>
+      <p class="meta">Maintained by Richard Nasser and Inspector Roofing and Restoration.</p>
+    </section>
+  </main>
+</body>
+</html>
