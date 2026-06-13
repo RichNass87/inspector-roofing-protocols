@@ -1,85 +1,39 @@
----
-license: cc-by-4.0
-language:
-  - en
-pretty_name: Roof Damage Negative Evidence Dataset
-task_categories:
-  - image-classification
-  - tabular-classification
-tags:
-  - roof-inspection
-  - roof-damage
-  - hail-damage
-  - negative-evidence
-  - documentation-quality
-  - insurance-scope-review
-size_categories:
-  - n<1K
----
+# Standards GitHub Pages Hotfix
 
-# Roof Damage Negative Evidence Dataset
+This fixes `https://standards.inspector-roofing.com/` returning a GitHub Pages 404.
 
-This dataset structure documents examples where roof evidence suggests fake hail indicators, non-storm damage, poor documentation, insufficient evidence, or mixed/inconclusive conditions.
+## What Was Wrong
 
-The initial public release should be a dataset shell: this dataset card, schema, CSV template, and JSONL examples. Add real images or videos only after privacy review.
+The repository publishes GitHub Pages from the `docs/` folder. The live YAML exists at:
 
-## Labels
+`docs/api/openapi.yaml`
 
-- `fake_hail_indicator`
-- `non_storm_damage`
-- `poor_documentation`
-- `insufficient_evidence`
-- `mixed_or_inconclusive`
+But the custom domain file was only at the repository root:
 
-## Sub-Labels
+`CNAME`
 
-- `mechanical_mark`
-- `wear_and_age`
-- `manufacturing_condition`
-- `installation_condition`
-- `maintenance_condition`
-- `missing_scale_reference`
-- `missing_overview_photo`
-- `unclear_date_context`
-- `unclear_location_context`
-- `requires_field_review`
-- `other`
+For a `docs/` Pages source, GitHub needs the custom domain file inside:
 
-## Data Files
+`docs/CNAME`
 
-- `template.csv`: tabular starter dataset.
-- `examples.jsonl`: machine-readable examples.
-- `../../schemas/negative-evidence-record.schema.json`: JSON Schema for each JSONL record.
+The `docs/` folder also did not have a homepage:
 
-## Privacy Rules
+`docs/index.html`
 
-Do not publish:
+So the standards domain root had no page to serve.
 
-- Homeowner names
-- Exact residential addresses
-- Claim numbers
-- Policy numbers
-- Faces, license plates, personal documents, or private reports
-- EXIF GPS metadata
+## Files To Upload
 
-## Intended Use
+Upload these two files to the `main` branch of `RichNass87/inspector-roofing-protocols`:
 
-- Standardize roof evidence documentation.
-- Train or evaluate data processing workflows.
-- Explain what weak or insufficient documentation looks like.
-- Provide a transparent companion dataset for the RoofFile Protocol.
+- `docs/CNAME`
+- `docs/index.html`
 
-## Not Intended For
+## After Upload
 
-- Automatic claim denial.
-- Identification of homeowners, carriers, adjusters, or claimants.
-- Replacing field inspection or professional judgment.
-
-## Related Links
-
-- Website authority page: REPLACE_WITH_WEBSITE_AUTHORITY_PAGE
-- GitHub protocol repo: REPLACE_WITH_GITHUB_REPO_URL
-- Zenodo DOI: REPLACE_WITH_ZENODO_DOI_URL
-- OSF project: REPLACE_WITH_OSF_PROJECT_URL
-- ORCID: REPLACE_WITH_ORCID_URL
-
+1. Wait 2-5 minutes for GitHub Pages to rebuild.
+2. Open `https://standards.inspector-roofing.com/`.
+3. Open `https://standards.inspector-roofing.com/api/openapi.yaml`.
+4. If the root still shows 404, go to repository `Settings > Pages`.
+5. Confirm the source is `Deploy from a branch`, branch `main`, folder `/docs`.
+6. Confirm the custom domain is `standards.inspector-roofing.com`.
