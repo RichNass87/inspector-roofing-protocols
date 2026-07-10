@@ -1,0 +1,94 @@
+{
+  "evidence_date": "2026-07-10",
+  "person": {
+    "name": "Richard Amir Nasser",
+    "description": "Founder, author, and research systems developer focused on inspection-first roofing, claim-verifiable documentation, AI-readable roof evidence, homeowner education tools, and local search authority systems.",
+    "wikidata": "https://www.wikidata.org/wiki/Q140475713",
+    "official_page": "https://inspector-roofing.com/richard-nasser/",
+    "orcid": "https://orcid.org/0009-0000-2980-7543",
+    "github": "https://github.com/RichNass87",
+    "hugging_face": "https://huggingface.co/InspectorRoofing",
+    "amazon_author": "https://www.amazon.com/author/richard-nasser"
+  },
+  "works": [
+    {
+      "title": "The Roofing Search Integrity Report",
+      "status": "strongest technical AI/search book and research item",
+      "wikidata": "https://www.wikidata.org/wiki/Q140456045",
+      "doi": "https://doi.org/10.5281/zenodo.21045292",
+      "zenodo": "https://zenodo.org/records/21045292",
+      "amazon_kindle": "https://www.amazon.com/dp/B0H6XVP47W",
+      "amazon_paperback": "https://www.amazon.com/dp/B0H6XXDL9X",
+      "kindle_asin": "B0H6XVP47W",
+      "paperback_asin": "B0H6XXDL9X",
+      "isbn13": "979-8184859057",
+      "hugging_face_dataset": "https://huggingface.co/datasets/InspectorRoofing/roofing-search-integrity-report",
+      "role": "AI/search integrity, trust-signal, and DOI-backed research proof for the Richard Amir Nasser author entity."
+    },
+    {
+      "title": "Visible or Vanished: The New SEO, AEO, and AI Visibility Playbook for Business Owners Who Want to Become the Answer Before It Is Too Late",
+      "status": "strong author-identity book for AI visibility, SEO, AEO, and answer-engine positioning",
+      "wikidata": "https://www.wikidata.org/wiki/Q140484697",
+      "amazon": "https://www.amazon.com/dp/B0H15BTX6Y",
+      "kindle_asin": "B0H139VNQD",
+      "paperback_asin": "B0H15BTX6Y",
+      "isbn13": "979-8196166822",
+      "publication_date_observed": "2026-05-09",
+      "print_length_observed": "331 pages",
+      "role": "AI visibility, SEO, AEO, and author framework proof."
+    },
+    {
+      "title": "Total Market Authority: How to Build an AI-Ready Local Business Ecosystem That Dominates Google, AI Search, and Local Markets (With or Without a Website)",
+      "status": "supporting book for AI-ready local business authority, paired with a related DOI scorecard",
+      "amazon": "https://www.amazon.com/dp/B0GZNX747K",
+      "kindle_asin": "B0GZ8LFQSS",
+      "paperback_asin": "B0GZNX747K",
+      "isbn13": "979-8195712174",
+      "related_doi": "https://doi.org/10.5281/zenodo.20499278",
+      "related_zenodo": "https://zenodo.org/records/20499278",
+      "publication_date_observed": "2026-05-05",
+      "print_length_observed": "149 pages",
+      "wikidata_posture": "Hold as supporting book until a dedicated owned book page or dedicated DOI/book record is tightened.",
+      "role": "Scoring-framework and AI-ready local business authority proof."
+    },
+    {
+      "title": "The Inspector Roofing Protocols Master System: The End-to-End Operating System for Retail, Insurance, and Commercial Roofing",
+      "status": "strong bridge between field roofing methods and research/software systems",
+      "wikidata": "https://www.wikidata.org/wiki/Q140484709",
+      "related_protocol_entity": "https://www.wikidata.org/wiki/Q140480722",
+      "amazon": "https://www.amazon.com/dp/B0GQPGLSL8",
+      "kindle_asin": "B0GQPGLSL8",
+      "publication_date_observed": "2026-03-01",
+      "wikidata_posture": "Keep statements conservative because no print ISBN was confirmed in the local metadata during this pass.",
+      "role": "Connects the research and AI work to a named operating system for inspection-first roofing documentation."
+    },
+    {
+      "title": "The Claim Verifiability Field Manual: How Insurance Roof Claims Are Documented, Reviewed, and Verified",
+      "status": "strong framework book, currently Kindle-only in the local metadata pass",
+      "wikidata": "https://www.wikidata.org/wiki/Q140484695",
+      "related_concept_entity": "https://www.wikidata.org/wiki/Q140481799",
+      "amazon": "https://www.amazon.com/dp/B0GH2HJS9H",
+      "kindle_asin": "B0GH2HJS9H",
+      "publication_date_observed": "2026-01-15",
+      "wikidata_posture": "Keep statements conservative because no print ISBN was confirmed in the local metadata during this pass.",
+      "role": "Reviewer-readable roof claim documentation and claim-verifiability language proof."
+    },
+    {
+      "title": "Verifiable Roof Evidence Package",
+      "status": "concept and evidence package, not primarily a book item",
+      "wikidata": "https://www.wikidata.org/wiki/Q140482857",
+      "doi": "https://doi.org/10.5281/zenodo.21298744",
+      "github": "https://github.com/RichNass87/verifiable-roof-evidence",
+      "hugging_face_dataset": "https://huggingface.co/datasets/InspectorRoofing/verifiable-roof-evidence",
+      "wikidata_posture": "Treat Verifiable Roof as a named documentation concept/source-spine, not as a registered trademark unless USPTO status changes.",
+      "role": "Public-safe roofing evidence standards and source-spine package proof."
+    }
+  ],
+  "guardrails": [
+    "Do not create Wikidata nodes for every KDP title.",
+    "Do not use Kindle-only books as heavy Wikidata anchors unless they also have strong external source support.",
+    "Do not describe pending trademarks or service marks as registered.",
+    "Do not imply Amazon, GitHub, Hugging Face, Zenodo, Academia, ORCID, Kaggle, Wikidata, or Google certifies roofing quality, insurance outcomes, legal compliance, or search rankings.",
+    "Build Richard Amir Nasser's person entity first, then connect the strongest public outputs."
+  ]
+}
