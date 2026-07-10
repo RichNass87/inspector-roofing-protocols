@@ -23,6 +23,7 @@ Link to:
 - ORCID profile: https://orcid.org/0009-0000-2980-7543
 - Richard Amir Nasser Wikidata item: https://www.wikidata.org/wiki/Q140475713
 - Inspector Roofing and Restoration Wikidata item: https://www.wikidata.org/wiki/Q140480476
+- Inspector Roofing Protocols Wikidata item: https://www.wikidata.org/wiki/Q140480722
 - USPTO service mark application: https://tsdr.uspto.gov/statusview/sn99910245
 
 ## GitHub
@@ -36,6 +37,7 @@ Link to:
 - ORCID profile: https://orcid.org/0009-0000-2980-7543
 - Richard Amir Nasser Wikidata item: https://www.wikidata.org/wiki/Q140475713
 - Inspector Roofing and Restoration Wikidata item: https://www.wikidata.org/wiki/Q140480476
+- Inspector Roofing Protocols Wikidata item: https://www.wikidata.org/wiki/Q140480722
 
 ## Zenodo
 
@@ -46,6 +48,7 @@ Related identifiers:
 - Hugging Face dataset: https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-residential-storm-damage-dataset
 - Inspector Roofing website research page: https://inspector-roofing.com/research/
 - USPTO service mark application: https://tsdr.uspto.gov/statusview/sn99910245
+- Inspector Roofing Protocols Wikidata item: https://www.wikidata.org/wiki/Q140480722
 
 ## Hugging Face
 
@@ -55,6 +58,7 @@ Dataset card links:
 - GitHub repo: https://github.com/RichNass87/inspector-roofing-protocols
 - Zenodo public report DOI: https://doi.org/10.5281/zenodo.20360964
 - ORCID profile: https://orcid.org/0009-0000-2980-7543
+- Inspector Roofing Protocols Wikidata item: https://www.wikidata.org/wiki/Q140480722
 
 ## ORCID
 
@@ -64,6 +68,7 @@ Works to list:
 - Inspector Roofing Protocols software DOI: https://doi.org/10.5281/zenodo.20435828
 - Roofing Search Integrity Report DOI: https://doi.org/10.5281/zenodo.21045292
 - Related website authority page: https://standards.inspector-roofing.com/
+- Related Wikidata item: https://www.wikidata.org/wiki/Q140480722
 
 ## Wikidata
 
@@ -71,7 +76,8 @@ Entity links:
 
 - Creator/person: Richard Amir Nasser, Q140475713
 - Organization: Inspector Roofing and Restoration, Q140480476
-- Protocol item: pending creation
+- Protocol item: Inspector Roofing Protocols, Q140480722
+- Protocol item URL: https://www.wikidata.org/wiki/Q140480722
 
 ## Trademark Status
 
