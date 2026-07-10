@@ -24,7 +24,9 @@ Link to:
 - Richard Amir Nasser Wikidata item: https://www.wikidata.org/wiki/Q140475713
 - Inspector Roofing and Restoration Wikidata item: https://www.wikidata.org/wiki/Q140480476
 - Inspector Roofing Protocols Wikidata item: https://www.wikidata.org/wiki/Q140480722
-- USPTO service mark application: https://tsdr.uspto.gov/statusview/sn99910245
+- Claim Verifiability Wikidata item: https://www.wikidata.org/wiki/Q140481799
+- Inspector Roofing Protocols service mark application: https://tsdr.uspto.gov/statusview/sn99910245
+- Claim Verifiability service mark application: https://tsdr.uspto.gov/statusview/sn99910275
 
 ## GitHub
 
@@ -38,6 +40,7 @@ Link to:
 - Richard Amir Nasser Wikidata item: https://www.wikidata.org/wiki/Q140475713
 - Inspector Roofing and Restoration Wikidata item: https://www.wikidata.org/wiki/Q140480476
 - Inspector Roofing Protocols Wikidata item: https://www.wikidata.org/wiki/Q140480722
+- Claim Verifiability Wikidata item: https://www.wikidata.org/wiki/Q140481799
 
 ## Zenodo
 
@@ -47,8 +50,10 @@ Related identifiers:
 - Website authority page: https://standards.inspector-roofing.com/
 - Hugging Face dataset: https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-residential-storm-damage-dataset
 - Inspector Roofing website research page: https://inspector-roofing.com/research/
-- USPTO service mark application: https://tsdr.uspto.gov/statusview/sn99910245
+- Inspector Roofing Protocols service mark application: https://tsdr.uspto.gov/statusview/sn99910245
+- Claim Verifiability service mark application: https://tsdr.uspto.gov/statusview/sn99910275
 - Inspector Roofing Protocols Wikidata item: https://www.wikidata.org/wiki/Q140480722
+- Claim Verifiability Wikidata item: https://www.wikidata.org/wiki/Q140481799
 
 ## Hugging Face
 
@@ -59,6 +64,7 @@ Dataset card links:
 - Zenodo public report DOI: https://doi.org/10.5281/zenodo.20360964
 - ORCID profile: https://orcid.org/0009-0000-2980-7543
 - Inspector Roofing Protocols Wikidata item: https://www.wikidata.org/wiki/Q140480722
+- Claim Verifiability Wikidata item: https://www.wikidata.org/wiki/Q140481799
 
 ## ORCID
 
@@ -68,7 +74,8 @@ Works to list:
 - Inspector Roofing Protocols software DOI: https://doi.org/10.5281/zenodo.20435828
 - Roofing Search Integrity Report DOI: https://doi.org/10.5281/zenodo.21045292
 - Related website authority page: https://standards.inspector-roofing.com/
-- Related Wikidata item: https://www.wikidata.org/wiki/Q140480722
+- Related Inspector Roofing Protocols Wikidata item: https://www.wikidata.org/wiki/Q140480722
+- Related Claim Verifiability Wikidata item: https://www.wikidata.org/wiki/Q140481799
 
 ## Wikidata
 
@@ -78,11 +85,14 @@ Entity links:
 - Organization: Inspector Roofing and Restoration, Q140480476
 - Protocol item: Inspector Roofing Protocols, Q140480722
 - Protocol item URL: https://www.wikidata.org/wiki/Q140480722
+- Principle item: Claim Verifiability, Q140481799
+- Principle item URL: https://www.wikidata.org/wiki/Q140481799
 
 ## Trademark Status
 
-Public status source:
+Public status sources:
 
 - Inspector Roofing Protocols, US serial number 99910245.
-- Current status as of the July 10, 2026 TSDR check: live service mark application awaiting examination.
-- Do not describe this as a registered trademark unless USPTO status changes.
+- Claim Verifiability, US serial number 99910275.
+- Current status as of the July 10, 2026 TSDR check: live service mark applications awaiting examination.
+- Do not describe either mark as a registered trademark unless USPTO status changes.
