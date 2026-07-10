@@ -1,27 +1,30 @@
 cff-version: 1.2.0
-message: "If you use this protocol, please cite it as below."
-title: "Roof Damage Verification Protocol"
-version: "0.1.0"
-date-released: "2026-06-11"
+message: "If you use Inspector Roofing Protocols, please cite the DOI-backed public release below."
+title: "Inspector Roofing Protocols: Open Technical Documentation Standard for Residential Roof Inspection Evidence Capture"
+version: "1.0.2"
+date-released: "2026-06-29"
 authors:
   - family-names: "Nasser"
-    given-names: "Richard"
-    affiliation: "Inspector Roofing"
-    orcid: "REPLACE_WITH_ORCID_URL"
-repository-code: "https://REPLACE_WITH_GITHUB_REPO_URL"
-url: "https://REPLACE_WITH_DOMAIN/ai-roof-damage-verification-protocol/"
-doi: "REPLACE_WITH_DOI_WITHOUT_HTTPS"
-license: "REPLACE_WITH_LICENSE_ID"
+    given-names: "Richard Amir"
+    affiliation: "Inspector Roofing and Restoration"
+    orcid: "https://orcid.org/0009-0000-2980-7543"
+repository-code: "https://github.com/RichNass87/inspector-roofing-protocols"
+url: "https://standards.inspector-roofing.com/"
+doi: "10.5281/zenodo.20360964"
+license: "CC-BY-4.0"
 abstract: >
-  A machine-readable protocol, callable API stub, JSON Schema, dataset
-  structure, and OpenAPI contract for documenting and reviewing roof damage
-  evidence.
+  A public roof inspection documentation standard and machine-readable
+  protocol package for residential roof inspection evidence capture, slope
+  mapping, photo sequencing, hail and wind condition documentation, roof damage
+  label taxonomy, Claim Verifiability, and AI-readable roof condition reporting.
 keywords:
   - roof inspection
-  - roof damage verification
+  - roof inspection documentation
+  - Inspector Roofing Protocols
   - hail damage
-  - insurance scope review
+  - wind damage
+  - storm damage documentation
+  - Claim Verifiability
   - JSON Schema
   - OpenAPI
-  - negative evidence
-
+  - AI-readable roofing documentation
