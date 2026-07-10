@@ -12,7 +12,7 @@ This file records the small, source-backed set of book/work items selected for p
 - Add Wikidata statements only when the supporting source is public, stable, and appropriate for Wikidata.
 - Prefer work-level clarity over promotional wording.
 
-## Existing Wikidata Item Reused
+## Existing Wikidata Items Reused
 
 ### The Roofing Search Integrity Report
 
@@ -22,6 +22,26 @@ This file records the small, source-backed set of book/work items selected for p
 - Paperback ASIN observed in KDP: `B0H6XXDL9X`
 - Paperback ISBN-13 observed in KDP: `979-8184859057`
 - Notes: strongest existing book/report item because it already has research context and an established Wikidata item.
+
+### The Chase for "Roofer Near Me"
+
+- Wikidata: https://www.wikidata.org/wiki/Q140485275
+- Full title: The Chase for "Roofer Near Me": A Funny, Human Quest to Own the Language, Build Local Authority, and Make AI Finally Understand Your Business
+- Role in graph: DOI-backed book and research cluster for roofing-near-me search language, local authority, and AI visibility.
+- Owned book page: https://inspector-roofing.com/the-chase-for-roofer-near-me/
+- Roofing near me research page: https://standards.inspector-roofing.com/roofing-near-me-research/
+- DOI: https://doi.org/10.5281/zenodo.20650615
+- Zenodo record: https://zenodo.org/records/20650615
+- GitHub source: https://github.com/RichNass87/roofing-near-me-ai-visibility-study
+- GitHub Pages mirror: https://richnass87.github.io/roofing-near-me-ai-visibility-study/
+- Hugging Face: https://huggingface.co/InspectorRoofing/RoofingNearMe
+- Academia paper: https://www.academia.edu/168541076/Roofing_Near_Me_AI_Visibility_Study_v2_1_A_Scientific_Language_Control_Framework_for_Local_Roofing_Search_Authority_Proof_and_AI_Visibility
+- Kindle ASIN observed in KDP: `B0H4YNJQP4`
+- Paperback ASIN observed in KDP: `B0H51PXC4Q`
+- Paperback ISBN-13 observed in KDP: `979-8181285156`
+- Publication date observed: June 12, 2026
+- Print length observed: 118 pages
+- Notes: strongest next book/work item because it links a book, DOI archive, public research page, GitHub source, Hugging Face item, Academia upload, and owned canonical page.
 
 ## Newly Created Wikidata Book/Work Items
 
@@ -68,7 +88,7 @@ Add these manually or through a clean Wikidata tool only where sources support t
 - instance of: literary work or book
 - author: Richard Amir Nasser, https://www.wikidata.org/wiki/Q140475713
 - ISBN-13: only for confirmed print editions
-- described at URL: public Amazon detail page or official owned-source page
+- described at URL: public Amazon detail page, official owned-source page, DOI record, or public research page
 - related concept or main subject: only where the source clearly supports the relationship
 - publication date: only when confirmed by Amazon/KDP or another stable public source
 
@@ -77,6 +97,7 @@ Add these manually or through a clean Wikidata tool only where sources support t
 - Richard Amir Nasser: https://www.wikidata.org/wiki/Q140475713
 - Inspector Roofing and Restoration: https://www.wikidata.org/wiki/Q140480476
 - The Roofing Search Integrity Report: https://www.wikidata.org/wiki/Q140456045
+- The Chase for "Roofer Near Me": https://www.wikidata.org/wiki/Q140485275
 - Inspector Roofing Protocols: https://www.wikidata.org/wiki/Q140480722
 - Claim Verifiability: https://www.wikidata.org/wiki/Q140481799
 - Verifiable Roof: https://www.wikidata.org/wiki/Q140482857
