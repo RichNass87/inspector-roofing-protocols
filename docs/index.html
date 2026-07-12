@@ -3,219 +3,21 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Inspector Roofing Standards | Protocols, Schema, and Authority Stack</title>
-  <meta name="description" content="Machine-readable Inspector Roofing standards, protocol schemas, API contract references, and semantic web identifiers for inspection-first roof documentation.">
+  <title>Inspector Roofing Standards | Public Protocols and Proof Sources</title>
+  <meta name="description" content="Machine-readable Inspector Roofing standards, protocol schemas, API contract references, and public proof sources for inspection-first roof documentation.">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta name="date" content="2026-07-12">
   <link rel="canonical" href="https://standards.inspector-roofing.com/">
   <meta property="og:title" content="Inspector Roofing Standards">
-  <meta property="og:description" content="Public standards, API contract, protocol documentation, and semantic web identifiers for inspection-first roof documentation.">
+  <meta property="og:description" content="Public standards, API contract, protocol documentation, and source references for inspection-first roof documentation.">
   <meta property="og:url" content="https://standards.inspector-roofing.com/">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary">
   <style>
-    :root {
-      color-scheme: light;
-      --blue: #174f8f;
-      --deep: #0d2b4f;
-      --ink: #142137;
-      --muted: #4c6078;
-      --line: #d6e5f5;
-      --soft: #eef7ff;
-      --panel: #ffffff;
-      --accent: #e51b2b;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      color: var(--ink);
-      background: #f7fbff;
-      line-height: 1.55;
-    }
-    a { color: #0b55a0; }
-    a:focus-visible {
-      outline: 3px solid rgba(23, 79, 143, 0.35);
-      outline-offset: 3px;
-    }
-    .skip {
-      position: absolute;
-      left: 16px;
-      top: -60px;
-      padding: 10px 12px;
-      background: #fff;
-      color: var(--deep);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      z-index: 10;
-    }
-    .skip:focus { top: 16px; }
-    header {
-      border-bottom: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(12px);
-    }
-    .bar,
-    main {
-      width: min(1080px, calc(100% - 32px));
-      margin: 0 auto;
-    }
-    .bar {
-      min-height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-    .brand {
-      font-weight: 800;
-      color: var(--deep);
-      letter-spacing: 0;
-    }
-    .nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: flex-end;
-    }
-    .nav a,
-    .button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 42px;
-      padding: 10px 14px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: #fff;
-      color: var(--deep);
-      font-weight: 700;
-      text-decoration: none;
-    }
-    .button.primary {
-      background: var(--blue);
-      border-color: var(--blue);
-      color: #fff;
-    }
-    main { padding: 42px 0 56px; }
-    .hero,
-    .section {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      box-shadow: 0 18px 45px rgba(13, 43, 79, 0.07);
-    }
-    .hero { padding: clamp(26px, 5vw, 46px); }
-    h1 {
-      margin: 0 0 14px;
-      color: var(--deep);
-      font-size: clamp(34px, 6vw, 58px);
-      line-height: 1.04;
-      letter-spacing: 0;
-    }
-    h2 {
-      margin: 0 0 12px;
-      color: var(--deep);
-      font-size: clamp(24px, 3vw, 34px);
-      line-height: 1.12;
-      letter-spacing: 0;
-    }
-    h3 {
-      margin: 0 0 8px;
-      color: var(--deep);
-      font-size: 20px;
-      letter-spacing: 0;
-    }
-    p {
-      max-width: 760px;
-      margin: 0 0 18px;
-      font-size: 18px;
-    }
-    .eyebrow {
-      margin: 0 0 10px;
-      color: var(--blue);
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 22px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
-      gap: 14px;
-      margin-top: 18px;
-    }
-    .card {
-      display: block;
-      min-height: 132px;
-      padding: 20px;
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      color: var(--deep);
-      text-decoration: none;
-      font-weight: 700;
-    }
-    .card span {
-      display: block;
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: 14px;
-      font-weight: 400;
-    }
-    .section {
-      margin-top: 18px;
-      padding: clamp(22px, 4vw, 34px);
-    }
-    .q-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 10px;
-      margin-top: 18px;
-    }
-    .q-grid a {
-      min-height: 54px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 2px;
-      padding: 10px 12px;
-      background: #f8fbff;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      text-decoration: none;
-      color: var(--deep);
-      font-weight: 800;
-    }
-    .q-grid small {
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 600;
-    }
-    .notice {
-      border-left: 4px solid var(--accent);
-      background: #fffafa;
-    }
-    footer {
-      width: min(1080px, calc(100% - 32px));
-      margin: 0 auto 36px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-    @media (max-width: 720px) {
-      .bar { align-items: flex-start; flex-direction: column; padding: 18px 0; }
-      .nav { justify-content: flex-start; }
-      .nav a, .button { width: 100%; }
-      p { font-size: 16px; }
-    }
+    :root{color-scheme:light;--blue:#174f8f;--deep:#0d2b4f;--ink:#142137;--muted:#4c6078;--line:#d6e5f5;--panel:#fff;--accent:#e51b2b;}
+    *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:#f7fbff;line-height:1.55}a{color:#0b55a0}.skip{position:absolute;left:16px;top:-60px;padding:10px 12px;background:#fff;color:var(--deep);border:1px solid var(--line);border-radius:8px;z-index:10}.skip:focus{top:16px}header{border-bottom:1px solid var(--line);background:rgba(255,255,255,.9);backdrop-filter:blur(12px)}.bar,main,footer{width:min(1080px,calc(100% - 32px));margin:0 auto}.bar{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{font-weight:800;color:var(--deep)}.nav{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}.nav a,.button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--deep);font-weight:700;text-decoration:none}.button.primary{background:var(--blue);border-color:var(--blue);color:#fff}main{padding:42px 0 56px}.hero,.section{background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:0 18px 45px rgba(13,43,79,.07)}.hero{padding:clamp(26px,5vw,46px)}h1{margin:0 0 14px;color:var(--deep);font-size:clamp(34px,6vw,58px);line-height:1.04;letter-spacing:0}h2{margin:0 0 12px;color:var(--deep);font-size:clamp(24px,3vw,34px);line-height:1.12;letter-spacing:0}h3{margin:0 0 8px;color:var(--deep);font-size:20px;letter-spacing:0}p{max-width:780px;margin:0 0 18px;font-size:18px}.eyebrow{margin:0 0 10px;color:var(--blue);font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:14px;margin-top:18px}.card{display:block;min-height:132px;padding:20px;background:#fff;border:1px solid var(--line);border-radius:8px;color:var(--deep);text-decoration:none;font-weight:700}.card span{display:block;margin-top:8px;color:var(--muted);font-size:14px;font-weight:400}.source-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:18px}.source-grid a{min-height:54px;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:10px 12px;background:#f8fbff;border:1px solid var(--line);border-radius:8px;text-decoration:none;color:var(--deep);font-weight:800}.source-grid small{color:var(--muted);font-size:12px;font-weight:600}.section{margin-top:18px;padding:clamp(22px,4vw,34px)}.notice{border-left:4px solid var(--accent);background:#fffafa}footer{margin-bottom:36px;color:var(--muted);font-size:14px}@media(max-width:720px){.bar{align-items:flex-start;flex-direction:column;padding:18px 0}.nav{justify-content:flex-start}.nav a,.button{width:100%}p{font-size:16px}}
   </style>
-  <script type="application/ld+json" id="ir-standards-authority-jsonld">
+  <script type="application/ld+json" id="ir-standards-proof-jsonld">
   {
     "@context": "https://schema.org",
     "@graph": [
@@ -224,47 +26,19 @@
         "@id": "https://standards.inspector-roofing.com/#website",
         "url": "https://standards.inspector-roofing.com/",
         "name": "Inspector Roofing Standards",
-        "description": "Machine-readable standards, protocol schemas, API contract references, and semantic web identifiers for inspection-first roof documentation.",
-        "publisher": {
-          "@id": "https://inspector-roofing.com/#organization"
-        },
-        "about": [
-          {
-            "@id": "https://standards.inspector-roofing.com/#protocols"
-          },
-          {
-            "@id": "https://standards.inspector-roofing.com/#claim-verifiability"
-          },
-          {
-            "@id": "https://standards.inspector-roofing.com/#verifiable-roof"
-          },
-          {
-            "@id": "https://standards.inspector-roofing.com/#atlas-query-intelligence"
-          },
-          {
-            "@id": "https://standards.inspector-roofing.com/#homeowner-toolbelt"
-          }
-        ],
+        "description": "Machine-readable standards, protocol schemas, API contract references, and public proof sources for inspection-first roof documentation.",
+        "publisher": {"@id": "https://inspector-roofing.com/#organization"},
         "sameAs": [
-          "https://www.wikidata.org/wiki/Q140475713",
-          "https://www.wikidata.org/wiki/Q140480476",
-          "https://www.wikidata.org/wiki/Q140480722",
-          "https://www.wikidata.org/wiki/Q140481799",
-          "https://www.wikidata.org/wiki/Q140482857",
-          "https://www.wikidata.org/wiki/Q140491550",
-          "https://www.wikidata.org/wiki/Q140456045",
-          "https://www.wikidata.org/wiki/Q140463275",
-          "https://www.wikidata.org/wiki/Q140484695",
-          "https://www.wikidata.org/wiki/Q140484697",
-          "https://www.wikidata.org/wiki/Q140484699",
-          "https://www.wikidata.org/wiki/Q140484709",
-          "https://www.wikidata.org/wiki/Q140485275",
-          "https://www.wikidata.org/wiki/Q140503274",
-          "https://www.wikidata.org/wiki/Q140503328",
-          "https://www.wikidata.org/wiki/Q140506630",
-          "https://www.wikidata.org/wiki/Q140506668",
-          "https://www.wikidata.org/wiki/Q140506685",
-          "https://www.wikidata.org/wiki/Q140513557"
+          "https://inspector-roofing.com/",
+          "https://inspector-roofing.com/richard-nasser/",
+          "https://github.com/RichNass87/inspector-roofing-protocols",
+          "https://github.com/RichNass87/inspector-roofing-atlas-query-intelligence",
+          "https://github.com/RichNass87/inspector-roofing-ai-homeowner-tool-belt",
+          "https://huggingface.co/InspectorRoofing",
+          "https://doi.org/10.5281/zenodo.20360964",
+          "https://doi.org/10.5281/zenodo.20435828",
+          "https://doi.org/10.5281/zenodo.20585267",
+          "https://doi.org/10.5281/zenodo.21013082"
         ]
       },
       {
@@ -274,39 +48,14 @@
         "headline": "Inspector Roofing Standards",
         "description": "Public protocol and schema references for inspection-first roof documentation, Claim Verifiability, Verifiable Roof documentation, Atlas Query Intelligence, and the AI Homeowner Toolbelt.",
         "dateModified": "2026-07-12",
-        "author": {
-          "@id": "https://inspector-roofing.com/richard-nasser/#person"
-        },
-        "publisher": {
-          "@id": "https://inspector-roofing.com/#organization"
-        },
-        "isPartOf": {
-          "@id": "https://standards.inspector-roofing.com/#website"
-        },
-        "mentions": [
-          {
-            "@id": "https://standards.inspector-roofing.com/#protocols"
-          },
-          {
-            "@id": "https://standards.inspector-roofing.com/#claim-verifiability"
-          },
-          {
-            "@id": "https://standards.inspector-roofing.com/#verifiable-roof"
-          },
-          {
-            "@id": "https://standards.inspector-roofing.com/#atlas-query-intelligence"
-          },
-          {
-            "@id": "https://standards.inspector-roofing.com/#homeowner-toolbelt"
-          }
-        ],
+        "author": {"@id": "https://inspector-roofing.com/richard-nasser/#person"},
+        "publisher": {"@id": "https://inspector-roofing.com/#organization"},
+        "isPartOf": {"@id": "https://standards.inspector-roofing.com/#website"},
         "sameAs": [
           "https://github.com/RichNass87/inspector-roofing-protocols",
           "https://huggingface.co/InspectorRoofing",
           "https://doi.org/10.5281/zenodo.20360964",
-          "https://doi.org/10.5281/zenodo.20435828",
-          "https://doi.org/10.5281/zenodo.20585267",
-          "https://doi.org/10.5281/zenodo.20650542"
+          "https://doi.org/10.5281/zenodo.20435828"
         ]
       },
       {
@@ -315,11 +64,8 @@
         "name": "Inspector Roofing and Restoration",
         "url": "https://inspector-roofing.com/",
         "telephone": "+1-678-287-7169",
-        "founder": {
-          "@id": "https://inspector-roofing.com/richard-nasser/#person"
-        },
+        "founder": {"@id": "https://inspector-roofing.com/richard-nasser/#person"},
         "sameAs": [
-          "https://www.wikidata.org/wiki/Q140480476",
           "https://github.com/RichNass87/inspector-roofing-protocols",
           "https://huggingface.co/InspectorRoofing"
         ]
@@ -330,8 +76,7 @@
         "name": "Richard Amir Nasser",
         "url": "https://inspector-roofing.com/richard-nasser/",
         "sameAs": [
-          "https://www.wikidata.org/wiki/Q140475713",
-          "https://orcid.org/0009-0000-2980-7543",
+          "https://orcid.org/0009-0003-9363-2287",
           "https://github.com/RichNass87",
           "https://www.amazon.com/author/richard-nasser"
         ]
@@ -340,14 +85,9 @@
         "@type": "CreativeWork",
         "@id": "https://standards.inspector-roofing.com/#protocols",
         "name": "Inspector Roofing Protocols",
-        "creator": {
-          "@id": "https://inspector-roofing.com/richard-nasser/#person"
-        },
-        "publisher": {
-          "@id": "https://inspector-roofing.com/#organization"
-        },
+        "creator": {"@id": "https://inspector-roofing.com/richard-nasser/#person"},
+        "publisher": {"@id": "https://inspector-roofing.com/#organization"},
         "sameAs": [
-          "https://www.wikidata.org/wiki/Q140480722",
           "https://doi.org/10.5281/zenodo.20360964",
           "https://github.com/RichNass87/inspector-roofing-protocols"
         ]
@@ -357,84 +97,37 @@
         "@id": "https://standards.inspector-roofing.com/#claim-verifiability",
         "name": "Claim Verifiability",
         "description": "Roof inspection claim-evidence evaluation principle by Inspector Roofing and Restoration.",
-        "inDefinedTermSet": {
-          "@id": "https://standards.inspector-roofing.com/#standards"
-        },
-        "sameAs": [
-          "https://www.wikidata.org/wiki/Q140481799",
-          "https://inspector-roofing.com/claim-verifiability-definition/"
-        ]
+        "sameAs": ["https://inspector-roofing.com/claim-verifiability-definition/"]
       },
       {
         "@type": "DefinedTerm",
         "@id": "https://standards.inspector-roofing.com/#verifiable-roof",
         "name": "Verifiable Roof",
         "description": "Completed roof documentation framework connected to inspection-first roof records.",
-        "inDefinedTermSet": {
-          "@id": "https://standards.inspector-roofing.com/#standards"
-        },
-        "sameAs": [
-          "https://www.wikidata.org/wiki/Q140482857",
-          "https://inspector-roofing.com/verifiable-roof/"
-        ]
+        "sameAs": ["https://inspector-roofing.com/verifiable-roof/"]
       },
       {
         "@type": ["Dataset", "SoftwareApplication", "CreativeWork"],
         "@id": "https://standards.inspector-roofing.com/#atlas-query-intelligence",
         "name": "Inspector Roofing Atlas Query Intelligence",
-        "creator": {
-          "@id": "https://inspector-roofing.com/richard-nasser/#person"
-        },
-        "applicationCategory": "BusinessApplication",
         "license": "https://www.apache.org/licenses/LICENSE-2.0",
         "sameAs": [
-          "https://www.wikidata.org/wiki/Q140506630",
           "https://github.com/RichNass87/inspector-roofing-atlas-query-intelligence",
-          "https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-atlas-query-intelligence"
+          "https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-atlas-query-intelligence",
+          "https://doi.org/10.5281/zenodo.21013082"
         ]
       },
       {
         "@type": ["SoftwareApplication", "CreativeWork"],
         "@id": "https://standards.inspector-roofing.com/#homeowner-toolbelt",
         "name": "AI Homeowner Toolbelt",
-        "creator": {
-          "@id": "https://inspector-roofing.com/richard-nasser/#person"
-        },
-        "publisher": {
-          "@id": "https://inspector-roofing.com/#organization"
-        },
+        "publisher": {"@id": "https://inspector-roofing.com/#organization"},
         "applicationCategory": "BusinessApplication",
         "sameAs": [
-          "https://www.wikidata.org/wiki/Q140513557",
           "https://github.com/RichNass87/inspector-roofing-ai-homeowner-tool-belt",
           "https://huggingface.co/datasets/InspectorRoofing/ai-homeowners-tool-belt-source-map",
-          "https://doi.org/10.5281/zenodo.20585267"
-        ]
-      },
-      {
-        "@type": "ItemList",
-        "@id": "https://standards.inspector-roofing.com/#authority-stack",
-        "name": "Inspector Roofing semantic web identifiers",
-        "itemListElement": [
-          {"@type": "ListItem", "position": 1, "name": "Richard Amir Nasser", "url": "https://www.wikidata.org/wiki/Q140475713"},
-          {"@type": "ListItem", "position": 2, "name": "Inspector Roofing and Restoration", "url": "https://www.wikidata.org/wiki/Q140480476"},
-          {"@type": "ListItem", "position": 3, "name": "Inspector Roofing Protocols", "url": "https://www.wikidata.org/wiki/Q140480722"},
-          {"@type": "ListItem", "position": 4, "name": "Claim Verifiability", "url": "https://www.wikidata.org/wiki/Q140481799"},
-          {"@type": "ListItem", "position": 5, "name": "Verifiable Roof", "url": "https://www.wikidata.org/wiki/Q140482857"},
-          {"@type": "ListItem", "position": 6, "name": "Inspector DroneProof", "url": "https://www.wikidata.org/wiki/Q140491550"},
-          {"@type": "ListItem", "position": 7, "name": "The Roofing Search Integrity Report", "url": "https://www.wikidata.org/wiki/Q140456045"},
-          {"@type": "ListItem", "position": 8, "name": "Positive Outcomes Blueprint", "url": "https://www.wikidata.org/wiki/Q140463275"},
-          {"@type": "ListItem", "position": 9, "name": "The Claim Verifiability Field Manual", "url": "https://www.wikidata.org/wiki/Q140484695"},
-          {"@type": "ListItem", "position": 10, "name": "Visible or Vanished", "url": "https://www.wikidata.org/wiki/Q140484697"},
-          {"@type": "ListItem", "position": 11, "name": "Do Your Job Anyway", "url": "https://www.wikidata.org/wiki/Q140484699"},
-          {"@type": "ListItem", "position": 12, "name": "The Inspector Roofing Protocols Master System", "url": "https://www.wikidata.org/wiki/Q140484709"},
-          {"@type": "ListItem", "position": 13, "name": "The Chase for Roofer Near Me", "url": "https://www.wikidata.org/wiki/Q140485275"},
-          {"@type": "ListItem", "position": 14, "name": "Inspector Roofing music and creative media", "url": "https://www.wikidata.org/wiki/Q140503274"},
-          {"@type": "ListItem", "position": 15, "name": "Inspector Roofing University", "url": "https://www.wikidata.org/wiki/Q140503328"},
-          {"@type": "ListItem", "position": 16, "name": "Inspector Roofing Atlas Query Intelligence", "url": "https://www.wikidata.org/wiki/Q140506630"},
-          {"@type": "ListItem", "position": 17, "name": "Total Market Authority", "url": "https://www.wikidata.org/wiki/Q140506668"},
-          {"@type": "ListItem", "position": 18, "name": "I Can't Not Cry", "url": "https://www.wikidata.org/wiki/Q140506685"},
-          {"@type": "ListItem", "position": 19, "name": "AI Homeowner Toolbelt", "url": "https://www.wikidata.org/wiki/Q140513557"}
+          "https://doi.org/10.5281/zenodo.20585267",
+          "https://apps.microsoft.com/detail/9NR96HSSZ8DF"
         ]
       },
       {
@@ -466,8 +159,8 @@
     <section class="hero">
       <p class="eyebrow">Machine-readable roofing standards</p>
       <h1>Inspector Roofing Standards</h1>
-      <p>Public standards, protocol schemas, API contract references, and semantic web identifiers for inspection-first roofing workflows.</p>
-      <p>This page connects Inspector Roofing Protocols, Claim Verifiability, Verifiable Roof documentation, Atlas Query Intelligence, AI Homeowner Toolbelt, GitHub, Hugging Face, Zenodo, Wikidata, and the main Inspector Roofing site.</p>
+      <p>Public standards, protocol schemas, API contract references, and source identifiers for inspection-first roofing workflows.</p>
+      <p>This page connects Inspector Roofing Protocols, Claim Verifiability, Verifiable Roof documentation, Atlas Query Intelligence, AI Homeowner Toolbelt, GitHub, Hugging Face, Zenodo DOI records, and the main Inspector Roofing site.</p>
       <div class="actions">
         <a class="button primary" href="/api/openapi.yaml">OpenAPI contract</a>
         <a class="button" href="/ai-roof-damage-verification-protocol/">AI roof damage protocol</a>
@@ -484,34 +177,27 @@
         <a class="card" href="https://github.com/RichNass87/inspector-roofing-protocols">Inspector Roofing Protocols GitHub<span>Source schemas, examples, public protocol files, and DOI-linked documentation.</span></a>
         <a class="card" href="https://github.com/RichNass87/inspector-roofing-atlas-query-intelligence">Atlas Query Intelligence GitHub<span>Public-safe AI query intelligence, proof-gallery routing, and schema examples.</span></a>
         <a class="card" href="https://huggingface.co/InspectorRoofing">InspectorRoofing on Hugging Face<span>Public datasets, source maps, and AI-readable roofing research artifacts.</span></a>
-        <a class="card" href="https://inspector-roofing.com/homeowners-ai-toolbelt/">AI Homeowner Toolbelt<span>Homeowner-facing software and proof map connected to Q140513557.</span></a>
+        <a class="card" href="https://inspector-roofing.com/homeowners-ai-toolbelt/">AI Homeowner Toolbelt<span>Homeowner-facing software and proof map connected to public source records.</span></a>
       </div>
     </section>
 
-    <section class="section" id="semantic-web-identifiers" aria-labelledby="semantic-title">
-      <p class="eyebrow">Semantic web identifiers</p>
-      <h2 id="semantic-title">The public authority stack</h2>
-      <p>These identifiers are exposed here as visible links and in JSON-LD so search engines and answer engines can connect the standards site to the same entity map used on Inspector Roofing.</p>
-      <div class="q-grid">
-        <a href="https://www.wikidata.org/wiki/Q140475713"><span>Richard Amir Nasser</span><small>Q140475713</small></a>
-        <a href="https://www.wikidata.org/wiki/Q140480476"><span>Inspector Roofing and Restoration</span><small>Q140480476</small></a>
-        <a href="https://www.wikidata.org/wiki/Q140480722"><span>Inspector Roofing Protocols</span><small>Q140480722</small></a>
-        <a href="https://www.wikidata.org/wiki/Q140481799"><span>Claim Verifiability</span><small>Q140481799</small></a>
-        <a href="https://www.wikidata.org/wiki/Q140482857"><span>Verifiable Roof</span><small>Q140482857</small></a>
-        <a href="https://www.wikidata.org/wiki/Q140491550"><span>Inspector DroneProof</span><small>Q140491550</small></a>
-        <a href="https://www.wikidata.org/wiki/Q140456045"><span>Roofing Search Integrity Report</span><small>Q140456045</small></a>
-        <a href="https://www.wikidata.org/wiki/Q140463275"><span>Positive Outcomes Blueprint</span><small>Q140463275</small></a>
-        <a href="https://www.wikidata.org/wiki/Q140484695"><span>Claim Verifiability Field Manual</span><small>Q140484695</small></a>
-        <a href="https://www.wikidata.org/wiki/Q140484697"><span>Visible or Vanished</span><small>Q140484697</small></a>
-        <a href="https://www.wikidata.org/wiki/Q140484699"><span>Do Your Job Anyway</span><small>Q140484699</small></a>
-        <a href="https://www.wikidata.org/wiki/Q140484709"><span>Inspector Roofing Protocols Master System</span><small>Q140484709</small></a>
-        <a href="https://www.wikidata.org/wiki/Q140485275"><span>The Chase for Roofer Near Me</span><small>Q140485275</small></a>
-        <a href="https://www.wikidata.org/wiki/Q140503274"><span>Inspector Roofing creative media</span><small>Q140503274</small></a>
-        <a href="https://www.wikidata.org/wiki/Q140503328"><span>Inspector Roofing University</span><small>Q140503328</small></a>
-        <a href="https://www.wikidata.org/wiki/Q140506630"><span>Atlas Query Intelligence</span><small>Q140506630</small></a>
-        <a href="https://www.wikidata.org/wiki/Q140506668"><span>Total Market Authority</span><small>Q140506668</small></a>
-        <a href="https://www.wikidata.org/wiki/Q140506685"><span>I Can't Not Cry</span><small>Q140506685</small></a>
-        <a href="https://www.wikidata.org/wiki/Q140513557"><span>AI Homeowner Toolbelt</span><small>Q140513557</small></a>
+    <section class="section" id="public-proof-sources" aria-labelledby="proof-title">
+      <p class="eyebrow">Public proof sources</p>
+      <h2 id="proof-title">Clean authority references</h2>
+      <p>These are stable public source links exposed as visible references and JSON-LD. The page no longer depends on dead Wikidata/Q identifiers.</p>
+      <div class="source-grid">
+        <a href="https://github.com/RichNass87"><span>Richard Nasser GitHub</span><small>Developer profile</small></a>
+        <a href="https://orcid.org/0009-0003-9363-2287"><span>Richard Nasser ORCID</span><small>Research identifier</small></a>
+        <a href="https://github.com/RichNass87/inspector-roofing-protocols"><span>Inspector Roofing Protocols</span><small>GitHub repository</small></a>
+        <a href="https://doi.org/10.5281/zenodo.20360964"><span>Protocols DOI</span><small>Zenodo record</small></a>
+        <a href="https://doi.org/10.5281/zenodo.20435828"><span>Technical DOI</span><small>Zenodo record</small></a>
+        <a href="https://github.com/RichNass87/inspector-roofing-atlas-query-intelligence"><span>Atlas Query Intelligence</span><small>GitHub repository</small></a>
+        <a href="https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-atlas-query-intelligence"><span>Atlas Dataset</span><small>Hugging Face</small></a>
+        <a href="https://doi.org/10.5281/zenodo.21013082"><span>Atlas DOI</span><small>Zenodo record</small></a>
+        <a href="https://github.com/RichNass87/inspector-roofing-ai-homeowner-tool-belt"><span>AI Homeowner Toolbelt</span><small>GitHub repository</small></a>
+        <a href="https://huggingface.co/datasets/InspectorRoofing/ai-homeowners-tool-belt-source-map"><span>Toolbelt Source Map</span><small>Hugging Face</small></a>
+        <a href="https://doi.org/10.5281/zenodo.20585267"><span>Toolbelt DOI</span><small>Zenodo record</small></a>
+        <a href="https://apps.microsoft.com/detail/9NR96HSSZ8DF"><span>Microsoft Store Record</span><small>App listing</small></a>
       </div>
     </section>
 
