@@ -1,0 +1,199 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://inspector-roofing.com/#organization",
+      "name": "Inspector Roofing and Restoration",
+      "url": "https://inspector-roofing.com/",
+      "sameAs": [
+        "https://github.com/RichNass87/inspector-roofing-protocols",
+        "https://standards.inspector-roofing.com/"
+      ],
+      "subjectOf": [
+        {
+          "@id": "https://standards.inspector-roofing.com/app-distribution-authority/#webpage"
+        }
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://inspector-roofing.com/richard-nasser/#person",
+      "name": "Richard Amir Nasser",
+      "url": "https://inspector-roofing.com/richard-nasser/",
+      "sameAs": [
+        "https://github.com/RichNass87",
+        "https://orcid.org/0009-0000-2980-7543"
+      ],
+      "affiliation": {
+        "@id": "https://inspector-roofing.com/#organization"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://standards.inspector-roofing.com/app-distribution-authority/#webpage",
+      "url": "https://standards.inspector-roofing.com/app-distribution-authority/",
+      "name": "Inspector Roofing App Distribution Authority",
+      "description": "Public-safe software distribution evidence for Inspector Roofing and Restoration, AI Homeowner's Tool Belt, and Inspector DroneProof.",
+      "about": [
+        {
+          "@id": "https://inspector-roofing.com/#organization"
+        },
+        {
+          "@id": "https://inspector-roofing.com/richard-nasser/#person"
+        },
+        {
+          "@id": "https://inspector-roofing.com/ai-homeowner-tool-belt/#software"
+        },
+        {
+          "@id": "https://inspector-roofing.com/droneproof/#software"
+        }
+      ],
+      "mainEntity": {
+        "@id": "https://standards.inspector-roofing.com/app-distribution-authority/#item-list"
+      }
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://standards.inspector-roofing.com/app-distribution-authority/#item-list",
+      "name": "Inspector Roofing public-safe app distribution records",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "item": {
+            "@id": "https://inspector-roofing.com/ai-homeowner-tool-belt/#software"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "item": {
+            "@id": "https://inspector-roofing.com/droneproof/#software"
+          }
+        }
+      ]
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://inspector-roofing.com/ai-homeowner-tool-belt/#software",
+      "name": "AI Homeowner's Tool Belt",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": [
+        "Web",
+        "Windows",
+        "Chrome"
+      ],
+      "creator": {
+        "@id": "https://inspector-roofing.com/richard-nasser/#person"
+      },
+      "publisher": {
+        "@id": "https://inspector-roofing.com/#organization"
+      },
+      "isBasedOn": {
+        "@id": "https://inspector-roofing.com/#inspector-roofing-protocols"
+      },
+      "sameAs": [
+        "https://github.com/RichNass87/inspector-roofing-ai-homeowner-tool-belt",
+        "https://doi.org/10.5281/zenodo.20585267",
+        "https://apps.microsoft.com/detail/9NR96HSSZ8DF"
+      ],
+      "identifier": [
+        {
+          "@type": "PropertyValue",
+          "propertyID": "Microsoft Store ID",
+          "value": "9NR96HSSZ8DF"
+        },
+        {
+          "@type": "PropertyValue",
+          "propertyID": "Microsoft MSA App ID",
+          "value": "8213439c-a25a-4343-9f4f-add02c5f377f"
+        },
+        {
+          "@type": "PropertyValue",
+          "propertyID": "Chrome Publisher ID",
+          "value": "920aa84f-43e6-48b9-8e88-5710c8365f1d"
+        },
+        {
+          "@type": "PropertyValue",
+          "propertyID": "Chrome Extension ID",
+          "value": "dgdpjonamnnfphkbibajcagcepngcgcj"
+        }
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "Chrome Web Store status observed on 2026-07-11",
+          "value": "Pending review"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "Public claim boundary",
+          "value": "Distribution setup and review status only; no platform endorsement is claimed."
+        }
+      ]
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://inspector-roofing.com/droneproof/#software",
+      "name": "Inspector DroneProof",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": [
+        "Android",
+        "Web"
+      ],
+      "softwareVersion": "0.5.0",
+      "creator": {
+        "@id": "https://inspector-roofing.com/richard-nasser/#person"
+      },
+      "publisher": {
+        "@id": "https://inspector-roofing.com/#organization"
+      },
+      "sameAs": [
+        "https://doi.org/10.5281/zenodo.21301426",
+        "https://github.com/RichNass87/inspector-droneproof",
+        "https://huggingface.co/datasets/InspectorRoofing/inspector-droneproof-evidence-samples",
+        "https://inspector-roofing.com/droneproof/"
+      ],
+      "identifier": [
+        {
+          "@type": "PropertyValue",
+          "propertyID": "Amazon Appstore App ID",
+          "value": "amzn1.devportal.mobileapp.94f3fd69e00a4055b9f2fe5d5e50c89e"
+        },
+        {
+          "@type": "PropertyValue",
+          "propertyID": "Amazon Appstore Release ID",
+          "value": "amzn1.devportal.apprelease.dc3efbc786a14a53bb7144b5f7bce73b"
+        },
+        {
+          "@type": "PropertyValue",
+          "propertyID": "Meta App ID",
+          "value": "1259026162836066"
+        },
+        {
+          "@type": "PropertyValue",
+          "propertyID": "Meta Business ID",
+          "value": "636031046737980"
+        }
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "Amazon Appstore status observed on 2026-07-11",
+          "value": "Draft created; app file upload required before submission can move forward."
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "Meta for Developers status observed on 2026-07-11",
+          "value": "Created, unpublished."
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "Public claim boundary",
+          "value": "Developer-console identity and public source records only; no platform endorsement is claimed."
+        }
+      ]
+    }
+  ]
+}
