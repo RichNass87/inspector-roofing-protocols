@@ -1,106 +1,104 @@
-# Cross-Link Map
+# Public Source-Spine Cross-Link Map
 
-Use one canonical authority page for the public standard:
+This map keeps one consistent, public-safe identity trail for Richard Amir Nasser, Inspector Roofing and Restoration, the Inspector Roofing Protocols, and related research and software records.
 
-```text
-https://standards.inspector-roofing.com/
-```
+## Canonical identity
 
-Use one canonical DOI record for citation:
+Use these live pages as the primary identity anchors:
 
-```text
-https://doi.org/10.5281/zenodo.20360964
-```
+- Richard Amir Nasser: https://inspector-roofing.com/richard-nasser/
+- Richard Amir Nasser knowledge graph: https://inspector-roofing.com/richard-amir-nasser-knowledge-graph/
+- Inspector Roofing authority stack: https://inspector-roofing.com/authority-stack/
+- Inspector Roofing and Restoration: https://inspector-roofing.com/
+- ORCID: https://orcid.org/0009-0000-2980-7543
+- GitHub profile: https://github.com/RichNass87
+- Hugging Face profile: https://huggingface.co/InspectorRoofing
+- Kaggle profile: https://www.kaggle.com/inspectorroofing
+- Academia author profile: https://independent.academia.edu/RichardNasser
+- Amazon author profile: https://www.amazon.com/author/richard-nasser
+- About.me profile: https://about.me/richardnasser
+
+These pages describe the same public identity and should use the same name, role, company relationship, and canonical URLs.
 
 ## Website
 
-Link to:
+Primary research and standards links:
 
-- GitHub repo: https://github.com/RichNass87/inspector-roofing-protocols
-- App distribution authority page: https://standards.inspector-roofing.com/app-distribution-authority/
-- Zenodo public report DOI: https://doi.org/10.5281/zenodo.20360964
-- Zenodo software DOI: https://doi.org/10.5281/zenodo.20435828
-- Hugging Face roof dataset: https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-residential-storm-damage-dataset
-- ORCID profile: https://orcid.org/0009-0000-2980-7543
-- Richard Amir Nasser profile: https://inspector-roofing.com/richard-nasser/
-- Inspector DroneProof page: https://inspector-roofing.com/droneproof/
-- USPTO service mark application: https://tsdr.uspto.gov/statusview/sn99910245
+- Standards site: https://standards.inspector-roofing.com/
+- GitHub repository: https://github.com/RichNass87/inspector-roofing-protocols
+- Public report DOI: https://doi.org/10.5281/zenodo.20360964
+- Software DOI: https://doi.org/10.5281/zenodo.20435828
+- Roofing Search Integrity Report: https://inspector-roofing.com/research/
+- Inspector DroneProof: https://inspector-roofing.com/droneproof/
+- ORCID: https://orcid.org/0009-0000-2980-7543
+- USPTO service mark application status: https://tsdr.uspto.gov/statusview/sn99910245
 
 ## GitHub
 
-Link to:
+Link the public repositories back to the canonical identity pages and the primary evidence records:
 
-- Website authority page: https://standards.inspector-roofing.com/
-- App distribution authority page: https://standards.inspector-roofing.com/app-distribution-authority/
-- App distribution schema: ./app-distribution-authority.schema.jsonld
-- Zenodo public report DOI: https://doi.org/10.5281/zenodo.20360964
-- Zenodo software DOI: https://doi.org/10.5281/zenodo.20435828
-- Hugging Face dataset: https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-residential-storm-damage-dataset
-- ORCID profile: https://orcid.org/0009-0000-2980-7543
+- Richard Amir Nasser profile: https://inspector-roofing.com/richard-nasser/
+- Knowledge graph: https://inspector-roofing.com/richard-amir-nasser-knowledge-graph/
+- Authority stack: https://inspector-roofing.com/authority-stack/
+- Standards site: https://standards.inspector-roofing.com/
+- Public report DOI: https://doi.org/10.5281/zenodo.20360964
+- Software DOI: https://doi.org/10.5281/zenodo.20435828
+- ORCID: https://orcid.org/0009-0000-2980-7543
+- Hugging Face profile: https://huggingface.co/InspectorRoofing
+- Residential storm-damage dataset: https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-residential-storm-damage-dataset
 
-## App Distribution Authority
+## Public software records
 
-Public-safe records:
+### AI Homeowner's Tool Belt
 
-- AI Homeowner's Tool Belt GitHub repository: https://github.com/RichNass87/inspector-roofing-ai-homeowner-tool-belt
-- AI Homeowner's Tool Belt Zenodo DOI: https://doi.org/10.5281/zenodo.20585267
-- Microsoft Store public URL: https://apps.microsoft.com/detail/9NR96HSSZ8DF
+- GitHub: https://github.com/RichNass87/inspector-roofing-ai-homeowner-tool-belt
+- Website: https://inspector-roofing.com/homeowners-ai-toolbelt/
+- DOI: https://doi.org/10.5281/zenodo.20585267
+- Hugging Face source-map dataset: https://huggingface.co/datasets/InspectorRoofing/ai-homeowners-tool-belt-source-map
+- Microsoft Store: https://apps.microsoft.com/detail/9NR96HSSZ8DF
 - Chrome Extension ID: `dgdpjonamnnfphkbibajcagcepngcgcj`
 - Chrome Publisher ID: `920aa84f-43e6-48b9-8e88-5710c8365f1d`
-- Chrome status observed on July 11, 2026: pending review.
-- Inspector DroneProof official page: https://inspector-roofing.com/droneproof/
-- Inspector DroneProof GitHub repository: https://github.com/RichNass87/inspector-droneproof
-- Inspector DroneProof Zenodo DOI: https://doi.org/10.5281/zenodo.21301426
-- Inspector DroneProof Hugging Face dataset: https://huggingface.co/datasets/InspectorRoofing/inspector-droneproof-evidence-samples
-- Amazon Appstore App ID: `amzn1.devportal.mobileapp.94f3fd69e00a4055b9f2fe5d5e50c89e`
-- Amazon Appstore Release ID: `amzn1.devportal.apprelease.dc3efbc786a14a53bb7144b5f7bce73b`
-- Meta App ID: `1259026162836066`
-- Meta Business ID: `636031046737980`
+- Chrome status observed July 11, 2026: pending review.
 
-Use these as software distribution evidence only. Do not describe draft, pending review, unpublished, or reserved listings as approved, live, endorsed, or certified by the platform.
+### Inspector DroneProof
 
-## Zenodo
+- Website: https://inspector-roofing.com/droneproof/
+- GitHub: https://github.com/RichNass87/inspector-droneproof
+- Zenodo DOI: https://doi.org/10.5281/zenodo.21301426
+- Hugging Face dataset: https://huggingface.co/datasets/InspectorRoofing/inspector-droneproof-evidence-samples
 
-Related identifiers:
-
-- GitHub release/repository: https://github.com/RichNass87/inspector-roofing-protocols
-- Website authority page: https://standards.inspector-roofing.com/
-- Hugging Face dataset: https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-residential-storm-damage-dataset
-- Inspector Roofing website research page: https://inspector-roofing.com/research/
-- USPTO service mark application: https://tsdr.uspto.gov/statusview/sn99910245
+Use platform identifiers as software distribution evidence only. Do not describe draft, pending-review, unpublished, or reserved listings as approved, live, endorsed, or certified by a platform.
 
 ## Hugging Face
 
-Dataset card links:
+Dataset cards should link to:
 
-- Website authority page: https://standards.inspector-roofing.com/
-- GitHub repo: https://github.com/RichNass87/inspector-roofing-protocols
-- Zenodo public report DOI: https://doi.org/10.5281/zenodo.20360964
-- ORCID profile: https://orcid.org/0009-0000-2980-7543
+- Canonical identity page: https://inspector-roofing.com/richard-nasser/
+- Knowledge graph: https://inspector-roofing.com/richard-amir-nasser-knowledge-graph/
+- Authority stack: https://inspector-roofing.com/authority-stack/
+- Company: https://inspector-roofing.com/
+- GitHub: https://github.com/RichNass87/inspector-roofing-protocols
+- ORCID: https://orcid.org/0009-0000-2980-7543
+- DOI: https://doi.org/10.5281/zenodo.20360964
 
 ## ORCID
 
-Works to list:
+Keep the ORCID works list focused on citeable, public records:
 
-- Inspector Roofing Protocols public report DOI: https://doi.org/10.5281/zenodo.20360964
-- Inspector Roofing Protocols software DOI: https://doi.org/10.5281/zenodo.20435828
-- Roofing Search Integrity Report DOI: https://doi.org/10.5281/zenodo.21045292
-- Related website authority page: https://standards.inspector-roofing.com/
+- Inspector Roofing Protocols public report: https://doi.org/10.5281/zenodo.20360964
+- Inspector Roofing Protocols software: https://doi.org/10.5281/zenodo.20435828
+- Roofing Search Integrity Report: https://doi.org/10.5281/zenodo.21045292
+- Atlas Query Intelligence: https://doi.org/10.5281/zenodo.21013082
+- Related standards site: https://standards.inspector-roofing.com/
 
-## Wikidata Status
+ORCID should use the same name, public biography, and website links as the canonical Richard Amir Nasser page.
 
-Status as of 2026-07-12: the earlier Wikidata items for Richard Amir Nasser, Inspector Roofing and Restoration, Inspector Roofing Protocols, Claim Verifiability, Verifiable Roof, Inspector DroneProof, and Inspector Roofing Atlas Query Intelligence are not live. Wikidata deletion logs checked today cited Wikidata notability policy.
+## Registry hygiene
 
-Do not use deleted Q IDs as public identifiers in schema, DOI metadata, GitHub README files, Hugging Face dataset cards, ORCID, press pages, or app metadata.
+Older registry identifiers that no longer resolve are intentionally omitted from this source map. Do not publish or reuse dead identifiers in schema, DOI metadata, GitHub README files, Hugging Face dataset cards, ORCID records, press pages, or app metadata. Add a registry identifier only after it is independently live, stable, and relevant to the page.
 
-Future Wikidata attempts should happen slowly, one item at a time, only after stronger independent coverage exists. The safest first candidates are Richard Amir Nasser, Inspector Roofing and Restoration, Inspector Roofing Protocols, and one software item.
+## Trademark status
 
-Hold app-store identifier statements until the public store URLs are live, stable, and citeable. During pending/draft phases, keep app-store IDs in GitHub documentation, website schema, and internal evidence maps only.
-
-## Trademark Status
-
-Public status source:
-
-- Inspector Roofing Protocols, US serial number 99910245.
-- Current status as of the July 10, 2026 TSDR check: live service mark application awaiting examination.
-- Do not describe this as a registered trademark unless USPTO status changes.
+- Inspector Roofing Protocols: US serial number 99910245.
+- Current public description: live service mark application awaiting examination.
+- Do not describe this as a registered trademark unless the USPTO status changes.
