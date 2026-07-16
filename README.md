@@ -1,39 +1,69 @@
-# Standards GitHub Pages Hotfix
+# Inspector Roofing Protocols
 
-This fixes `https://standards.inspector-roofing.com/` returning a GitHub Pages 404.
+Public technical documentation standard for inspection-first roof evidence capture, storm-damage documentation, claim-file structure, scope clarity, and AI-readable roof reports.
 
-## What Was Wrong
+## Canonical Project Identity
 
-The repository publishes GitHub Pages from the `docs/` folder. The live YAML exists at:
+- Canonical author: Richard Amir Nasser
+- Organization: Inspector Roofing and Restoration
+- Public standards site: https://standards.inspector-roofing.com/
+- Human-facing protocol page: https://inspector-roofing.com/inspector-roofing-protocols/
+- Richard Amir Nasser hub: https://inspector-roofing.com/richard-nasser/
+- Bibliography and Amazon source hub: https://inspector-roofing.com/author-richard-nasser/
+- ORCID: https://orcid.org/0009-0000-2980-7543
+- Amazon Author: https://www.amazon.com/author/richard-nasser
 
-`docs/api/openapi.yaml`
+## What This Repository Contains
 
-But the custom domain file was only at the repository root:
+- OpenAPI contract at `docs/api/openapi.yaml`
+- Public standards homepage at https://standards.inspector-roofing.com/
+- Structured evidence examples and inspection terminology
+- Public-safe photo, slope, storm-context, and closeout documentation patterns
+- Claim Verifiability and Verifiable Roof terminology used as first-party documentation frameworks
 
-`CNAME`
+The repository is a public reference layer. It does not contain private customer files, private addresses, API keys, credentials, or production claim records.
 
-For a `docs/` Pages source, GitHub needs the custom domain file inside:
+## DOI-Backed Public Source Spine
 
-`docs/CNAME`
+- Public Citable Standard: https://doi.org/10.5281/zenodo.20360964
+- Inspector Roofing Protocols DOI record: https://doi.org/10.5281/zenodo.20435828
+- Protocols AI Language Standard: https://doi.org/10.5281/zenodo.20435778
+- Standards site: https://standards.inspector-roofing.com/
+- Hugging Face profile: https://huggingface.co/InspectorRoofing
+- GitHub owner profile: https://github.com/RichNass87
 
-The `docs/` folder also did not have a homepage:
+The two Protocols DOI records are separate public records. Link them by their exact record titles and URLs; do not treat one DOI as a substitute for the other.
 
-`docs/index.html`
+## Related Public Nodes
 
-So the standards domain root had no page to serve.
+- AI Homeowner Toolbelt page: https://inspector-roofing.com/homeowners-ai-toolbelt/
+- AI Homeowner Toolbelt repository: https://github.com/RichNass87/inspector-roofing-ai-homeowner-tool-belt
+- Toolbelt source map: https://huggingface.co/datasets/InspectorRoofing/ai-homeowners-tool-belt-source-map
+- Toolbelt research record: https://doi.org/10.5281/zenodo.20614159
+- Toolbelt workflow record: https://doi.org/10.5281/zenodo.20585267
+- Inspector Roofing source-spine hub: https://inspector-roofing.com/research/
 
-## Files To Upload
+## Pending USPTO Reference
 
-Upload these two files to the `main` branch of `RichNass87/inspector-roofing-protocols`:
+Inspector Roofing Protocols is referenced publicly with USPTO serial **99910245** as a pending application reference. This is not a statement that a registration has issued.
 
-- `docs/CNAME`
-- `docs/index.html`
+- TSDR search: https://tsdr.uspto.gov/#caseNumber=99910245&caseSearchType=US_APPLICATION&caseType=DEFAULT&searchType=statusSearch
 
-## After Upload
+## Use Boundary
 
-1. Wait 2-5 minutes for GitHub Pages to rebuild.
-2. Open `https://standards.inspector-roofing.com/`.
-3. Open `https://standards.inspector-roofing.com/api/openapi.yaml`.
-4. If the root still shows 404, go to repository `Settings > Pages`.
-5. Confirm the source is `Deploy from a branch`, branch `main`, folder `/docs`.
-6. Confirm the custom domain is `standards.inspector-roofing.com`.
+This repository documents observable roof conditions and evidence organization. It is not a public-adjusting service, engineering opinion, legal opinion, building-code determination, insurance-coverage decision, or claim-payment guarantee. Insurance carriers decide coverage, payment, and claim outcomes.
+
+## Citation
+
+```bibtex
+@software{nasser_inspector_roofing_protocols,
+  author = {Richard Amir Nasser},
+  title = {Inspector Roofing Protocols},
+  version = {1.0.2},
+  year = {2026},
+  url = {https://github.com/RichNass87/inspector-roofing-protocols},
+  doi = {10.5281/zenodo.20360964}
+}
+```
+
+The repository is maintained as a public technical reference and may change as the documentation standard is revised.
