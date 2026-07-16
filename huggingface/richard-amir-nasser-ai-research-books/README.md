@@ -28,11 +28,24 @@ Core person and profile anchors:
 
 - Official person hub: https://inspector-roofing.com/richard-nasser/
 - ORCID: https://orcid.org/0009-0000-2980-7543
+- LinkedIn: https://www.linkedin.com/in/richard-amir-nasser-2b35011a/
 - GitHub: https://github.com/RichNass87
 - Hugging Face: https://huggingface.co/InspectorRoofing
 - Amazon author page: https://www.amazon.com/author/richard-nasser
 - Wikidata person status: no live person item verified on 2026-07-16
 - Inspector Roofing and Restoration: https://inspector-roofing.com/
+
+## Credential Source Map
+
+The adjacent `credentials.json` file records public-safe relationships for:
+
+- FAA, GARCA, and HAAG field-credential evidence with their source limitations;
+- three OpenAI Academy course completion certificates;
+- the Google AI Professional Certificate and its seven component course IDs;
+- eleven current Google Skillshop certifications; and
+- the canonical LinkedIn, ORCID, GitHub, Hugging Face, and person-hub anchors.
+
+Issuer URLs remain primary. LinkedIn is an aggregation profile, not the credential issuer. Learning records support the Richard Amir Nasser person node and do not establish roofing licensure, Google or OpenAI endorsement, product approval, or insurance authority.
 
 ## Included Works
 
@@ -97,3 +110,5 @@ The dataset emphasizes a small set of source-backed works rather than every KDP 
 ## Source File
 
 Structured data should be placed in `books.json` beside this card.
+
+Credential relationships are stored separately in `credentials.json` so book metadata and personal credential evidence are not merged into one claim type.
