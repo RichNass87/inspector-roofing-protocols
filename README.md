@@ -1,69 +1,90 @@
 # Inspector Roofing Protocols
 
-Public technical documentation standard for inspection-first roof evidence capture, storm-damage documentation, claim-file structure, scope clarity, and AI-readable roof reports.
+Versioned, machine-readable documentation for recording observable residential roof conditions. The package includes JSON Schemas, a damage-label taxonomy, an OpenAPI contract, templates, an anonymized example packet, and a reproducible release-readiness validator.
 
-## Canonical Project Identity
+## Release identity
 
-- Canonical author: Richard Amir Nasser
-- Organization: Inspector Roofing and Restoration
-- Public standards site: https://standards.inspector-roofing.com/
-- Human-facing protocol page: https://inspector-roofing.com/inspector-roofing-protocols/
-- Richard Amir Nasser hub: https://inspector-roofing.com/richard-nasser/
-- Bibliography and Amazon source hub: https://inspector-roofing.com/author-richard-nasser/
-- ORCID: https://orcid.org/0009-0000-2980-7543
-- Amazon Author: https://www.amazon.com/author/richard-nasser
+- Title: **Inspector Roofing Protocols**
+- Version: **1.1.0**
+- Author: **Richard Amir Nasser**
+- Maintainer: **Inspector Roofing and Restoration**
+- Repository: <https://github.com/RichNass87/inspector-roofing-protocols>
+- Standards site: <https://standards.inspector-roofing.com/>
+- Protocol page: <https://inspector-roofing.com/inspector-roofing-protocols/>
+- Richard Amir Nasser hub: <https://inspector-roofing.com/richard-nasser/>
+- Bibliography and Amazon source hub: <https://inspector-roofing.com/author-richard-nasser/>
+- ORCID: <https://orcid.org/0009-0000-2980-7543>
+- GitHub profile: <https://github.com/RichNass87>
+- Hugging Face profile: <https://huggingface.co/InspectorRoofing>
+- Amazon Author: <https://www.amazon.com/author/richard-nasser>
 
-## What This Repository Contains
+## DOI-backed source spine
 
-- OpenAPI contract at `docs/api/openapi.yaml`
-- Public standards homepage at https://standards.inspector-roofing.com/
-- Structured evidence examples and inspection terminology
-- Public-safe photo, slope, storm-context, and closeout documentation patterns
-- Claim Verifiability and Verifiable Roof terminology used as first-party documentation frameworks
+- Public Citable Standard: <https://doi.org/10.5281/zenodo.20360964>
+- Inspector Roofing Protocols record: <https://doi.org/10.5281/zenodo.20435828>
+- Protocols AI Language Standard: <https://doi.org/10.5281/zenodo.20435778>
 
-The repository is a public reference layer. It does not contain private customer files, private addresses, API keys, credentials, or production claim records.
+These are separate public records. Cite each record by its exact title and URL; do not treat one DOI as a substitute for another or as independent certification. See `docs/SOURCE_SPINE.md` for the normalized public source map.
 
-## DOI-Backed Public Source Spine
+## Scope
 
-- Public Citable Standard: https://doi.org/10.5281/zenodo.20360964
-- Inspector Roofing Protocols DOI record: https://doi.org/10.5281/zenodo.20435828
-- Protocols AI Language Standard: https://doi.org/10.5281/zenodo.20435778
-- Standards site: https://standards.inspector-roofing.com/
-- Hugging Face profile: https://huggingface.co/InspectorRoofing
-- GitHub owner profile: https://github.com/RichNass87
+The protocol supports:
 
-The two Protocols DOI records are separate public records. Link them by their exact record titles and URLs; do not treat one DOI as a substitute for the other.
+- inspection context and access limitations;
+- roof-system and slope identification;
+- observable-condition notes;
+- context, overview, and detail photo references;
+- separation of storm candidates from wear, installation, maintenance, and inconclusive conditions;
+- explicit documentation gaps; and
+- structured recommendations for follow-up inspection or contractor review.
 
-## Related Public Nodes
+The protocol does not determine insurance coverage, payment, causation, code compliance, engineering conclusions, or legal rights. Inspector Roofing documents visible and accessible conditions and does not act as a public adjuster. Carriers decide coverage, payment, and claim outcomes.
 
-- AI Homeowner Toolbelt page: https://inspector-roofing.com/homeowners-ai-toolbelt/
-- AI Homeowner Toolbelt repository: https://github.com/RichNass87/inspector-roofing-ai-homeowner-tool-belt
-- Toolbelt source map: https://huggingface.co/datasets/InspectorRoofing/ai-homeowners-tool-belt-source-map
-- Toolbelt research record: https://doi.org/10.5281/zenodo.20614159
-- Toolbelt workflow record: https://doi.org/10.5281/zenodo.20585267
-- Inspector Roofing source-spine hub: https://inspector-roofing.com/research/
+## Quick verification
 
-## Pending USPTO Reference
+Requires Node.js 18 or newer.
 
-Inspector Roofing Protocols is referenced publicly with USPTO serial **99910245** as a pending application reference. This is not a statement that a registration has issued.
-
-- TSDR search: https://tsdr.uspto.gov/#caseNumber=99910245&caseSearchType=US_APPLICATION&caseType=DEFAULT&searchType=statusSearch
-
-## Use Boundary
-
-This repository documents observable roof conditions and evidence organization. It is not a public-adjusting service, engineering opinion, legal opinion, building-code determination, insurance-coverage decision, or claim-payment guarantee. Insurance carriers decide coverage, payment, and claim outcomes.
-
-## Citation
-
-```bibtex
-@software{nasser_inspector_roofing_protocols,
-  author = {Richard Amir Nasser},
-  title = {Inspector Roofing Protocols},
-  version = {1.0.2},
-  year = {2026},
-  url = {https://github.com/RichNass87/inspector-roofing-protocols},
-  doi = {10.5281/zenodo.20360964}
-}
+```bash
+npm run validate
+npm run smoke
+npm run checksums
 ```
 
-The repository is maintained as a public technical reference and may change as the documentation standard is revised.
+The validator writes `release-readiness-report.json` and `release-readiness-report.md`. Its score is an internal, reproducible package-readiness measure, not an independent ranking or platform endorsement. A release remains on hold if any hard gate fails, even if the numeric score is 85 or higher. The stronger improvement target remains 91+.
+
+## Key files
+
+- `METHODOLOGY.md`: collection, labeling, review, privacy, and limitation rules.
+- `roof_inspection.schema.json`: structured roof inspection file.
+- `rooffile-protocol.schema.json`: evidence-package schema.
+- `damage_labels.json`: observable-condition vocabulary.
+- `openapi.yaml`: documented API contract; publication does not assert a hosted production API.
+- `examples/anonymized-roof-documentation-packet/`: synthetic, non-claim example.
+- `evidence/credential-evidence-register.md`: public-source credential register and name boundaries.
+- `release-manifest.json`: release identity and source relationships.
+- `CHECKSUMS.sha256`: file-integrity ledger generated for the release.
+
+## Evidence boundaries
+
+- Public examples must not contain homeowner names, exact residential addresses, dates of birth, policy or claim numbers, certificate numbers, faces, license plates, signatures, or EXIF GPS metadata.
+- A credential is described only to the extent supported by its cited source.
+- The FAA registry record uses the credential name **Richard James Nasser**. The project author remains canonically **Richard Amir Nasser**. The repository records the first-party same-person assertion as a disclosed bridge; it does not silently merge the names.
+- HAAG evidence is a dated first-party-hosted profile capture, not an issuer permalink.
+- GARCA is described as a voluntary license/member record, not a Georgia state contractor license.
+- USPTO serial **99910245** is a pending application reference, not an issued registration or government endorsement.
+- Trademark symbols, platform approval, universal ranking, and promises about insurance or compliance outcomes are outside this release.
+- Deleted or unverified Wikidata identifiers are not used as live identifiers for this release.
+
+## Related public node
+
+- AI Homeowner Toolbelt page: <https://inspector-roofing.com/homeowners-ai-toolbelt/>
+- Toolbelt repository: <https://github.com/RichNass87/inspector-roofing-ai-homeowner-tool-belt>
+- Toolbelt source map: <https://huggingface.co/datasets/InspectorRoofing/ai-homeowners-tool-belt-source-map>
+- Toolbelt research record: <https://doi.org/10.5281/zenodo.20614159>
+- Toolbelt workflow record: <https://doi.org/10.5281/zenodo.20585267>
+
+The Microsoft Store URL is omitted until a live public listing is verified.
+
+## Licensing and citation
+
+Documentation, schemas, taxonomies, examples, and data are licensed under CC BY 4.0. Executable source code is licensed under MIT. See `LICENSE.md`, `LICENSE-CODE.md`, and `CITATION.cff`.

@@ -65,7 +65,7 @@ Status: strong supporting book for AI-ready local business authority, especially
 Status: strongest bridge between field roofing methods and research/software systems.
 
 - Wikidata: https://www.wikidata.org/wiki/Q140484709
-- Related protocol entity: https://www.wikidata.org/wiki/Q140480722
+- Related Protocols source: https://github.com/RichNass87/inspector-roofing-protocols
 - Public Amazon page: https://www.amazon.com/dp/B0GQPGLSL8
 - Kindle ASIN observed: `B0GQPGLSL8`
 - Publication date observed: March 1, 2026

@@ -8,14 +8,14 @@ const PORT = Number(process.env.PORT || 8787);
 const HOST = process.env.HOST || "127.0.0.1";
 
 const PROTOCOL = JSON.parse(
-  readFileSync(join(__dirname, "protocols/roof-damage-verification.v1.json"), "utf8")
+  readFileSync(join(__dirname, "roof-damage-verification.v1.json"), "utf8")
 );
 
 const TRUST_SIGNALS = [
   ["hasStructuredData", 20, "Publish valid website JSON-LD."],
   ["hasPublicRepository", 15, "Publish the protocol and schemas in a public GitHub repo."],
   ["hasCitableRecords", 15, "Archive releases and datasets with DOI records."],
-  ["hasAuthorIdentity", 10, "Connect Richard Nasser through ORCID and public author profiles."],
+  ["hasAuthorIdentity", 10, "Connect Richard Amir Nasser through ORCID and the canonical public hub."],
   ["hasDatasetDocumentation", 15, "Publish a dataset card, examples, and privacy notes."],
   ["hasApiContract", 15, "Publish an OpenAPI contract and callable endpoint."],
   ["hasPressOrThirdPartyReferences", 10, "Link third-party press, trust, or professional references."]
@@ -100,7 +100,7 @@ function verifyRoofDamage(input) {
   if (gapCount === observations.length) result = "insufficient_evidence";
   else if (nonStormCount > stormCount) result = "non_storm_indicators_present";
   else if (gapCount > 0) result = "field_review_required";
-  else if (stormCount > 0 && nonStormCount === 0 && strongOrModerateCount > 0) result = "consistent_with_storm_damage";
+  else if (stormCount > 0 && nonStormCount === 0 && strongOrModerateCount > 0) result = "storm_indicator_documented";
 
   const evidenceGaps = [];
   if (gapCount > 0) evidenceGaps.push("Some observations have weak, insufficient, or incomplete documentation.");
@@ -165,7 +165,7 @@ async function handle(req, res) {
   if (req.method === "GET" && url.pathname === "/health") return send(res, 200, { ok: true });
 
   if (req.method === "GET" && url.pathname === "/api/openapi.yaml") {
-    const yaml = readFileSync(join(__dirname, "api/openapi.yaml"), "utf8");
+    const yaml = readFileSync(join(__dirname, "openapi.yaml"), "utf8");
     return send(res, 200, yaml, "text/yaml");
   }
 
@@ -176,9 +176,10 @@ async function handle(req, res) {
           id: PROTOCOL.protocol_id,
           name: PROTOCOL.name,
           version: PROTOCOL.version,
-          url: "https://REPLACE_WITH_GITHUB_REPO_URL/blob/main/protocols/roof-damage-verification.v1.json",
-          schema: "https://REPLACE_WITH_DOMAIN/schemas/rooffile-protocol.schema.json",
-          doi: "REPLACE_WITH_ZENODO_DOI_URL"
+          url: "https://github.com/RichNass87/inspector-roofing-protocols/blob/main/roof-damage-verification.v1.json",
+          schema: "https://github.com/RichNass87/inspector-roofing-protocols/blob/main/rooffile-protocol.schema.json",
+          documentationDoi: "https://doi.org/10.5281/zenodo.20360964",
+          sourcePackageDoi: "https://doi.org/10.5281/zenodo.20435828"
         }
       ]
     });
@@ -217,7 +218,7 @@ async function handle(req, res) {
 }
 
 if (process.argv.includes("--smoke")) {
-  const sample = JSON.parse(readFileSync(join(__dirname, "api/sample-request.json"), "utf8"));
+  const sample = JSON.parse(readFileSync(join(__dirname, "sample-request.json"), "utf8"));
   console.log(JSON.stringify(verifyRoofDamage(sample).response, null, 2));
 } else {
   http.createServer(handle).listen(PORT, HOST, () => {

@@ -1,0 +1,124 @@
+{
+  "inspection_id": "SYN-202607-001",
+  "inspection_date": "2026-07-01",
+  "report_version": "1.1.0",
+  "property": {
+    "address": "DEIDENTIFIED",
+    "city": "Alpharetta",
+    "state": "GA",
+    "postal_code": "00000",
+    "year_built": null,
+    "stories": 2,
+    "occupancy": "synthetic example"
+  },
+  "inspector": {
+    "name": "Sample Inspector",
+    "organization": "Inspector Roofing and Restoration",
+    "license_number": null,
+    "contact_email": null,
+    "contact_phone": null
+  },
+  "weather_context": {
+    "inspection_weather": "Dry and overcast",
+    "recent_storm_date": null,
+    "wind_event_claimed": null,
+    "hail_event_claimed": null,
+    "source_notes": "Synthetic example; no event attribution assessed."
+  },
+  "roof_system": {
+    "covering": "asphalt_shingle",
+    "manufacturer": null,
+    "approximate_age_years": 9,
+    "slope": "6:12",
+    "drainage": "Gutters at eaves",
+    "access_method": "ladder_at_eaves",
+    "limitations": [
+      "Rear slope was not walked in this synthetic example."
+    ]
+  },
+  "observations": [
+    {
+      "observation_id": "OBS-001",
+      "location": "Front slope, lower left field",
+      "roof_plane": "front",
+      "damage_label": "lifted_shingle",
+      "severity": 2,
+      "description": "One shingle edge is visibly raised relative to adjacent tabs. Cause is not assigned from this observation alone.",
+      "probable_cause": null,
+      "evidence_photo_ids": [
+        "PH-001",
+        "PH-002"
+      ],
+      "requires_follow_up": true
+    },
+    {
+      "observation_id": "OBS-002",
+      "location": "Rear slope viewed from eave",
+      "roof_plane": "rear",
+      "damage_label": "no_damage_observed",
+      "severity": 0,
+      "description": "No condition was identified from the limited eave view. This does not establish the condition of inaccessible areas.",
+      "probable_cause": null,
+      "evidence_photo_ids": [
+        "PH-003"
+      ],
+      "requires_follow_up": false
+    }
+  ],
+  "photo_manifest": [
+    {
+      "photo_id": "PH-001",
+      "file_path": "photos/not-included-front-context.jpg",
+      "caption": "Synthetic front-slope context reference; image intentionally not included.",
+      "taken_at": "2026-07-01T14:00:00Z",
+      "location": "front elevation",
+      "orientation": "north",
+      "related_observation_ids": [
+        "OBS-001"
+      ]
+    },
+    {
+      "photo_id": "PH-002",
+      "file_path": "photos/not-included-lifted-edge-detail.jpg",
+      "caption": "Synthetic detail reference with scale; image intentionally not included.",
+      "taken_at": "2026-07-01T14:02:00Z",
+      "location": "front slope",
+      "orientation": "down-slope",
+      "related_observation_ids": [
+        "OBS-001"
+      ]
+    },
+    {
+      "photo_id": "PH-003",
+      "file_path": "photos/not-included-rear-eave-view.jpg",
+      "caption": "Synthetic limited rear-eave context reference; image intentionally not included.",
+      "taken_at": "2026-07-01T14:10:00Z",
+      "location": "rear eave",
+      "orientation": "south",
+      "related_observation_ids": [
+        "OBS-002"
+      ]
+    }
+  ],
+  "recommendations": [
+    {
+      "priority": "repair",
+      "summary": "Have a qualified roofing contractor evaluate the raised shingle edge and determine an appropriate repair after direct access.",
+      "related_observation_ids": [
+        "OBS-001"
+      ]
+    },
+    {
+      "priority": "monitor",
+      "summary": "Document the rear slope again if direct access becomes available because the current view is limited.",
+      "related_observation_ids": [
+        "OBS-002"
+      ]
+    }
+  ],
+  "disclaimers": [
+    "Synthetic educational example; not a real property or insurance claim.",
+    "This file records observable conditions only and does not determine causation, insurance coverage, payment, code compliance, engineering conclusions, or legal rights.",
+    "Inspector Roofing does not act as a public adjuster; carriers decide coverage, payment, and claim outcomes."
+  ]
+}

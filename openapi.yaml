@@ -1,21 +1,23 @@
 openapi: 3.1.0
 info:
   title: Inspector Roofing Roof Damage Verification API
-  version: 1.0.0
+  version: 1.1.0
   description: >
-    Public OpenAPI contract for the Inspector Roofing Roof Damage Verification Protocol.
-    This specification documents planned machine-readable operations for roof evidence packages,
-    protocol findings, evidence gaps, citations, and Local Enterprise AI Readiness Index evaluation.
+    Public OpenAPI contract for Inspector Roofing Protocols. This specification
+    documents planned machine-readable operations for roof condition packages,
+    documentation gaps, citations, and supplied source-signal evaluation. Publication
+    of this contract does not assert that a production API is currently hosted.
 servers:
   - url: https://standards.inspector-roofing.com
     description: Public standards documentation server
 paths:
   /v1/roof-damage/verify:
     post:
-      summary: Verify a roof damage evidence package
+      summary: Review a roof condition documentation package
       description: >
-        Accepts a structured roof evidence package and returns protocol findings,
-        evidence gaps, citations, and recommended documentation actions.
+        Accepts a structured roof condition package and returns documented observations,
+        evidence gaps, citations, and recommended follow-up documentation actions. The
+        result does not determine causation, insurance coverage, payment, or legal rights.
       operationId: verifyRoofDamageEvidence
       requestBody:
         required: true
@@ -182,7 +184,7 @@ paths:
                 properties:
                   readiness_score:
                     type: number
-                    example: 92
+                      example: 80
                   strengths:
                     type: array
                     items:

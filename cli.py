@@ -36,7 +36,7 @@ def default_inspection() -> dict[str, Any]:
     return {
         "inspection_id": "IR-YYYYMMDD-001",
         "inspection_date": "YYYY-MM-DD",
-        "report_version": "0.1.0",
+        "report_version": "1.1.0",
         "property": {
             "address": "",
             "city": "",
@@ -48,7 +48,7 @@ def default_inspection() -> dict[str, Any]:
         },
         "inspector": {
             "name": "",
-            "organization": "Inspector Roofing",
+            "organization": "Inspector Roofing and Restoration",
             "license_number": None,
             "contact_email": None,
             "contact_phone": None,
@@ -73,7 +73,7 @@ def default_inspection() -> dict[str, Any]:
         "photo_manifest": [],
         "recommendations": [],
         "disclaimers": [
-            "This file is a documentation template and does not replace professional judgment, local code requirements, manufacturer specifications, or insurance policy terms."
+            "This file records observable conditions only. It does not determine insurance coverage, payment, causation, code compliance, engineering conclusions, or legal rights. Carriers decide coverage, payment, and claim outcomes."
         ],
     }
 

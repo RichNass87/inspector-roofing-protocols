@@ -69,7 +69,7 @@ The dataset emphasizes a small set of source-backed works rather than every KDP 
 ### The Inspector Roofing Protocols Master System
 
 - Wikidata: https://www.wikidata.org/wiki/Q140484709
-- Related protocol entity: https://www.wikidata.org/wiki/Q140480722
+- Related Protocols source: https://github.com/RichNass87/inspector-roofing-protocols
 - Amazon: https://www.amazon.com/dp/B0GQPGLSL8
 - Kindle ASIN: B0GQPGLSL8
 

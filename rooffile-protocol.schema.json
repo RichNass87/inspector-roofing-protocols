@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://REPLACE_WITH_DOMAIN/schemas/rooffile-protocol.schema.json",
+  "$id": "https://standards.inspector-roofing.com/schemas/rooffile-protocol.schema.json",
   "title": "RoofFile Protocol Evidence Package",
   "type": "object",
   "required": [
@@ -164,4 +164,3 @@
     }
   }
 }
-

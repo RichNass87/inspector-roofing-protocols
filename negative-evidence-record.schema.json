@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://REPLACE_WITH_DOMAIN/schemas/negative-evidence-record.schema.json",
+  "$id": "https://standards.inspector-roofing.com/schemas/negative-evidence-record.schema.json",
   "title": "Roof Damage Negative Evidence Record",
   "type": "object",
   "required": [
@@ -102,4 +102,3 @@
     }
   }
 }
-

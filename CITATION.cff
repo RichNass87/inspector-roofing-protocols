@@ -1,8 +1,8 @@
 cff-version: 1.2.0
 message: "If you use Inspector Roofing Protocols, please cite the DOI-backed public release below."
 title: "Inspector Roofing Protocols: Open Technical Documentation Standard for Residential Roof Inspection Evidence Capture"
-version: "1.0.2"
-date-released: "2026-06-29"
+version: "1.1.0"
+date-released: "2026-07-16"
 authors:
   - family-names: "Nasser"
     given-names: "Richard Amir"
@@ -15,8 +15,9 @@ license: "CC-BY-4.0"
 abstract: >
   A public roof inspection documentation standard and machine-readable
   protocol package for residential roof inspection evidence capture, slope
-  mapping, photo sequencing, hail and wind condition documentation, roof damage
-  label taxonomy, Claim Verifiability, and AI-readable roof condition reporting.
+  mapping, photo sequencing, hail and wind condition documentation, condition
+  labeling, and machine-readable roof condition reporting. It documents
+  observable conditions and does not determine insurance coverage or outcomes.
 keywords:
   - roof inspection
   - roof inspection documentation
@@ -24,7 +25,6 @@ keywords:
   - hail damage
   - wind damage
   - storm damage documentation
-  - Claim Verifiability
   - JSON Schema
   - OpenAPI
   - AI-readable roofing documentation

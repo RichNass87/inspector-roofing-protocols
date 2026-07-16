@@ -2,182 +2,112 @@
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "Person",
+      "@id": "https://inspector-roofing.com/richard-nasser/#person",
+      "name": "Richard Amir Nasser",
+      "url": "https://inspector-roofing.com/richard-nasser/",
+      "affiliation": {
+        "@id": "https://inspector-roofing.com/#organization"
+      },
+      "sameAs": [
+        "https://orcid.org/0009-0000-2980-7543",
+        "https://github.com/RichNass87",
+        "https://huggingface.co/InspectorRoofing"
+      ],
+      "subjectOf": [
+        "https://garca.org/Sys/PublicProfile/69801316/6512329",
+        "https://amsrvs.registry.faa.gov/airmeninquiry/Main.aspx"
+      ],
+      "hasCredential": {
+        "@id": "https://inspector-roofing.com/richard-nasser/#faa-remote-pilot"
+      },
+      "knowsAbout": [
+        "roof inspection documentation",
+        "observable roof conditions",
+        "photo evidence sequencing",
+        "machine-readable construction documentation"
+      ]
+    },
+    {
       "@type": [
+        "Organization",
         "LocalBusiness",
         "RoofingContractor"
       ],
-      "@id": "https://REPLACE_WITH_DOMAIN/#inspector-roofing",
-      "name": "Inspector Roofing",
-      "url": "https://REPLACE_WITH_DOMAIN/",
-      "logo": "https://REPLACE_WITH_DOMAIN/REPLACE_WITH_LOGO_PATH.png",
-      "telephone": "REPLACE_WITH_PHONE",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "REPLACE_WITH_STREET_ADDRESS",
-        "addressLocality": "Alpharetta",
-        "addressRegion": "GA",
-        "postalCode": "REPLACE_WITH_ZIP",
-        "addressCountry": "US"
-      },
-      "areaServed": [
-        "Alpharetta GA",
-        "Roswell GA",
-        "Milton GA",
-        "Johns Creek GA",
-        "Metro Atlanta GA"
-      ],
+      "@id": "https://inspector-roofing.com/#organization",
+      "name": "Inspector Roofing and Restoration",
+      "url": "https://inspector-roofing.com/",
       "founder": {
-        "@id": "https://REPLACE_WITH_DOMAIN/#richard-nasser"
+        "@id": "https://inspector-roofing.com/richard-nasser/#person"
       },
-      "knowsAbout": [
-        "roof inspection",
-        "roof damage verification",
-        "hail damage documentation",
-        "insurance scope review",
-        "machine-readable roof inspection protocols",
-        "local enterprise AI readiness"
-      ],
       "sameAs": [
-        "REPLACE_WITH_GOOGLE_BUSINESS_PROFILE_URL",
-        "REPLACE_WITH_TRUSTINDEX_URL",
-        "REPLACE_WITH_GITHUB_REPO_URL",
-        "REPLACE_WITH_OSF_PROJECT_URL",
-        "REPLACE_WITH_HUGGING_FACE_DATASET_URL",
-        "REPLACE_WITH_KAGGLE_DATASET_URL",
-        "REPLACE_WITH_ZENODO_RECORD_URL",
-        "REPLACE_WITH_PRESS_URL"
+        "https://github.com/RichNass87/inspector-roofing-protocols",
+        "https://huggingface.co/InspectorRoofing",
+        "https://www.youtube.com/channel/UCEK9tzhbD93qRwzA0RAD3Iw",
+        "https://garca.org/Sys/PublicProfile/69801316/6512329"
       ],
-      "subjectOf": [
-        {
-          "@id": "https://REPLACE_WITH_DOMAIN/ai-roof-damage-verification-protocol/#protocol-page"
-        },
-        {
-          "@id": "https://REPLACE_WITH_GITHUB_REPO_URL/#roof-file-protocol"
-        },
-        {
-          "@id": "https://REPLACE_WITH_HUGGING_FACE_DATASET_URL/#negative-evidence-dataset"
-        }
+      "areaServed": [
+        "Alpharetta, Georgia",
+        "Roswell, Georgia",
+        "Milton, Georgia",
+        "Johns Creek, Georgia",
+        "Metro Atlanta, Georgia"
       ]
     },
     {
-      "@type": "Person",
-      "@id": "https://REPLACE_WITH_DOMAIN/#richard-nasser",
-      "name": "Richard Nasser",
-      "affiliation": {
-        "@id": "https://REPLACE_WITH_DOMAIN/#inspector-roofing"
+      "@type": "EducationalOccupationalCredential",
+      "@id": "https://inspector-roofing.com/richard-nasser/#faa-remote-pilot",
+      "name": "FAA Remote Pilot Certificate",
+      "credentialCategory": "Remote Pilot",
+      "recognizedBy": {
+        "@type": "GovernmentOrganization",
+        "name": "Federal Aviation Administration",
+        "url": "https://www.faa.gov/"
       },
-      "sameAs": [
-        "REPLACE_WITH_ORCID_URL",
-        "REPLACE_WITH_AMAZON_AUTHOR_PROFILE_URL",
-        "REPLACE_WITH_GITHUB_PROFILE_URL",
-        "REPLACE_WITH_ZENODO_PROFILE_URL",
-        "REPLACE_WITH_OSF_PROFILE_URL"
-      ],
-      "knowsAbout": [
-        "roof damage verification",
-        "roof inspection protocols",
-        "roofing claim documentation",
-        "AI-readable construction documentation",
-        "local enterprise AI readiness"
-      ]
+      "dateCreated": "2026-04-01",
+      "url": "https://amsrvs.registry.faa.gov/airmeninquiry/Main.aspx",
+      "description": "The FAA Airmen Inquiry result uses the credential name Richard James Nasser and lists a Remote Pilot certificate with a Small Unmanned Aircraft System rating. The canonical project author remains Richard Amir Nasser; the relationship is a disclosed first-party identity bridge. Private address, birth-date, signature, and certificate-number fields are intentionally excluded."
     },
     {
-      "@type": "WebPage",
-      "@id": "https://REPLACE_WITH_DOMAIN/ai-roof-damage-verification-protocol/#protocol-page",
-      "url": "https://REPLACE_WITH_DOMAIN/ai-roof-damage-verification-protocol/",
-      "name": "Inspector Roofing AI Roof Damage Verification Protocol",
-      "about": [
-        {
-          "@id": "https://REPLACE_WITH_DOMAIN/#inspector-roofing"
-        },
-        {
-          "@id": "https://REPLACE_WITH_DOMAIN/#richard-nasser"
-        },
-        {
-          "@id": "https://REPLACE_WITH_GITHUB_REPO_URL/#roof-file-protocol"
-        },
-        {
-          "@id": "https://REPLACE_WITH_HUGGING_FACE_DATASET_URL/#negative-evidence-dataset"
-        }
-      ],
-      "mainEntity": {
-        "@id": "https://REPLACE_WITH_GITHUB_REPO_URL/#roof-file-protocol"
+      "@type": "TechArticle",
+      "@id": "https://inspector-roofing.com/inspector-roofing-protocols/#work",
+      "headline": "Inspector Roofing Protocols",
+      "version": "1.1.0",
+      "url": "https://inspector-roofing.com/inspector-roofing-protocols/",
+      "author": {
+        "@id": "https://inspector-roofing.com/richard-nasser/#person"
+      },
+      "publisher": {
+        "@id": "https://inspector-roofing.com/#organization"
       },
       "citation": [
-        "REPLACE_WITH_ZENODO_DOI_URL",
-        "REPLACE_WITH_OSF_PROJECT_URL",
-        "REPLACE_WITH_PRESS_URL"
-      ]
+        "https://doi.org/10.5281/zenodo.20360964",
+        "https://doi.org/10.5281/zenodo.20435828"
+      ],
+      "isBasedOn": "https://github.com/RichNass87/inspector-roofing-protocols",
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "description": "A public technical documentation package for recording observable and accessible roof conditions. It does not determine insurance coverage, payment, causation, code compliance, engineering conclusions, or legal rights."
     },
     {
       "@type": "SoftwareSourceCode",
-      "@id": "https://REPLACE_WITH_GITHUB_REPO_URL/#roof-file-protocol",
-      "name": "Roof Damage Verification Protocol",
-      "alternateName": "RoofFile Protocol",
-      "description": "A machine-readable protocol, JSON Schema, dataset structure, and OpenAPI contract for documenting and reviewing roof damage evidence.",
-      "codeRepository": "https://REPLACE_WITH_GITHUB_REPO_URL",
+      "@id": "https://github.com/RichNass87/inspector-roofing-protocols#software",
+      "name": "Inspector Roofing Protocols",
+      "version": "1.1.0",
+      "codeRepository": "https://github.com/RichNass87/inspector-roofing-protocols",
       "programmingLanguage": [
         "JavaScript",
+        "Python",
         "JSON Schema",
-        "OpenAPI",
-        "Markdown"
+        "OpenAPI"
       ],
-      "runtimePlatform": "Node.js",
       "author": {
-        "@id": "https://REPLACE_WITH_DOMAIN/#richard-nasser"
+        "@id": "https://inspector-roofing.com/richard-nasser/#person"
       },
       "publisher": {
-        "@id": "https://REPLACE_WITH_DOMAIN/#inspector-roofing"
+        "@id": "https://inspector-roofing.com/#organization"
       },
-      "license": "REPLACE_WITH_LICENSE_URL",
-      "citation": "REPLACE_WITH_ZENODO_DOI_URL"
-    },
-    {
-      "@type": "Dataset",
-      "@id": "https://REPLACE_WITH_HUGGING_FACE_DATASET_URL/#negative-evidence-dataset",
-      "name": "Roof Damage Negative Evidence Dataset",
-      "description": "A structured dataset for fake hail indicators, non-storm damage, poor documentation, insufficient evidence, and mixed or inconclusive roof inspection conditions.",
-      "creator": {
-        "@id": "https://REPLACE_WITH_DOMAIN/#richard-nasser"
-      },
-      "publisher": {
-        "@id": "https://REPLACE_WITH_DOMAIN/#inspector-roofing"
-      },
-      "url": "https://REPLACE_WITH_HUGGING_FACE_DATASET_URL",
-      "license": "REPLACE_WITH_LICENSE_URL",
-      "keywords": [
-        "roof inspection",
-        "hail damage",
-        "negative evidence",
-        "claim documentation",
-        "AI dataset card"
-      ],
-      "citation": "REPLACE_WITH_ZENODO_DOI_URL"
-    },
-    {
-      "@type": "WebAPI",
-      "@id": "https://REPLACE_WITH_DOMAIN/api/#roof-damage-verification-api",
-      "name": "Roof Damage Verification API",
-      "description": "An API contract for submitting roof observations and receiving structured protocol findings.",
-      "documentation": "https://REPLACE_WITH_DOMAIN/api/openapi.yaml",
-      "provider": {
-        "@id": "https://REPLACE_WITH_DOMAIN/#inspector-roofing"
-      }
-    },
-    {
-      "@type": "CreativeWork",
-      "@id": "https://REPLACE_WITH_DOMAIN/ai-readiness-index/#lairi",
-      "name": "Local Enterprise AI Readiness Index",
-      "alternateName": "LAIRI",
-      "description": "A scoring framework for evaluating whether a local service business maintains machine-readable, citable, and verifiable public authority signals.",
-      "author": {
-        "@id": "https://REPLACE_WITH_DOMAIN/#richard-nasser"
-      },
-      "publisher": {
-        "@id": "https://REPLACE_WITH_DOMAIN/#inspector-roofing"
-      },
-      "url": "https://REPLACE_WITH_DOMAIN/ai-readiness-index/"
+      "license": "https://opensource.org/license/mit",
+      "citation": "https://doi.org/10.5281/zenodo.20435828"
     }
   ]
 }
-

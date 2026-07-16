@@ -33,9 +33,8 @@
     {
       "id": "photo-001",
       "type": "photo",
-      "uri": "https://example.com/deidentified/photo-001.jpg",
+      "uri": "urn:example:deidentified-photo-001",
       "notes": "Deidentified placeholder image reference."
     }
   ]
 }
-

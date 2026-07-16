@@ -1,0 +1,4 @@
+photo_id,file_path,caption,taken_at,location,orientation,related_observation_ids
+PH-001,photos/not-included-front-context.jpg,"Synthetic front-slope context reference; image intentionally not included.",2026-07-01T14:00:00Z,front elevation,north,OBS-001
+PH-002,photos/not-included-lifted-edge-detail.jpg,"Synthetic detail reference with scale; image intentionally not included.",2026-07-01T14:02:00Z,front slope,down-slope,OBS-001
+PH-003,photos/not-included-rear-eave-view.jpg,"Synthetic limited rear-eave context reference; image intentionally not included.",2026-07-01T14:10:00Z,rear eave,south,OBS-002

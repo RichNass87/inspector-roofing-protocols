@@ -1,0 +1,192 @@
+{
+  "validator": "Inspector Roofing Protocols internal release-readiness validator",
+  "validatorVersion": "1.0.0",
+  "evaluatedAt": "2026-07-16T14:45:20.544Z",
+  "packageVersion": "1.1.0",
+  "minimumReleaseScore": 85,
+  "strongTargetScore": 91,
+  "independentCertification": false,
+  "categories": [
+    {
+      "name": "Identity and version consistency",
+      "pointsAvailable": 20,
+      "pointsEarned": 20,
+      "checks": [
+        {
+          "name": "Release manifest uses the canonical title, version, author, organization, and planned date",
+          "ok": true
+        },
+        {
+          "name": "Node package metadata uses the canonical version and author",
+          "ok": true
+        },
+        {
+          "name": "Citation metadata uses the canonical version, date, and author",
+          "ok": true
+        },
+        {
+          "name": "Active protocol metadata uses the canonical identity",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "name": "Persistent source graph",
+      "pointsAvailable": 15,
+      "pointsEarned": 15,
+      "checks": [
+        {
+          "name": "Documentation DOI relationship is explicit",
+          "ok": true
+        },
+        {
+          "name": "Software/source package DOI relationship is explicit",
+          "ok": true
+        },
+        {
+          "name": "ORCID, repository, canonical hub, and public Protocols page are linked",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "name": "Methodology and sample",
+      "pointsAvailable": 15,
+      "pointsEarned": 15,
+      "checks": [
+        {
+          "name": "Methodology defines collection, review, privacy, credential, insurance, and reproducibility rules",
+          "ok": true
+        },
+        {
+          "name": "Core JSON schemas and taxonomy parse and use the release version where applicable",
+          "ok": true
+        },
+        {
+          "name": "Synthetic sample is deidentified and all observation/photo references resolve",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "name": "Reproducibility and integrity",
+      "pointsAvailable": 15,
+      "pointsEarned": 15,
+      "checks": [
+        {
+          "name": "Runtime references shipped root files rather than missing directories",
+          "ok": true
+        },
+        {
+          "name": "Release manifest and dual licenses are complete",
+          "ok": true
+        },
+        {
+          "name": "SHA-256 ledger covers the required release files and is current",
+          "ok": true,
+          "detail": "60 checksum entries verified for required release files"
+        }
+      ]
+    },
+    {
+      "name": "Privacy and claim boundaries",
+      "pointsAvailable": 20,
+      "pointsEarned": 20,
+      "checks": [
+        {
+          "name": "Core release files contain no unresolved placeholder metadata",
+          "ok": true
+        },
+        {
+          "name": "Public sample and release scope contain no restricted private-field assignments or credential image",
+          "ok": true
+        },
+        {
+          "name": "Insurance and public-adjuster boundary appears across the evidence spine",
+          "ok": true
+        },
+        {
+          "name": "Core release avoids ranking, platform, trademark, insurance, and compliance overclaims",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "name": "Credential evidence quality",
+      "pointsAvailable": 10,
+      "pointsEarned": 10,
+      "checks": [
+        {
+          "name": "FAA official registry result records source name, certificate type, rating, and issue date",
+          "ok": true
+        },
+        {
+          "name": "FAA name bridge and private-card exclusion are explicit",
+          "ok": true
+        },
+        {
+          "name": "GARCA record is limited to a voluntary license/member profile",
+          "ok": true
+        },
+        {
+          "name": "HAAG capture is dated and labeled as first-party rather than issuer verification",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "name": "Published release",
+      "pointsAvailable": 5,
+      "pointsEarned": 5,
+      "checks": [
+        {
+          "name": "v1.1.0 public release is recorded only after publication",
+          "ok": true
+        }
+      ]
+    }
+  ],
+  "hardGates": [
+    {
+      "name": "Core files present",
+      "ok": true,
+      "detail": "All core files present"
+    },
+    {
+      "name": "Canonical identity and version consistent",
+      "ok": true,
+      "detail": "See identity checks"
+    },
+    {
+      "name": "No unresolved placeholders",
+      "ok": true,
+      "detail": "Core release files scanned"
+    },
+    {
+      "name": "No restricted private fields",
+      "ok": true,
+      "detail": "Public release scope scanned"
+    },
+    {
+      "name": "Insurance/public-adjuster boundary complete",
+      "ok": true,
+      "detail": "Five evidence-spine files checked"
+    },
+    {
+      "name": "Checksum ledger current",
+      "ok": true,
+      "detail": "60 checksum entries verified for required release files"
+    },
+    {
+      "name": "Minimum score reached",
+      "ok": true,
+      "detail": "100/85"
+    }
+  ],
+  "findings": [
+    "Score is an internal package-readiness result, not an independent certification or search ranking.",
+    "FAA evidence uses a disclosed first-party bridge from canonical Richard Amir Nasser to the registry name Richard James Nasser; private card fields remain excluded."
+  ],
+  "score": 100,
+  "status": "PASS"
+}

@@ -2,7 +2,7 @@
 
 ## API Layer
 
-- [ ] Replace all `REPLACE_WITH_...` placeholders.
+- [ ] Confirm that all public URLs and identifiers are resolved rather than placeholders.
 - [ ] Run `npm start`.
 - [ ] Test `GET /v1/protocols`.
 - [ ] Test `POST /v1/roof-damage/verify`.
@@ -35,4 +35,3 @@
 - [ ] Zenodo record links to GitHub and website.
 - [ ] OSF links to website, GitHub, Zenodo, and datasets.
 - [ ] Hugging Face and Kaggle link to website, GitHub, Zenodo, and ORCID.
-

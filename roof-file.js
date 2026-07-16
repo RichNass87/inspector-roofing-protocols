@@ -31,7 +31,7 @@ function defaultInspection() {
   return {
     inspection_id: "IR-YYYYMMDD-001",
     inspection_date: "YYYY-MM-DD",
-    report_version: "0.1.0",
+    report_version: "1.1.0",
     property: {
       address: "",
       city: "",
@@ -43,7 +43,7 @@ function defaultInspection() {
     },
     inspector: {
       name: "",
-      organization: "Inspector Roofing",
+      organization: "Inspector Roofing and Restoration",
       license_number: null,
       contact_email: null,
       contact_phone: null,
@@ -68,7 +68,7 @@ function defaultInspection() {
     photo_manifest: [],
     recommendations: [],
     disclaimers: [
-      "This file is a documentation template and does not replace professional judgment, local code requirements, manufacturer specifications, or insurance policy terms."
+      "This file records observable conditions only. It does not determine insurance coverage, payment, causation, code compliance, engineering conclusions, or legal rights. Carriers decide coverage, payment, and claim outcomes."
     ],
   };
 }

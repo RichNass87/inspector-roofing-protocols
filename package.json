@@ -1,22 +1,33 @@
 {
-  "name": "roof-damage-verification-protocol",
-  "version": "0.1.0",
-  "description": "Callable API stub, OpenAPI spec, schemas, and dataset structures for roof damage verification.",
+  "name": "inspector-roofing-protocols",
+  "version": "1.1.0",
+  "description": "Versioned schemas, methodology, examples, and API contract for inspection-first roof condition documentation.",
   "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "smoke": "node server.js --smoke"
+    "smoke": "node server.js --smoke",
+    "validate": "node scripts/validate-release.mjs",
+    "checksums": "node scripts/generate-checksums.mjs"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RichNass87/inspector-roofing-protocols.git"
+  },
+  "homepage": "https://standards.inspector-roofing.com/",
+  "author": "Richard Amir Nasser",
   "keywords": [
     "roof-inspection",
-    "roof-damage",
+    "roof-condition-documentation",
     "hail-damage",
+    "wind-damage",
     "json-schema",
     "openapi",
-    "negative-evidence",
-    "ai-readiness"
+    "negative-evidence"
   ],
-  "license": "UNLICENSED"
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "private": true
 }
-

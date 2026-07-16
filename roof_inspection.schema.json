@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://inspector-roofing.example/schemas/roof_inspection.schema.json",
+  "$id": "https://standards.inspector-roofing.com/schemas/roof_inspection.schema.json",
   "title": "Inspector Roofing Roof Inspection File",
   "description": "A lightweight, vendor-neutral JSON structure for documenting residential roof inspections.",
   "type": "object",
@@ -26,7 +26,7 @@
     },
     "report_version": {
       "type": "string",
-      "default": "0.1.0"
+      "default": "1.1.0"
     },
     "property": {
       "type": "object",

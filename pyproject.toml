@@ -4,20 +4,19 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "inspector-roofing-protocols"
-version = "0.1.0"
-description = "Public schema, templates, and CLI utilities for structured residential roof inspection files."
+version = "1.1.0"
+description = "Public schemas, templates, and CLI utilities for structured residential roof condition documentation."
 readme = "README.md"
 requires-python = ">=3.9"
-license = {text = "MIT"}
+license = {file = "LICENSE-CODE.md"}
 authors = [
-  {name = "Inspector Roofing", email = "hello@example.com"}
+  {name = "Richard Amir Nasser"}
 ]
-keywords = ["roofing", "roof inspection", "json schema", "storm damage", "inspection report", "roof file"]
+keywords = ["roofing", "roof inspection", "JSON Schema", "storm documentation", "inspection report"]
 classifiers = [
-  "Development Status :: 3 - Alpha",
+  "Development Status :: 4 - Beta",
   "Environment :: Console",
   "Intended Audience :: Developers",
-  "Intended Audience :: Information Technology",
   "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
@@ -27,22 +26,14 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Homepage = "https://example.com/inspector-roofing-protocols"
-Repository = "https://github.com/inspector-roofing/inspector-roofing-protocols"
-Issues = "https://github.com/inspector-roofing/inspector-roofing-protocols/issues"
+Homepage = "https://standards.inspector-roofing.com/"
+Repository = "https://github.com/RichNass87/inspector-roofing-protocols"
+Documentation = "https://doi.org/10.5281/zenodo.20360964"
+SourcePackage = "https://doi.org/10.5281/zenodo.20435828"
+Issues = "https://github.com/RichNass87/inspector-roofing-protocols/issues"
 
 [project.scripts]
-roof-file = "inspector_roofing_protocols.cli:main"
+roof-file = "cli:main"
 
-[tool.setuptools.packages.find]
-where = ["src"]
-
-[tool.setuptools.package-data]
-inspector_roofing_protocols = [
-  "data/schemas/*.json",
-  "data/taxonomies/*.json",
-  "data/checklists/*.md",
-  "data/templates/*.md",
-  "data/templates/*.csv",
-  "data/samples/*.md"
-]
+[tool.setuptools]
+py-modules = ["cli"]

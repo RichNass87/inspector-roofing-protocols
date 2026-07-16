@@ -1,14 +1,14 @@
 {
-  "protocol_id": "roof-damage-verification",
-  "version": "0.1.0",
-  "name": "Roof Damage Verification Protocol",
-  "alternate_name": "RoofFile Protocol",
+  "protocol_id": "inspector-roofing-protocols",
+  "version": "1.1.0",
+  "name": "Inspector Roofing Protocols",
+  "alternate_name": "Roof Condition Documentation Protocol",
   "maintainer": {
-    "name": "Richard Nasser",
-    "organization": "Inspector Roofing",
-    "orcid": "REPLACE_WITH_ORCID_URL"
+    "name": "Richard Amir Nasser",
+    "organization": "Inspector Roofing and Restoration",
+    "orcid": "https://orcid.org/0009-0000-2980-7543"
   },
-  "purpose": "Provide a structured method for documenting roof damage observations, evidence quality, non-storm indicators, documentation defects, and recommended review actions.",
+  "purpose": "Provide a structured method for recording observable roof conditions, evidence quality, non-storm indicators, documentation defects, access limits, and follow-up actions.",
   "evidence_categories": [
     "hail_candidate",
     "wind_candidate",
@@ -21,8 +21,8 @@
     "other"
   ],
   "review_results": [
-    "consistent_with_storm_damage",
-    "non_storm_indicators_present",
+    "storm_indicator_documented",
+    "non_storm_indicator_documented",
     "mixed_or_inconclusive",
     "insufficient_evidence",
     "field_review_required"
@@ -34,26 +34,33 @@
     "slope_or_area_location",
     "observation_description",
     "evidence_quality",
-    "photo_or_media_reference_when_available"
+    "photo_or_media_reference_when_available",
+    "inspection_limitations"
   ],
   "privacy_rules": [
     "Do not include homeowner names in public examples.",
-    "Do not include claim numbers in public examples.",
+    "Do not include policy or claim numbers in public examples.",
     "Do not include exact residential addresses in public examples.",
+    "Do not publish dates of birth, certificate numbers, signatures, faces, or license plates.",
     "Remove EXIF location metadata from public media.",
-    "Do not publish third-party reports unless you have permission and have redacted sensitive details."
+    "Do not publish third-party reports without permission and documented redaction."
   ],
+  "boundary": "The protocol records observable conditions. It does not determine insurance coverage, payment, causation, code compliance, engineering conclusions, or legal rights. Inspector Roofing does not act as a public adjuster; carriers decide coverage, payment, and claim outcomes.",
   "citations": [
     {
-      "title": "Roof Damage Verification Protocol DOI",
-      "url": "REPLACE_WITH_ZENODO_DOI_URL",
-      "identifier": "REPLACE_WITH_DOI"
+      "title": "Inspector Roofing Protocols documentation record",
+      "url": "https://doi.org/10.5281/zenodo.20360964",
+      "identifier": "10.5281/zenodo.20360964"
     },
     {
-      "title": "Inspector Roofing AI Protocol Authority Page",
-      "url": "https://REPLACE_WITH_DOMAIN/ai-roof-damage-verification-protocol/",
+      "title": "Inspector Roofing Protocols software/source package record",
+      "url": "https://doi.org/10.5281/zenodo.20435828",
+      "identifier": "10.5281/zenodo.20435828"
+    },
+    {
+      "title": "Inspector Roofing Protocols public page",
+      "url": "https://inspector-roofing.com/inspector-roofing-protocols/",
       "identifier": "website"
     }
   ]
 }
-

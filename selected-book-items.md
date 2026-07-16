@@ -48,10 +48,10 @@ This file records the small, source-backed set of book/work items selected for p
 ### The Inspector Roofing Protocols Master System
 
 - Wikidata: https://www.wikidata.org/wiki/Q140484709
-- Related protocol entity: https://www.wikidata.org/wiki/Q140480722
+- Related Protocols source: https://github.com/RichNass87/inspector-roofing-protocols
 - Kindle ASIN observed in KDP: `B0GQPGLSL8`
 - Role in graph: flagship book explaining the Inspector Roofing Protocols system.
-- Safe description: 2026 book by Richard Nasser about the Inspector Roofing Protocols system.
+- Safe description: 2026 book by Richard Amir Nasser about the Inspector Roofing Protocols system.
 - Note: no print ISBN was confirmed during this pass, so statement work should stay conservative until a print edition or official book page is added.
 
 ### The Claim Verifiability Field Manual
@@ -60,7 +60,7 @@ This file records the small, source-backed set of book/work items selected for p
 - Related concept entity: https://www.wikidata.org/wiki/Q140481799
 - Kindle ASIN observed in KDP: `B0GH2HJS9H`
 - Role in graph: book/manual connected to the Claim Verifiability evidence and documentation framework.
-- Safe description: 2026 book by Richard Nasser about roof claim documentation and verification.
+- Safe description: 2026 book by Richard Amir Nasser about roof claim documentation and verification.
 - Note: no print ISBN was confirmed during this pass, so statement work should stay conservative until a print edition or official book page is added.
 
 ### Visible or Vanished
@@ -70,7 +70,7 @@ This file records the small, source-backed set of book/work items selected for p
 - Paperback ASIN observed in KDP: `B0H15BTX6Y`
 - Paperback ISBN-13 observed in KDP: `979-8196166822`
 - Role in graph: author-identity and SEO/AEO visibility work.
-- Safe description: 2026 book by Richard Nasser about SEO, AEO, and AI visibility.
+- Safe description: 2026 book by Richard Amir Nasser about SEO, AEO, and AI visibility.
 
 ### Do Your Job Anyway
 
@@ -79,7 +79,7 @@ This file records the small, source-backed set of book/work items selected for p
 - Paperback ASIN observed in KDP: `B0H1H4RMGG`
 - Paperback ISBN-13 observed in KDP: `979-8196501593`
 - Role in graph: human/person entity support for Richard Amir Nasser outside roofing authority.
-- Safe description: 2026 memoir by Richard Nasser about endurance, brain injury, brotherhood, and recovery.
+- Safe description: 2026 memoir by Richard Amir Nasser about endurance, brain injury, brotherhood, and recovery.
 
 ## Next Safe Wikidata Statement Pass
 
@@ -98,7 +98,7 @@ Add these manually or through a clean Wikidata tool only where sources support t
 - Inspector Roofing and Restoration: https://www.wikidata.org/wiki/Q140480476
 - The Roofing Search Integrity Report: https://www.wikidata.org/wiki/Q140456045
 - The Chase for "Roofer Near Me": https://www.wikidata.org/wiki/Q140485275
-- Inspector Roofing Protocols: https://www.wikidata.org/wiki/Q140480722
+- Inspector Roofing Protocols source: https://github.com/RichNass87/inspector-roofing-protocols
 - Claim Verifiability: https://www.wikidata.org/wiki/Q140481799
 - Verifiable Roof: https://www.wikidata.org/wiki/Q140482857
 - The Claim Verifiability Field Manual: https://www.wikidata.org/wiki/Q140484695
