@@ -1,6 +1,6 @@
 # Inspector Roofing Protocols release-readiness report
 
-- Evaluated: 2026-07-16T15:13:53.476Z
+- Evaluated: 2026-07-16T18:36:07.822Z
 - Version: 1.1.1
 - Score: **100/100**
 - Release minimum: **85/100**
@@ -28,7 +28,7 @@
 - PASS: No restricted private fields - Public release scope scanned
 - PASS: No missing or deleted Wikidata identifiers - Only allowlisted live identifiers are present
 - PASS: Insurance/public-adjuster boundary complete - Five evidence-spine files checked
-- PASS: Checksum ledger current - 60 checksum entries verified for required release files
+- PASS: Checksum ledger current - 62 checksum entries verified for required release files
 - PASS: Minimum score reached - 100/85
 
 ## Boundaries

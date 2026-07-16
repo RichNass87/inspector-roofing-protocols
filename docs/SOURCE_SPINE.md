@@ -9,11 +9,23 @@ Richard Amir Nasser is the canonical author identity for this repository and its
 - Person hub: https://inspector-roofing.com/richard-nasser/
 - Bibliography hub: https://inspector-roofing.com/author-richard-nasser/
 - ORCID: https://orcid.org/0009-0000-2980-7543
+- LinkedIn: https://www.linkedin.com/in/richard-amir-nasser-2b35011a/
 - GitHub: https://github.com/RichNass87
 - Amazon Author: https://www.amazon.com/author/richard-nasser
 - Hugging Face: https://huggingface.co/InspectorRoofing
 
 Older source-display text such as Richard Nasser or Richard A. Nasser is not the canonical target identity.
+
+## Credential and Developer Record Map
+
+- Public-safe credential register: ../evidence/credential-evidence-register.md
+- Structured credential register: ../evidence/credential-evidence-register.json
+- Person credential source map: PERSON_CREDENTIAL_SOURCE_MAP.md
+- OpenAI Academy certificate records: https://academy.openai.com/public/certificate/2ji4g36etd, https://academy.openai.com/public/certificate/0mioinkeqz, and https://academy.openai.com/public/certificate/1nq3j5jerb
+- Google AI Professional Certificate: https://coursera.org/verify/professional-cert/S79SQ3CETJ7D
+- Google Skillshop wallet: https://skillshop.credential.net/profile/inspectorroofing/wallet
+
+The LinkedIn profile aggregates these records but is not substituted for issuer verification. Learning records support the person node only; they do not establish roofing licensure, platform endorsement, or product approval. Developer app publication records belong to the developer/product graph, not the certification graph.
 
 ## Inspector Roofing Protocols
 

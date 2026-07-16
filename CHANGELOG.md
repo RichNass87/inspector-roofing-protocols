@@ -2,6 +2,18 @@
 
 All notable changes are recorded here. Dates use ISO 8601.
 
+## [Unreleased]
+
+### Added
+
+- Added a canonical person credential source map separating field credentials, learning records, developer publication records, and publication identifiers.
+- Added public OpenAI Academy, Coursera, Google Skillshop, LinkedIn, ORCID, GitHub, and Hugging Face relationships with issuer and identity boundaries.
+- Added a Hugging Face-ready credential summary without merging credential claims into book metadata.
+
+### Changed
+
+- Extended the public-safe credential register with direct issuer URLs, credential IDs, source-display names, dates, and no-endorsement limits.
+
 ## [1.1.1] - 2026-07-16
 
 ### Fixed
