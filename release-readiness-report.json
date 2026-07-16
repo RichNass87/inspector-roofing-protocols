@@ -1,7 +1,7 @@
 {
   "validator": "Inspector Roofing Protocols internal release-readiness validator",
   "validatorVersion": "1.0.0",
-  "evaluatedAt": "2026-07-16T15:13:53.476Z",
+  "evaluatedAt": "2026-07-16T18:36:07.822Z",
   "packageVersion": "1.1.1",
   "minimumReleaseScore": 85,
   "strongTargetScore": 91,
@@ -84,7 +84,7 @@
         {
           "name": "SHA-256 ledger covers the required release files and is current",
           "ok": true,
-          "detail": "60 checksum entries verified for required release files"
+          "detail": "62 checksum entries verified for required release files"
         }
       ]
     },
@@ -185,7 +185,7 @@
     {
       "name": "Checksum ledger current",
       "ok": true,
-      "detail": "60 checksum entries verified for required release files"
+      "detail": "62 checksum entries verified for required release files"
     },
     {
       "name": "Minimum score reached",
