@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "inspector-roofing-protocols"
-version = "1.1.0"
+version = "1.1.1"
 description = "Public schemas, templates, and CLI utilities for structured residential roof condition documentation."
 readme = "README.md"
 requires-python = ">=3.9"

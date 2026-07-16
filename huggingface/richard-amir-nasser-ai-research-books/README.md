@@ -31,7 +31,7 @@ Core person and profile anchors:
 - GitHub: https://github.com/RichNass87
 - Hugging Face: https://huggingface.co/InspectorRoofing
 - Amazon author page: https://www.amazon.com/author/richard-nasser
-- Wikidata person item: https://www.wikidata.org/wiki/Q140475713
+- Wikidata person status: no live person item verified on 2026-07-16
 - Inspector Roofing and Restoration: https://inspector-roofing.com/
 
 ## Included Works
@@ -40,7 +40,7 @@ The dataset emphasizes a small set of source-backed works rather than every KDP 
 
 ### The Roofing Search Integrity Report
 
-- Wikidata: https://www.wikidata.org/wiki/Q140456045
+- Verified Wikidata item: https://www.wikidata.org/wiki/Q140522693
 - DOI: https://doi.org/10.5281/zenodo.21045292
 - Zenodo: https://zenodo.org/records/21045292
 - Kindle ASIN: B0H6XVP47W
@@ -52,7 +52,7 @@ The dataset emphasizes a small set of source-backed works rather than every KDP 
 
 ### Visible or Vanished
 
-- Wikidata: https://www.wikidata.org/wiki/Q140484697
+- Wikidata status: no live item verified on 2026-07-16
 - Amazon: https://www.amazon.com/dp/B0H15BTX6Y
 - Kindle ASIN: B0H139VNQD
 - Paperback ASIN: B0H15BTX6Y
@@ -68,21 +68,20 @@ The dataset emphasizes a small set of source-backed works rather than every KDP 
 
 ### The Inspector Roofing Protocols Master System
 
-- Wikidata: https://www.wikidata.org/wiki/Q140484709
+- Wikidata status: no live item verified on 2026-07-16
 - Related Protocols source: https://github.com/RichNass87/inspector-roofing-protocols
 - Amazon: https://www.amazon.com/dp/B0GQPGLSL8
 - Kindle ASIN: B0GQPGLSL8
 
 ### The Claim Verifiability Field Manual
 
-- Wikidata: https://www.wikidata.org/wiki/Q140484695
-- Related concept entity: https://www.wikidata.org/wiki/Q140481799
+- Wikidata status: no live item verified for the book or related concept on 2026-07-16
 - Amazon: https://www.amazon.com/dp/B0GH2HJS9H
 - Kindle ASIN: B0GH2HJS9H
 
 ### Verifiable Roof Evidence Package
 
-- Wikidata concept/entity: https://www.wikidata.org/wiki/Q140482857
+- Wikidata status: no live concept item verified on 2026-07-16
 - DOI: https://doi.org/10.5281/zenodo.21298744
 - GitHub: https://github.com/RichNass87/verifiable-roof-evidence
 - Hugging Face dataset: https://huggingface.co/datasets/InspectorRoofing/verifiable-roof-evidence

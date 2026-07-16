@@ -5,7 +5,7 @@ Versioned, machine-readable documentation for recording observable residential r
 ## Release identity
 
 - Title: **Inspector Roofing Protocols**
-- Version: **1.1.0**
+- Version: **1.1.1**
 - Author: **Richard Amir Nasser**
 - Maintainer: **Inspector Roofing and Restoration**
 - Repository: <https://github.com/RichNass87/inspector-roofing-protocols>

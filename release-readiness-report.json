@@ -1,8 +1,8 @@
 {
   "validator": "Inspector Roofing Protocols internal release-readiness validator",
   "validatorVersion": "1.0.0",
-  "evaluatedAt": "2026-07-16T14:45:20.544Z",
-  "packageVersion": "1.1.0",
+  "evaluatedAt": "2026-07-16T15:13:53.476Z",
+  "packageVersion": "1.1.1",
   "minimumReleaseScore": 85,
   "strongTargetScore": 91,
   "independentCertification": false,
@@ -108,6 +108,11 @@
         {
           "name": "Core release avoids ranking, platform, trademark, insurance, and compliance overclaims",
           "ok": true
+        },
+        {
+          "name": "Public release files reference only the verified live Wikidata allowlist",
+          "ok": true,
+          "detail": "Only verified live item Q140522693 is referenced"
         }
       ]
     },
@@ -140,7 +145,7 @@
       "pointsEarned": 5,
       "checks": [
         {
-          "name": "v1.1.0 public release is recorded only after publication",
+          "name": "v1.1.1 public release is recorded only after publication",
           "ok": true
         }
       ]
@@ -168,6 +173,11 @@
       "detail": "Public release scope scanned"
     },
     {
+      "name": "No missing or deleted Wikidata identifiers",
+      "ok": true,
+      "detail": "Only allowlisted live identifiers are present"
+    },
+    {
       "name": "Insurance/public-adjuster boundary complete",
       "ok": true,
       "detail": "Five evidence-spine files checked"
@@ -185,7 +195,8 @@
   ],
   "findings": [
     "Score is an internal package-readiness result, not an independent certification or search ranking.",
-    "FAA evidence uses a disclosed first-party bridge from canonical Richard Amir Nasser to the registry name Richard James Nasser; private card fields remain excluded."
+    "FAA evidence uses a disclosed first-party bridge from canonical Richard Amir Nasser to the registry name Richard James Nasser; private card fields remain excluded.",
+    "The official Wikidata API check on 2026-07-16 verified Q140522693 as live; missing or deleted Q identifiers are excluded."
   ],
   "score": 100,
   "status": "PASS"

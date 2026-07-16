@@ -1,9 +1,12 @@
 {
-  "evidence_date": "2026-07-10",
+  "evidence_date": "2026-07-16",
+  "wikidata_status": {
+    "verified_live_item": "https://www.wikidata.org/wiki/Q140522693",
+    "note": "All other previously listed Q identifiers returned missing from the official Wikidata API on 2026-07-16."
+  },
   "person": {
     "name": "Richard Amir Nasser",
     "description": "Founder, author, and research systems developer focused on inspection-first roofing, claim-verifiable documentation, AI-readable roof evidence, homeowner education tools, and local search authority systems.",
-    "wikidata": "https://www.wikidata.org/wiki/Q140475713",
     "official_page": "https://inspector-roofing.com/richard-nasser/",
     "orcid": "https://orcid.org/0009-0000-2980-7543",
     "github": "https://github.com/RichNass87",
@@ -14,7 +17,7 @@
     {
       "title": "The Roofing Search Integrity Report",
       "status": "strongest technical AI/search book and research item",
-      "wikidata": "https://www.wikidata.org/wiki/Q140456045",
+      "wikidata": "https://www.wikidata.org/wiki/Q140522693",
       "doi": "https://doi.org/10.5281/zenodo.21045292",
       "zenodo": "https://zenodo.org/records/21045292",
       "amazon_kindle": "https://www.amazon.com/dp/B0H6XVP47W",
@@ -28,7 +31,6 @@
     {
       "title": "Visible or Vanished: The New SEO, AEO, and AI Visibility Playbook for Business Owners Who Want to Become the Answer Before It Is Too Late",
       "status": "strong author-identity book for AI visibility, SEO, AEO, and answer-engine positioning",
-      "wikidata": "https://www.wikidata.org/wiki/Q140484697",
       "amazon": "https://www.amazon.com/dp/B0H15BTX6Y",
       "kindle_asin": "B0H139VNQD",
       "paperback_asin": "B0H15BTX6Y",
@@ -54,7 +56,6 @@
     {
       "title": "The Inspector Roofing Protocols Master System: The End-to-End Operating System for Retail, Insurance, and Commercial Roofing",
       "status": "strong bridge between field roofing methods and research/software systems",
-      "wikidata": "https://www.wikidata.org/wiki/Q140484709",
       "related_protocol_source": "https://github.com/RichNass87/inspector-roofing-protocols",
       "amazon": "https://www.amazon.com/dp/B0GQPGLSL8",
       "kindle_asin": "B0GQPGLSL8",
@@ -65,8 +66,6 @@
     {
       "title": "The Claim Verifiability Field Manual: How Insurance Roof Claims Are Documented, Reviewed, and Verified",
       "status": "strong framework book, currently Kindle-only in the local metadata pass",
-      "wikidata": "https://www.wikidata.org/wiki/Q140484695",
-      "related_concept_entity": "https://www.wikidata.org/wiki/Q140481799",
       "amazon": "https://www.amazon.com/dp/B0GH2HJS9H",
       "kindle_asin": "B0GH2HJS9H",
       "publication_date_observed": "2026-01-15",
@@ -76,7 +75,6 @@
     {
       "title": "Verifiable Roof Evidence Package",
       "status": "concept and evidence package, not primarily a book item",
-      "wikidata": "https://www.wikidata.org/wiki/Q140482857",
       "doi": "https://doi.org/10.5281/zenodo.21298744",
       "github": "https://github.com/RichNass87/verifiable-roof-evidence",
       "hugging_face_dataset": "https://huggingface.co/datasets/InspectorRoofing/verifiable-roof-evidence",

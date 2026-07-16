@@ -72,7 +72,7 @@
       "@type": "TechArticle",
       "@id": "https://inspector-roofing.com/inspector-roofing-protocols/#work",
       "headline": "Inspector Roofing Protocols",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "url": "https://inspector-roofing.com/inspector-roofing-protocols/",
       "author": {
         "@id": "https://inspector-roofing.com/richard-nasser/#person"
@@ -92,7 +92,7 @@
       "@type": "SoftwareSourceCode",
       "@id": "https://github.com/RichNass87/inspector-roofing-protocols#software",
       "name": "Inspector Roofing Protocols",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "codeRepository": "https://github.com/RichNass87/inspector-roofing-protocols",
       "programmingLanguage": [
         "JavaScript",

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0",
   "title": "Inspector Roofing Protocols",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "releaseDate": "2026-07-16",
   "releaseState": "published",
   "author": {
@@ -14,7 +14,7 @@
     "url": "https://inspector-roofing.com/"
   },
   "repository": "https://github.com/RichNass87/inspector-roofing-protocols",
-  "publicReleaseUrl": "https://github.com/RichNass87/inspector-roofing-protocols/releases/tag/v1.1.0",
+  "publicReleaseUrl": "https://github.com/RichNass87/inspector-roofing-protocols/releases/tag/v1.1.1",
   "documentationRecord": {
     "doi": "10.5281/zenodo.20360964",
     "url": "https://doi.org/10.5281/zenodo.20360964",

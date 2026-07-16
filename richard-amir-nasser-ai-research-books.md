@@ -18,7 +18,7 @@ This keeps the identity broader than "roofer" while still tying the work back to
 
 Status: strongest technical AI/search book and research item.
 
-- Wikidata: https://www.wikidata.org/wiki/Q140456045
+- Verified Wikidata item: https://www.wikidata.org/wiki/Q140522693
 - DOI: https://doi.org/10.5281/zenodo.21045292
 - Zenodo record: https://zenodo.org/records/21045292
 - Amazon Kindle ASIN: `B0H6XVP47W`
@@ -34,7 +34,7 @@ Status: strongest technical AI/search book and research item.
 
 Status: strongest author-identity book for AI visibility, SEO, AEO, and answer-engine positioning.
 
-- Wikidata: https://www.wikidata.org/wiki/Q140484697
+- Wikidata status: no live item verified on 2026-07-16
 - Public Amazon page: https://www.amazon.com/dp/B0H15BTX6Y
 - Kindle ASIN: `B0H139VNQD`
 - Paperback ASIN: `B0H15BTX6Y`
@@ -64,7 +64,7 @@ Status: strong supporting book for AI-ready local business authority, especially
 
 Status: strongest bridge between field roofing methods and research/software systems.
 
-- Wikidata: https://www.wikidata.org/wiki/Q140484709
+- Wikidata status: no live item verified on 2026-07-16
 - Related Protocols source: https://github.com/RichNass87/inspector-roofing-protocols
 - Public Amazon page: https://www.amazon.com/dp/B0GQPGLSL8
 - Kindle ASIN observed: `B0GQPGLSL8`
@@ -77,8 +77,7 @@ Status: strongest bridge between field roofing methods and research/software sys
 
 Status: strong framework book, but currently Kindle-only in the local metadata pass.
 
-- Wikidata: https://www.wikidata.org/wiki/Q140484695
-- Related concept entity: https://www.wikidata.org/wiki/Q140481799
+- Wikidata status: no live item verified for the book or related concept on 2026-07-16
 - Public Amazon page: https://www.amazon.com/dp/B0GH2HJS9H
 - Kindle ASIN observed: `B0GH2HJS9H`
 - Publication date observed: January 15, 2026
@@ -90,7 +89,7 @@ Status: strong framework book, but currently Kindle-only in the local metadata p
 
 Status: concept/evidence package, not primarily a book item.
 
-- Wikidata concept/entity: https://www.wikidata.org/wiki/Q140482857
+- Wikidata status: no live concept item verified on 2026-07-16
 - Related evidence package DOI: https://doi.org/10.5281/zenodo.21298744
 - Related GitHub repository: https://github.com/RichNass87/verifiable-roof-evidence
 - Related Hugging Face dataset: https://huggingface.co/datasets/InspectorRoofing/verifiable-roof-evidence
@@ -122,7 +121,7 @@ Use these as the main profile sources for Richard Amir Nasser where appropriate:
 - GitHub: https://github.com/RichNass87
 - Hugging Face: https://huggingface.co/InspectorRoofing
 - Amazon author page: https://www.amazon.com/author/richard-nasser
-- Wikidata person item: https://www.wikidata.org/wiki/Q140475713
+- Wikidata person status: no live person item verified on 2026-07-16
 - Inspector Roofing and Restoration: https://inspector-roofing.com/
 
 ## Recommended Public Title
@@ -132,4 +131,4 @@ Founder, author, and research systems developer
 
 ## Recommended Short Bio
 
-Richard Amir Nasser is the founder of Inspector Roofing and Restoration and a public author/research systems developer focused on inspection-first roofing, claim-verifiable documentation, AI-readable roof evidence, homeowner education tools, and local search authority systems. His public work connects books, DOI-backed research, GitHub repositories, Hugging Face datasets/apps, ORCID, Wikidata, and owned-site source pages into a conservative evidence graph.
+Richard Amir Nasser is the founder of Inspector Roofing and Restoration and a public author/research systems developer focused on inspection-first roofing, review-ready documentation, AI-readable roof evidence, homeowner education tools, and local search authority systems. His public work connects books, DOI-backed research, GitHub repositories, Hugging Face datasets/apps, ORCID, and owned-site source pages into a conservative evidence graph.

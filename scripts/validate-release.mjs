@@ -4,7 +4,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const VERSION = "1.1.0";
+const VERSION = "1.1.1";
 const RELEASE_DATE = "2026-07-16";
 const AUTHOR = "Richard Amir Nasser";
 const ORGANIZATION = "Inspector Roofing and Restoration";
@@ -52,6 +52,23 @@ const sample = json("examples/anonymized-roof-documentation-packet/inspection.js
 const entitySchema = json("inspector-roofing-entity-schema.jsonld");
 
 const coreText = coreFiles.filter(file => existsSync(join(root, file))).map(read).join("\n");
+const wikidataScanFiles = [
+  "README.md",
+  "index.html",
+  "docs/index.html",
+  "selected-book-items.md",
+  "richard-amir-nasser-ai-research-books.md",
+  "related-research/roofing-near-me-ai-visibility-study.md",
+  "huggingface/richard-amir-nasser-ai-research-books/README.md",
+  "huggingface/richard-amir-nasser-ai-research-books/books.json"
+];
+const allowedWikidataIds = new Set(["Q140522693"]);
+const referencedWikidataIds = [...new Set(
+  wikidataScanFiles
+    .filter(file => existsSync(join(root, file)))
+    .flatMap(file => [...read(file).matchAll(/https:\/\/www\.wikidata\.org\/wiki\/(Q\d+)/g)].map(match => match[1]))
+)];
+const unverifiedWikidataIds = referencedWikidataIds.filter(id => !allowedWikidataIds.has(id));
 const report = {
   validator: "Inspector Roofing Protocols internal release-readiness validator",
   validatorVersion: "1.0.0",
@@ -233,6 +250,13 @@ const privacyBoundaryChecks = [
   {
     name: "Core release avoids ranking, platform, trademark, insurance, and compliance overclaims",
     ok: !overclaimPattern.test(coreText)
+  },
+  {
+    name: "Public release files reference only the verified live Wikidata allowlist",
+    ok: unverifiedWikidataIds.length === 0 && referencedWikidataIds.includes("Q140522693"),
+    detail: unverifiedWikidataIds.length
+      ? `Unverified or missing Wikidata identifiers: ${unverifiedWikidataIds.join(", ")}`
+      : "Only verified live item Q140522693 is referenced"
   }
 ];
 
@@ -270,9 +294,9 @@ const credentialChecks = [
 
 const publicReleaseChecks = [
   {
-    name: "v1.1.0 public release is recorded only after publication",
+    name: "v1.1.1 public release is recorded only after publication",
     ok: manifest.releaseState === "published" &&
-      manifest.publicReleaseUrl === "https://github.com/RichNass87/inspector-roofing-protocols/releases/tag/v1.1.0"
+      manifest.publicReleaseUrl === "https://github.com/RichNass87/inspector-roofing-protocols/releases/tag/v1.1.1"
   }
 ];
 
@@ -294,6 +318,7 @@ hardGate("Core files present", missingCoreFiles.length === 0, missingCoreFiles.j
 hardGate("Canonical identity and version consistent", identityChecks.every(check => check.ok), "See identity checks");
 hardGate("No unresolved placeholders", !unresolvedPlaceholders, "Core release files scanned");
 hardGate("No restricted private fields", !restrictedFieldAssignment && !forbiddenBinary, "Public release scope scanned");
+hardGate("No missing or deleted Wikidata identifiers", unverifiedWikidataIds.length === 0, unverifiedWikidataIds.join(", ") || "Only allowlisted live identifiers are present");
 hardGate("Insurance/public-adjuster boundary complete", privacyBoundaryChecks[2].ok, "Five evidence-spine files checked");
 hardGate("Checksum ledger current", checksums.ok, checksums.detail);
 hardGate("Minimum score reached", report.score >= report.minimumReleaseScore, `${report.score}/${report.minimumReleaseScore}`);
@@ -305,9 +330,10 @@ else report.status = "READY_FOR_SCHEDULED_RELEASE";
 
 report.findings.push("Score is an internal package-readiness result, not an independent certification or search ranking.");
 if (manifest.releaseState !== "published") {
-  report.findings.push("The staged package can score at most 95. Publish and verify the v1.1.0 release before changing releaseState to published.");
+  report.findings.push("The staged package can score at most 95. Publish and verify the v1.1.1 release before changing releaseState to published.");
 }
 report.findings.push("FAA evidence uses a disclosed first-party bridge from canonical Richard Amir Nasser to the registry name Richard James Nasser; private card fields remain excluded.");
+report.findings.push("The official Wikidata API check on 2026-07-16 verified Q140522693 as live; missing or deleted Q identifiers are excluded.");
 
 writeFileSync(join(root, "release-readiness-report.json"), `${JSON.stringify(report, null, 2)}\n`, "utf8");
 

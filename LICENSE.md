@@ -4,6 +4,6 @@ Except for executable source code, the documentation, schemas, taxonomies, templ
 
 License text: <https://creativecommons.org/licenses/by/4.0/legalcode>
 
-Attribution: `Inspector Roofing Protocols, Richard Amir Nasser and Inspector Roofing and Restoration, version 1.1.0`.
+Attribution: `Inspector Roofing Protocols, Richard Amir Nasser and Inspector Roofing and Restoration, version 1.1.1`.
 
 Third-party marks, linked pages, source screenshots, and referenced publications remain the property of their respective owners and are not relicensed by this repository.

@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use Inspector Roofing Protocols, please cite the DOI-backed public release below."
 title: "Inspector Roofing Protocols: Open Technical Documentation Standard for Residential Roof Inspection Evidence Capture"
-version: "1.1.0"
+version: "1.1.1"
 date-released: "2026-07-16"
 authors:
   - family-names: "Nasser"

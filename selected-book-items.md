@@ -12,11 +12,11 @@ This file records the small, source-backed set of book/work items selected for p
 - Add Wikidata statements only when the supporting source is public, stable, and appropriate for Wikidata.
 - Prefer work-level clarity over promotional wording.
 
-## Existing Wikidata Items Reused
+## Verified Wikidata Status
 
 ### The Roofing Search Integrity Report
 
-- Wikidata: https://www.wikidata.org/wiki/Q140456045
+- Verified Wikidata item: https://www.wikidata.org/wiki/Q140522693
 - Role in graph: search-integrity research/report tied to Richard Amir Nasser's AI visibility and roofing search work.
 - Kindle ASIN observed in KDP: `B0H6XVP47W`
 - Paperback ASIN observed in KDP: `B0H6XXDL9X`
@@ -25,7 +25,7 @@ This file records the small, source-backed set of book/work items selected for p
 
 ### The Chase for "Roofer Near Me"
 
-- Wikidata: https://www.wikidata.org/wiki/Q140485275
+- Wikidata status: no live item verified on 2026-07-16
 - Full title: The Chase for "Roofer Near Me": A Funny, Human Quest to Own the Language, Build Local Authority, and Make AI Finally Understand Your Business
 - Role in graph: DOI-backed book and research cluster for roofing-near-me search language, local authority, and AI visibility.
 - Owned book page: https://inspector-roofing.com/the-chase-for-roofer-near-me/
@@ -43,11 +43,11 @@ This file records the small, source-backed set of book/work items selected for p
 - Print length observed: 118 pages
 - Notes: strongest next book/work item because it links a book, DOI archive, public research page, GitHub source, Hugging Face item, Academia upload, and owned canonical page.
 
-## Newly Created Wikidata Book/Work Items
+## Former Book/Work Identifiers Now Missing
 
 ### The Inspector Roofing Protocols Master System
 
-- Wikidata: https://www.wikidata.org/wiki/Q140484709
+- Wikidata status: no live item verified on 2026-07-16
 - Related Protocols source: https://github.com/RichNass87/inspector-roofing-protocols
 - Kindle ASIN observed in KDP: `B0GQPGLSL8`
 - Role in graph: flagship book explaining the Inspector Roofing Protocols system.
@@ -56,8 +56,7 @@ This file records the small, source-backed set of book/work items selected for p
 
 ### The Claim Verifiability Field Manual
 
-- Wikidata: https://www.wikidata.org/wiki/Q140484695
-- Related concept entity: https://www.wikidata.org/wiki/Q140481799
+- Wikidata status: no live item verified for the book or related concept on 2026-07-16
 - Kindle ASIN observed in KDP: `B0GH2HJS9H`
 - Role in graph: book/manual connected to the Claim Verifiability evidence and documentation framework.
 - Safe description: 2026 book by Richard Amir Nasser about roof claim documentation and verification.
@@ -65,7 +64,7 @@ This file records the small, source-backed set of book/work items selected for p
 
 ### Visible or Vanished
 
-- Wikidata: https://www.wikidata.org/wiki/Q140484697
+- Wikidata status: no live item verified on 2026-07-16
 - Kindle ASIN observed in KDP: `B0H139VNQD`
 - Paperback ASIN observed in KDP: `B0H15BTX6Y`
 - Paperback ISBN-13 observed in KDP: `979-8196166822`
@@ -74,7 +73,7 @@ This file records the small, source-backed set of book/work items selected for p
 
 ### Do Your Job Anyway
 
-- Wikidata: https://www.wikidata.org/wiki/Q140484699
+- Wikidata status: no live item verified on 2026-07-16
 - Kindle ASIN observed in KDP: `B0H19DC7YZ`
 - Paperback ASIN observed in KDP: `B0H1H4RMGG`
 - Paperback ISBN-13 observed in KDP: `979-8196501593`
@@ -86,22 +85,15 @@ This file records the small, source-backed set of book/work items selected for p
 Add these manually or through a clean Wikidata tool only where sources support them:
 
 - instance of: literary work or book
-- author: Richard Amir Nasser, https://www.wikidata.org/wiki/Q140475713
+- author: Richard Amir Nasser, using serious public references; no live person Q item was verified on 2026-07-16
 - ISBN-13: only for confirmed print editions
 - described at URL: public Amazon detail page, official owned-source page, DOI record, or public research page
 - related concept or main subject: only where the source clearly supports the relationship
 - publication date: only when confirmed by Amazon/KDP or another stable public source
 
-## Current Core Q Codes
+## Current Wikidata Status
 
-- Richard Amir Nasser: https://www.wikidata.org/wiki/Q140475713
-- Inspector Roofing and Restoration: https://www.wikidata.org/wiki/Q140480476
-- The Roofing Search Integrity Report: https://www.wikidata.org/wiki/Q140456045
-- The Chase for "Roofer Near Me": https://www.wikidata.org/wiki/Q140485275
+- The Roofing Search Integrity Report: https://www.wikidata.org/wiki/Q140522693
+- All other previously listed Q IDs returned `missing` from the official Wikidata API on 2026-07-16.
 - Inspector Roofing Protocols source: https://github.com/RichNass87/inspector-roofing-protocols
-- Claim Verifiability: https://www.wikidata.org/wiki/Q140481799
-- Verifiable Roof: https://www.wikidata.org/wiki/Q140482857
-- The Claim Verifiability Field Manual: https://www.wikidata.org/wiki/Q140484695
-- Visible or Vanished: https://www.wikidata.org/wiki/Q140484697
-- Do Your Job Anyway: https://www.wikidata.org/wiki/Q140484699
-- The Inspector Roofing Protocols Master System: https://www.wikidata.org/wiki/Q140484709
+- Do not recreate missing items without a policy-compliant notability and reference package.

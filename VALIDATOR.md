@@ -12,7 +12,7 @@ The validator measures whether this repository is ready to be published as a coh
 | Reproducibility and integrity | 15 | Runtime paths work; release manifest is complete; dual licensing is explicit; checksum ledger is current. |
 | Privacy and claim boundaries | 20 | No restricted private fields or unresolved placeholders; insurance/public-adjuster boundary is present; overclaims are absent. |
 | Credential evidence quality | 10 | GARCA, FAA, and HAAG source limits are recorded; the FAA name bridge and raw-card exclusion are explicit. |
-| Published release | 5 | `release-manifest.json` is changed from `staged` to `published` only after the v1.1.0 public tag/release exists. |
+| Published release | 5 | `release-manifest.json` is changed from `staged` to `published` only after the v1.1.1 public tag/release exists. |
 
 Maximum staged score: 95. Maximum published score: 100. Release eligibility begins at 85; the stronger improvement target is 91+.
 
@@ -22,6 +22,7 @@ The validator returns `RELEASE_HOLD` regardless of score if it finds:
 
 - restricted personal data in the release files;
 - an unresolved placeholder in a core file;
+- a missing or deleted Wikidata Q identifier in a public release file;
 - missing insurance/public-adjuster boundary language;
 - inconsistent canonical identity or version metadata;
 - missing checksum coverage; or

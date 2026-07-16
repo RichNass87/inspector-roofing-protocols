@@ -2,6 +2,15 @@
 
 All notable changes are recorded here. Dates use ISO 8601.
 
+## [1.1.1] - 2026-07-16
+
+### Fixed
+
+- Removed 19 missing or deleted Wikidata identifiers after an official API check.
+- Corrected The Roofing Search Integrity Report to the verified live item `Q140522693`.
+- Replaced the retired Q-link grid with ORCID, GitHub, DOI, Hugging Face, and verified-source links.
+- Added a validator hard gate that allows only the verified live Wikidata item and blocks retired Q IDs from release files.
+
 ## [1.1.0] - 2026-07-16
 
 ### Added

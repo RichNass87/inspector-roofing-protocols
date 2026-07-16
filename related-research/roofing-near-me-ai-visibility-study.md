@@ -6,7 +6,7 @@ This file records the public evidence cluster for the Roofing Near Me AI Visibil
 
 ## Core Work Cluster
 
-- Book/work Wikidata item: https://www.wikidata.org/wiki/Q140485275
+- Wikidata status: no live book/work item verified on 2026-07-16
 - Full book title: The Chase for "Roofer Near Me": A Funny, Human Quest to Own the Language, Build Local Authority, and Make AI Finally Understand Your Business
 - DOI: https://doi.org/10.5281/zenodo.20650615
 - Zenodo record: https://zenodo.org/records/20650615
@@ -39,7 +39,7 @@ Together, these records separate three ideas that should not be collapsed:
 ## Entity Guardrails
 
 - Treat this as one book/research/source cluster, not multiple duplicate entities.
-- Use Q140485275 for the book/work item.
+- Do not use the former Q identifier unless Wikidata restores it through a policy-compliant process.
 - Use DOI 10.5281/zenodo.20650615 for the archived research record.
 - Use the owned book page as the canonical reader-facing source.
 - Use the GitHub repository as the source-code and version-history anchor.

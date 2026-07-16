@@ -31,7 +31,7 @@ function defaultInspection() {
   return {
     inspection_id: "IR-YYYYMMDD-001",
     inspection_date: "YYYY-MM-DD",
-    report_version: "1.1.0",
+    report_version: "1.1.1",
     property: {
       address: "",
       city: "",

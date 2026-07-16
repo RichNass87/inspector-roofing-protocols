@@ -1,6 +1,6 @@
 # Inspector Roofing Protocols methodology
 
-Version 1.1.0, released 2026-07-16.
+Version 1.1.1, released 2026-07-16.
 
 ## Purpose
 

@@ -44,7 +44,7 @@ Older or issuer-controlled source-display names are preserved only as source-dis
 - Source class: dated first-party-hosted capture of a profile screen
 - Boundary: this is not an issuer permalink and should not be presented as live issuer verification. Recheck status after the displayed expiration date. The HCI number is intentionally omitted from this release while identifier conflicts are being reconciled.
 
-## Not counted as verified in v1.1.0
+## Not counted as verified in v1.1.1
 
 - Xactimate Level 1: public pages mention it, but this release does not yet include a verified issuer-controlled person-specific URL or a public-safe certificate copy.
 - FAA physical card: reviewed privately, excluded from the public package.

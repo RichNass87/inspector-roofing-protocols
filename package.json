@@ -1,6 +1,6 @@
 {
   "name": "inspector-roofing-protocols",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Versioned schemas, methodology, examples, and API contract for inspection-first roof condition documentation.",
   "type": "module",
   "main": "server.js",
