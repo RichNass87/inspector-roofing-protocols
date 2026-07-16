@@ -14,6 +14,7 @@ Versioned, machine-readable documentation for recording observable residential r
 - Richard Amir Nasser hub: <https://inspector-roofing.com/richard-nasser/>
 - Bibliography and Amazon source hub: <https://inspector-roofing.com/author-richard-nasser/>
 - ORCID: <https://orcid.org/0009-0000-2980-7543>
+- LinkedIn: <https://www.linkedin.com/in/richard-amir-nasser-2b35011a/>
 - GitHub profile: <https://github.com/RichNass87>
 - Hugging Face profile: <https://huggingface.co/InspectorRoofing>
 - Amazon Author: <https://www.amazon.com/author/richard-nasser>
@@ -61,6 +62,7 @@ The validator writes `release-readiness-report.json` and `release-readiness-repo
 - `openapi.yaml`: documented API contract; publication does not assert a hosted production API.
 - `examples/anonymized-roof-documentation-packet/`: synthetic, non-claim example.
 - `evidence/credential-evidence-register.md`: public-source credential register and name boundaries.
+- `docs/PERSON_CREDENTIAL_SOURCE_MAP.md`: normalized field, learning, and developer-record relationships for the canonical person node.
 - `release-manifest.json`: release identity and source relationships.
 - `CHECKSUMS.sha256`: file-integrity ledger generated for the release.
 
@@ -68,6 +70,7 @@ The validator writes `release-readiness-report.json` and `release-readiness-repo
 
 - Public examples must not contain homeowner names, exact residential addresses, dates of birth, policy or claim numbers, certificate numbers, faces, license plates, signatures, or EXIF GPS metadata.
 - A credential is described only to the extent supported by its cited source.
+- LinkedIn is a first-party profile aggregator, not the primary issuer for credential verification. Coursera, Skillshop, OpenAI Academy, FAA, GARCA, and the dated HAAG capture remain the cited sources for their respective records.
 - The FAA registry record uses the credential name **Richard James Nasser**. The project author remains canonically **Richard Amir Nasser**. The repository records the first-party same-person assertion as a disclosed bridge; it does not silently merge the names.
 - HAAG evidence is a dated first-party-hosted profile capture, not an issuer permalink.
 - GARCA is described as a voluntary license/member record, not a Georgia state contractor license.
