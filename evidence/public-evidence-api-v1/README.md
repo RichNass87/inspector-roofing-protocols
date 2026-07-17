@@ -5,10 +5,12 @@ This is the public-safe source package for Inspector Roofing and Restoration and
 ## Published records
 
 - [Public evidence manifest](../public-evidence-manifest.json)
-- [First-party provenance credential](../public-evidence-credential-v1/credential.json)
+- [First-party provenance credential v1.0](../public-evidence-credential-v1/credential.json)
+- [Latest first-party provenance credential v1.1](../public-evidence-credential-v1.1/credential.json)
 - [Credential public key](../public-evidence-credential-v1/public-key.json)
-- [Credential verification payload](../public-evidence-credential-v1/credential-payload.json)
+- [Latest signed verification payload](../public-evidence-credential-v1.1/credential-payload.json)
 - [OpenTimestamps proof, base64 wrapped](../public-evidence-credential-v1/credential-payload.json.ots.b64)
+- [Confirmed Signet anchor record](../BLOCKCHAIN-ANCHOR-2026-07-17.md)
 
 ## API and agent contract
 
@@ -19,8 +21,8 @@ This is the public-safe source package for Inspector Roofing and Restoration and
 
 ## Status
 
-The manifest and credential are public-safe and published. The Ed25519 signature verifies locally. The OpenTimestamps proof was submitted to a Bitcoin calendar and is pending Bitcoin attestation confirmation.
+The manifest and credentials are public-safe and published. The Ed25519 signature for v1.1 verifies locally. The v1.0 signed payload digest is committed in confirmed Bitcoin Signet transaction `d4b51d8d43437c544f93f2738f29d75c4e2287e1aefb6b9a22d1ee0688b94897` at block `313627`.
 
-This package does not claim that a production API, MCP server, PostgreSQL ledger, timestamp service, blockchain application, live telemetry feed, or live availability system is connected.
+This package does not claim that a production API, MCP server, PostgreSQL ledger, timestamp service, blockchain application, live telemetry feed, or live availability system is connected. The Signet transaction is a public testnet tamper-evidence anchor, not Bitcoin mainnet certification.
 
 The credential is first-party self-attestation. It is not independent certification, accreditation, endorsement, ranking, insurance decision, government credential, or platform approval.
