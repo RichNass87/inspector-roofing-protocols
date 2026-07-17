@@ -1,0 +1,93 @@
+openapi: 3.1.0
+info:
+  title: Inspector Roofing Public Evidence API
+  version: 1.0.0
+  description: >-
+    Read-only contract for public-safe source-spine and educational evidence
+    records. This file is a deployment blueprint; the endpoint is not claimed
+    to be live until an authenticated owner deploys and verifies it.
+  contact:
+    name: Inspector Roofing and Restoration
+    url: https://inspector-roofing.com/
+servers: []
+tags:
+  - name: Public evidence
+    description: Allowlisted, non-customer public records only.
+paths:
+  /v1/health:
+    get:
+      tags: [Public evidence]
+      summary: Return deployment status
+      operationId: getHealth
+      responses:
+        '200':
+          description: Health response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+  /v1/source-spine:
+    get:
+      tags: [Public evidence]
+      summary: Return the public-safe source spine
+      operationId: getSourceSpine
+      responses:
+        '200':
+          description: Public-safe manifest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicEvidenceManifest'
+        '429':
+          description: Rate limit exceeded
+  /v1/evidence/{recordId}:
+    get:
+      tags: [Public evidence]
+      summary: Return one allowlisted public evidence record
+      operationId: getEvidenceRecord
+      parameters:
+        - name: recordId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Public evidence record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicEvidenceRecord'
+        '404':
+          description: Record not found
+        '429':
+          description: Rate limit exceeded
+components:
+  schemas:
+    Health:
+      type: object
+      required: [status, publicOnly, customerDataExposed, availabilityDataExposed]
+      properties:
+        status: {type: string, enum: [ok, unavailable]}
+        publicOnly: {type: boolean, const: true}
+        customerDataExposed: {type: boolean, const: false}
+        availabilityDataExposed: {type: boolean, const: false}
+        manifestVersion: {type: string}
+    PublicEvidenceRecord:
+      $ref: './schemas/public-evidence-record.schema.json'
+    PublicEvidenceManifest:
+      type: object
+      required: [manifestVersion, generatedAt, canonicalIdentity, scope, records, plannedCapabilities, integrity]
+      properties:
+        manifestVersion: {type: string}
+        generatedAt: {type: string, format: date}
+        canonicalIdentity: {type: object}
+        scope: {type: object}
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicEvidenceRecord'
+        plannedCapabilities:
+          type: array
+          items: {type: object}
+        integrity: {type: object}
