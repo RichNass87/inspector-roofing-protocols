@@ -1,0 +1,8 @@
+{
+  "keyType": "Ed25519",
+  "keyPurpose": "verification of Inspector Roofing first-party provenance credential",
+  "controller": "https://inspector-roofing.com/richard-nasser/",
+  "publicKeyPem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAm0bPiiKVX2KwpLwRXQ7Lz4SFaZrZJeyzxeOljtkJkbU=\n-----END PUBLIC KEY-----\n",
+  "publicKeySha256": "2623c9477c1681ba3305c3de1a1481fe91c98bd60496b1290ac24a606b0f9ec4",
+  "disclosure": "This key verifies a first-party provenance statement. It does not turn the issuer into an independent certifying authority."
+}

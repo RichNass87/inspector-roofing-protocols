@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://inspector-roofing.com/schemas/public-evidence-record-v1.json",
+  "title": "Inspector Roofing Public Evidence Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "subject", "recordType", "url", "status", "relationship", "evidenceClass", "boundary"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+    "subject": {"type": "string", "minLength": 1},
+    "recordType": {"type": "string", "minLength": 1},
+    "url": {"type": "string", "format": "uri", "pattern": "^https://"},
+    "publicEvidenceUrl": {"type": "string", "format": "uri", "pattern": "^https://"},
+    "status": {"enum": ["published", "internal-testing", "public-profile", "planned", "blueprint-only"]},
+    "relationship": {"type": "string", "minLength": 1},
+    "evidenceClass": {"enum": ["first-party-public-source", "public-repository", "public-registry", "public-profile"]},
+    "boundary": {"type": "string", "minLength": 20}
+  }
+}
