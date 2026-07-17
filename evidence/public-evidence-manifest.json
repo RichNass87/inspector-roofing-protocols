@@ -1,0 +1,146 @@
+{
+  "manifestVersion": "1.0.0",
+  "generatedAt": "2026-07-17",
+  "canonicalIdentity": {
+    "name": "Richard Amir Nasser",
+    "personUrl": "https://inspector-roofing.com/richard-nasser/",
+    "companyName": "Inspector Roofing and Restoration",
+    "companyUrl": "https://inspector-roofing.com/",
+    "sourceSpineLastReviewed": "2026-07-16"
+  },
+  "scope": {
+    "visibility": "public-safe",
+    "containsCustomerData": false,
+    "containsPrivateProjectData": false,
+    "containsLiveAvailability": false,
+    "insuranceBoundary": "Inspector Roofing documents observable conditions and organizes review-ready evidence. Insurance carriers decide coverage, payment, and claim outcomes."
+  },
+  "records": [
+    {
+      "id": "person-richard-amir-nasser",
+      "subject": "Richard Amir Nasser",
+      "recordType": "Person",
+      "url": "https://inspector-roofing.com/richard-nasser/",
+      "status": "published",
+      "relationship": "canonical person hub",
+      "evidenceClass": "first-party-public-source",
+      "boundary": "The page identifies the canonical public name and links to public profiles; it is not an independent identity certification."
+    },
+    {
+      "id": "organization-inspector-roofing",
+      "subject": "Inspector Roofing and Restoration",
+      "recordType": "Organization",
+      "url": "https://inspector-roofing.com/",
+      "status": "published",
+      "relationship": "company entity home",
+      "evidenceClass": "first-party-public-source",
+      "boundary": "Business information is presented as a first-party source and should be checked against independent directories where relevant."
+    },
+    {
+      "id": "authority-stack",
+      "subject": "Inspector Roofing authority stack",
+      "recordType": "WebPage",
+      "url": "https://inspector-roofing.com/authority-stack/",
+      "status": "published",
+      "relationship": "company, research, credential, and application source map",
+      "evidenceClass": "first-party-public-source",
+      "boundary": "Linked records support provenance and context; they do not create rankings, endorsements, or guaranteed search results."
+    },
+    {
+      "id": "knowledge-graph-richard-amir-nasser",
+      "subject": "Richard Amir Nasser knowledge graph",
+      "recordType": "WebPage",
+      "url": "https://inspector-roofing.com/richard-amir-nasser-knowledge-graph/",
+      "status": "published",
+      "relationship": "plain-language identity and source map",
+      "evidenceClass": "first-party-public-source",
+      "boundary": "The page organizes public relationships for clarity; it does not assert that every linked source independently verifies every statement."
+    },
+    {
+      "id": "inspector-droneproof",
+      "subject": "Inspector DroneProof",
+      "recordType": "SoftwareApplication",
+      "url": "https://inspector-roofing.com/inspector-droneproof/",
+      "status": "published",
+      "relationship": "developer and product publication record",
+      "evidenceClass": "first-party-public-source",
+      "publicEvidenceUrl": "https://www.amazon.com/",
+      "boundary": "A product publication record is not an Amazon certification, DJI endorsement, or claim that every workflow is automated."
+    },
+    {
+      "id": "orloj-prague-cosmos",
+      "subject": "ORLOJ: Prague Cosmos",
+      "recordType": "SoftwareApplication",
+      "url": "https://orloj-prague-cosmos.richard-670.workers.dev",
+      "status": "internal-testing",
+      "relationship": "Android developer and first-release provenance record",
+      "evidenceClass": "first-party-public-source",
+      "publicEvidenceUrl": "https://play.google.com/apps/internaltest/4701642438320430904",
+      "boundary": "The app is recorded as internal testing; public production availability and independent endorsement are not claimed."
+    },
+    {
+      "id": "repairability-iq-workflow",
+      "subject": "Inspector Roofing Repairability IQ workflow",
+      "recordType": "CreativeWork",
+      "url": "https://inspector-roofing.com/authority-stack/#repairability-iq",
+      "status": "published",
+      "relationship": "public explanation of evidence organization",
+      "evidenceClass": "first-party-public-source",
+      "boundary": "The current WordPress workflow uses reports, media hashes, JSON manifests, and an HMAC seal; a PostgreSQL ledger and timestamp service remain planned."
+    },
+    {
+      "id": "github-protocols-source-map",
+      "subject": "Inspector Roofing Protocols source map",
+      "recordType": "Dataset",
+      "url": "https://github.com/RichNass87/inspector-roofing-protocols",
+      "status": "published",
+      "relationship": "public source and credential map",
+      "evidenceClass": "public-repository",
+      "boundary": "Repository contents are public source material and should be interpreted according to their own files and references."
+    },
+    {
+      "id": "orcid-richard-amir-nasser",
+      "subject": "Richard Amir Nasser ORCID record",
+      "recordType": "PersonProfile",
+      "url": "https://orcid.org/0009-0000-2980-7543",
+      "status": "public-profile",
+      "relationship": "external researcher identifier",
+      "evidenceClass": "public-registry",
+      "boundary": "The registry identifier is a disambiguation and publication-linking signal, not proof of a roofing credential or business ranking."
+    },
+    {
+      "id": "hugging-face-inspector-roofing",
+      "subject": "InspectorRoofing Hugging Face organization",
+      "recordType": "OrganizationProfile",
+      "url": "https://huggingface.co/InspectorRoofing",
+      "status": "public-profile",
+      "relationship": "public dataset and model organization profile",
+      "evidenceClass": "public-profile",
+      "boundary": "Hosted datasets and profiles are public research or software records; they do not independently certify company performance."
+    }
+  ],
+  "plannedCapabilities": [
+    {
+      "id": "read-only-api",
+      "status": "planned",
+      "description": "Expose only this manifest and selected public educational records through a documented, rate-limited read-only endpoint."
+    },
+    {
+      "id": "mcp-adapter",
+      "status": "planned",
+      "description": "Provide read-only agent tools backed by the same allowlisted records, with no customer or live-availability access."
+    },
+    {
+      "id": "append-only-ledger",
+      "status": "blueprint-only",
+      "description": "Provision and test a separate ledger before describing it as production-connected."
+    }
+  ],
+  "integrity": {
+    "algorithm": "sha256",
+    "canonicalization": "UTF-8 JSON with two-space indentation and a trailing newline",
+    "digest": "TO_BE_GENERATED_BY_VALIDATOR",
+    "signatureStatus": "unsigned-manifest",
+    "note": "A digest detects file changes; it is not a digital signature. A private signing key must be provisioned and protected before claiming signed attestations."
+  }
+}
