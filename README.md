@@ -91,3 +91,14 @@ The Microsoft Store URL is omitted until a live public listing is verified.
 ## Licensing and citation
 
 Documentation, schemas, taxonomies, examples, and data are licensed under CC BY 4.0. Executable source code is licensed under MIT. See `LICENSE.md`, `LICENSE-CODE.md`, and `CITATION.cff`.
+
+## Public evidence contract and first-party credential
+
+The repository now includes a public-safe evidence contract and a first-party provenance credential. These materials make the boundaries explicit while keeping customer and private project data out of the package:
+
+- Public-safe manifest: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/public-evidence-manifest.json>
+- Evidence contract and deployment boundary: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/public-evidence-api-v1/README.md>
+- First-party credential record: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/public-evidence-credential-v1/credential.json>
+- Verification key: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/public-evidence-credential-v1/public-key.json>
+
+The credential is a self-attested provenance record. Its Ed25519 signature verifies the published payload, and its OpenTimestamps proof records a submitted timestamp anchor. It is not an independent certification, government credential, platform endorsement, insurance decision, or ranking. No production API, MCP server, PostgreSQL ledger, blockchain system, customer data, or live availability claim is included.
