@@ -94,11 +94,17 @@ Documentation, schemas, taxonomies, examples, and data are licensed under CC BY 
 
 ## Public evidence contract and first-party credential
 
-The repository now includes a public-safe evidence contract and a first-party provenance credential. These materials make the boundaries explicit while keeping customer and private project data out of the package:
+The repository includes a public-safe evidence contract and versioned first-party provenance records. These materials keep customer and private project data out of the package while making the public source path easy to audit:
 
 - Public-safe manifest: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/public-evidence-manifest.json>
 - Evidence contract and deployment boundary: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/public-evidence-api-v1/README.md>
-- First-party credential record: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/public-evidence-credential-v1/credential.json>
-- Verification key: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/public-evidence-credential-v1/public-key.json>
+- Latest signed credential v1.1: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/public-evidence-credential-v1.1/credential.json>
+- Latest signed verification payload v1.1: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/public-evidence-credential-v1.1/credential-payload.json>
+- Credential verification key: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/public-evidence-credential-v1/public-key.json>
+- Confirmed public Signet anchor record: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/BLOCKCHAIN-ANCHOR-2026-07-17.md>
+- Hugging Face organization: <https://huggingface.co/InspectorRoofing>
+- Hugging Face Atlas Query Intelligence dataset: <https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-atlas-query-intelligence>
+- Hugging Face Homeowner Tool Belt source map: <https://huggingface.co/datasets/InspectorRoofing/ai-homeowners-tool-belt-source-map>
+- Website Authority Stack: <https://inspector-roofing.com/authority-stack/>
 
-The credential is a self-attested provenance record. Its Ed25519 signature verifies the published payload, and its OpenTimestamps proof records a submitted timestamp anchor. It is not an independent certification, government credential, platform endorsement, insurance decision, or ranking. No production API, MCP server, PostgreSQL ledger, blockchain system, customer data, or live availability claim is included.
+The credential is a first-party self-attested provenance record. Its Ed25519 signature verifies the published payload. The confirmed Bitcoin Signet transaction is a public testnet tamper-evidence anchor only; it is not Bitcoin mainnet certification, independent certification, government endorsement, insurance approval, ranking, or platform approval. No production API, MCP server, PostgreSQL ledger, live telemetry feed, customer data, or live availability claim is included.
