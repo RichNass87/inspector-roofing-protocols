@@ -2,6 +2,12 @@
 
 This folder contains a public-safe, hash-verifiable first-party provenance credential for Inspector Roofing and Restoration's public source spine.
 
+## Public mirrors
+
+- [GitHub credential files](https://github.com/RichNass87/inspector-roofing-protocols/tree/main/evidence/public-evidence-credential-v2)
+- [Hugging Face dataset mirror](https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-public-evidence-credential)
+- [Inspector Roofing Authority Stack](https://inspector-roofing.com/authority-stack/)
+
 ## Verification model
 
 1. Compute the SHA-256 digest of `credential-payload.json` and compare it with `credential-proof.json`.
