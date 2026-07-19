@@ -102,9 +102,13 @@ The repository includes a public-safe evidence contract and versioned first-part
 - Latest signed verification payload v1.1: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/public-evidence-credential-v1.1/credential-payload.json>
 - Credential verification key: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/public-evidence-credential-v1/public-key.json>
 - Confirmed public Signet anchor record: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/BLOCKCHAIN-ANCHOR-2026-07-17.md>
+- Public Evidence Credential v2: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/public-evidence-credential-v2/credential-payload.json>
+- OpenTimestamps proof and status: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/public-evidence-credential-v2/credential-proof.json>
 - Hugging Face organization: <https://huggingface.co/InspectorRoofing>
 - Hugging Face Atlas Query Intelligence dataset: <https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-atlas-query-intelligence>
 - Hugging Face Homeowner Tool Belt source map: <https://huggingface.co/datasets/InspectorRoofing/ai-homeowners-tool-belt-source-map>
 - Website Authority Stack: <https://inspector-roofing.com/authority-stack/>
 
 The credential is a first-party self-attested provenance record. Its Ed25519 signature verifies the published payload. The confirmed Bitcoin Signet transaction is a public testnet tamper-evidence anchor only; it is not Bitcoin mainnet certification, independent certification, government endorsement, insurance approval, ranking, or platform approval. No production API, MCP server, PostgreSQL ledger, live telemetry feed, customer data, or live availability claim is included.
+
+Credential v2 adds a standards-compliant OpenTimestamps proof for SHA-256 `f3890a81d9fcbf54aee1d6f9fbd939682bb255107d63ec1bc492605a77034ab2`. Public calendars accepted the digest on July 19, 2026. Its current status is `submitted-pending-bitcoin-attestation`; it must not be described as Bitcoin-mainnet verified until the official client upgrades and verifies the proof against a confirmed Bitcoin block.
