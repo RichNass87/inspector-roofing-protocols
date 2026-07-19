@@ -1,6 +1,6 @@
 # Public Source Spine
 
-Last updated: 2026-07-16
+Last updated: 2026-07-19
 
 ## Canonical Identity
 
@@ -8,11 +8,18 @@ Richard Amir Nasser is the canonical author identity for this repository and its
 
 - Person hub: https://inspector-roofing.com/richard-nasser/
 - Bibliography hub: https://inspector-roofing.com/author-richard-nasser/
+- Knowledge-graph overview: https://inspector-roofing.com/richard-amir-nasser-knowledge-graph/
+- Company Authority Stack: https://inspector-roofing.com/authority-stack/
 - ORCID: https://orcid.org/0009-0000-2980-7543
 - LinkedIn: https://www.linkedin.com/in/richard-amir-nasser-2b35011a/
 - GitHub: https://github.com/RichNass87
 - Amazon Author: https://www.amazon.com/author/richard-nasser
 - Hugging Face: https://huggingface.co/InspectorRoofing
+- Kaggle: https://www.kaggle.com/inspectorroofing
+- Academia.edu: https://independent.academia.edu/RichardNasser
+- About.me: https://about.me/richardnasser
+
+Machine-readable registry: [primary-source-spine.json](primary-source-spine.json)
 
 Older source-display text such as Richard Nasser or Richard A. Nasser is not the canonical target identity.
 
@@ -53,6 +60,17 @@ The serial is a pending application reference only. It is not a registration or 
 
 The two Toolbelt DOI records should be described by their exact artifact titles. The Microsoft Store URL is intentionally omitted from the active source spine until a live public listing is verified.
 
+## Public Evidence Timestamp Record
+
+- Authority Stack record: https://inspector-roofing.com/authority-stack/#public-evidence-credential-v2
+- GitHub credential record: https://github.com/RichNass87/inspector-roofing-protocols/tree/main/evidence/public-evidence-credential-v2
+- Hugging Face mirror: https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-public-evidence-credential
+- Credential payload SHA-256: `f3890a81d9fcbf54aee1d6f9fbd939682bb255107d63ec1bc492605a77034ab2`
+- OpenTimestamps status: `bitcoin-transaction-created-waiting-confirmations`
+- Bitcoin mainnet transaction: `4badbefab314337e54b0d8db08aff44fef12c4b126c82818e554083f5276f9b2`
+
+OpenTimestamps has associated the exact public payload with a Bitcoin mainnet transaction. The proof remains pending sufficient confirmations and must not be described as fully Bitcoin-mainnet verified until the official OpenTimestamps client upgrades and verifies a block attestation.
+
 ## Public Safety Boundary
 
-The Protocols and Toolbelt are documentation and homeowner-education frameworks. They do not replace a physical roof inspection, engineering opinion, legal advice, policy interpretation, public-adjusting services, or an insurance carrier's coverage, payment, or claim decision.
+The Protocols and Toolbelt are documentation and homeowner-education frameworks. They do not replace a physical roof inspection, engineering opinion, legal advice, policy interpretation, public-adjusting services, or an insurance carrier's coverage, payment, or claim decision. The source spine and timestamp record are first-party provenance materials, not independent certification, accreditation, a ranking, a platform endorsement, or proof of every claim made elsewhere.
