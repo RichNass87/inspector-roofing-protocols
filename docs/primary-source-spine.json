@@ -1,0 +1,86 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "@id": "https://github.com/RichNass87/inspector-roofing-protocols/blob/main/docs/primary-source-spine.json",
+  "name": "Inspector Roofing Primary Source Spine",
+  "version": "1.0.0",
+  "dateModified": "2026-07-19",
+  "inLanguage": "en-US",
+  "description": "A public-safe registry of the primary public sources used to identify Richard Amir Nasser, Inspector Roofing and Restoration, the Inspector Roofing Protocols, and associated public research and software records.",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "creator": {
+    "@type": "Person",
+    "name": "Richard Amir Nasser",
+    "url": "https://inspector-roofing.com/richard-nasser/",
+    "sameAs": [
+      "https://orcid.org/0009-0000-2980-7543",
+      "https://www.linkedin.com/in/richard-amir-nasser-2b35011a/",
+      "https://github.com/RichNass87",
+      "https://huggingface.co/InspectorRoofing",
+      "https://www.kaggle.com/inspectorroofing",
+      "https://independent.academia.edu/RichardNasser",
+      "https://www.amazon.com/author/richard-nasser",
+      "https://about.me/richardnasser"
+    ]
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Inspector Roofing and Restoration",
+    "url": "https://inspector-roofing.com/"
+  },
+  "sourceRecords": [
+    {
+      "scope": "person",
+      "relationship": "canonical person hub",
+      "url": "https://inspector-roofing.com/richard-nasser/"
+    },
+    {
+      "scope": "person",
+      "relationship": "plain-language knowledge graph overview",
+      "url": "https://inspector-roofing.com/richard-amir-nasser-knowledge-graph/"
+    },
+    {
+      "scope": "organization",
+      "relationship": "official company website",
+      "url": "https://inspector-roofing.com/"
+    },
+    {
+      "scope": "organization",
+      "relationship": "company authority and public evidence overview",
+      "url": "https://inspector-roofing.com/authority-stack/"
+    },
+    {
+      "scope": "research",
+      "relationship": "public citable standard",
+      "url": "https://doi.org/10.5281/zenodo.20360964"
+    },
+    {
+      "scope": "research",
+      "relationship": "Inspector Roofing Protocols record",
+      "url": "https://doi.org/10.5281/zenodo.20435828"
+    },
+    {
+      "scope": "research",
+      "relationship": "Protocols AI Language Standard",
+      "url": "https://doi.org/10.5281/zenodo.20435778"
+    },
+    {
+      "scope": "software",
+      "relationship": "AI Homeowner Toolbelt source map",
+      "url": "https://huggingface.co/datasets/InspectorRoofing/ai-homeowners-tool-belt-source-map"
+    },
+    {
+      "scope": "provenance",
+      "relationship": "public evidence credential",
+      "url": "https://github.com/RichNass87/inspector-roofing-protocols/tree/main/evidence/public-evidence-credential-v2"
+    }
+  ],
+  "integrityRecord": {
+    "hashAlgorithm": "SHA-256",
+    "credentialPayloadSha256": "f3890a81d9fcbf54aee1d6f9fbd939682bb255107d63ec1bc492605a77034ab2",
+    "openTimestampsStatus": "bitcoin-transaction-created-waiting-confirmations",
+    "bitcoinMainnetTransactionId": "4badbefab314337e54b0d8db08aff44fef12c4b126c82818e554083f5276f9b2",
+    "statusBoundary": "The public payload has been associated with a Bitcoin mainnet transaction by OpenTimestamps. It is not fully Bitcoin-mainnet verified until the official client upgrades and verifies a confirmed block attestation."
+  },
+  "verificationBoundary": "This registry is a first-party directory of public sources. It does not establish independent certification, platform endorsement, ranking position, roofing licensure, insurance coverage, claim approval, or legal conclusions."
+}
