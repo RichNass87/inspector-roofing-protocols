@@ -26,6 +26,18 @@ The v1.1 Ed25519 signature verifies against the exact UTF-8 payload bytes.
 
 Signet is a public test network with no monetary value. This is not Bitcoin mainnet certification and does not independently prove the credential claims.
 
+## OpenTimestamps credential v2
+
+The official OpenTimestamps client recognizes `public-evidence-credential-v2/credential-payload.json.ots` as a valid proof for the unchanged credential payload.
+
+- Credential payload SHA-256: `f3890a81d9fcbf54aee1d6f9fbd939682bb255107d63ec1bc492605a77034ab2`
+- Proof-file SHA-256: `40479a378424988d17d8a10f5e7871ebd51c2701520bae4935328b15f1b60ac6`
+- Submitted: `2026-07-19T19:27:27Z`
+- Current status: `submitted-pending-bitcoin-attestation`
+- Public calendars: `btc.calendar.catallaxy.com` and `bob.btc.calendar.opentimestamps.org`
+
+The proof must not be described as Bitcoin-mainnet verified until it upgrades and verifies against a confirmed Bitcoin block.
+
 ## Deployment boundary
 
 The API and MCP files are contracts for a future read-only deployment. They are not represented as live endpoints yet. The existing WordPress evidence workflow remains the current live system; the PostgreSQL ledger, signing-key service, timestamp service, and live telemetry pipeline remain unconnected.
