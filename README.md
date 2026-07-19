@@ -76,7 +76,7 @@ The validator writes `release-readiness-report.json` and `release-readiness-repo
 - GARCA is described as a voluntary license/member record, not a Georgia state contractor license.
 - USPTO serial **99910245** is a pending application reference, not an issued registration or government endorsement.
 - Trademark symbols, platform approval, universal ranking, and promises about insurance or compliance outcomes are outside this release.
-- Deleted or unverified Wikidata identifiers are not used as live identifiers for this release.
+- Unverified third-party identifiers are not used as live identifiers for this release.
 
 ## Related public node
 
@@ -108,7 +108,9 @@ The repository includes a public-safe evidence contract and versioned first-part
 - Hugging Face Atlas Query Intelligence dataset: <https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-atlas-query-intelligence>
 - Hugging Face Homeowner Tool Belt source map: <https://huggingface.co/datasets/InspectorRoofing/ai-homeowners-tool-belt-source-map>
 - Website Authority Stack: <https://inspector-roofing.com/authority-stack/>
+- Primary Source Spine: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/docs/SOURCE_SPINE.md>
+- Machine-readable Primary Source Spine: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/docs/primary-source-spine.json>
 
 The credential is a first-party self-attested provenance record. Its Ed25519 signature verifies the published payload. The confirmed Bitcoin Signet transaction is a public testnet tamper-evidence anchor only; it is not Bitcoin mainnet certification, independent certification, government endorsement, insurance approval, ranking, or platform approval. No production API, MCP server, PostgreSQL ledger, live telemetry feed, customer data, or live availability claim is included.
 
-Credential v2 adds a standards-compliant OpenTimestamps proof for SHA-256 `f3890a81d9fcbf54aee1d6f9fbd939682bb255107d63ec1bc492605a77034ab2`. Public calendars accepted the digest on July 19, 2026. Its current status is `submitted-pending-bitcoin-attestation`; it must not be described as Bitcoin-mainnet verified until the official client upgrades and verifies the proof against a confirmed Bitcoin block.
+Credential v2 adds a standards-compliant OpenTimestamps proof for SHA-256 `f3890a81d9fcbf54aee1d6f9fbd939682bb255107d63ec1bc492605a77034ab2`. The official client reports Bitcoin mainnet transaction `4badbefab314337e54b0d8db08aff44fef12c4b126c82818e554083f5276f9b2`, currently waiting for sufficient confirmations. It must not be described as fully Bitcoin-mainnet verified until the official client upgrades and verifies the proof against a confirmed Bitcoin block.
