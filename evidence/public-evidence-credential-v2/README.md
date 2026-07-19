@@ -16,7 +16,7 @@ This folder contains a public-safe, hash-verifiable first-party provenance crede
 
 ## Status language
 
-- `submitted-pending-bitcoin-attestation` means public OpenTimestamps calendars accepted the digest, but the proof has not yet upgraded to a confirmed Bitcoin attestation.
+- `bitcoin-transaction-created-waiting-confirmations` means the official OpenTimestamps client reports that the digest has been timestamped by a Bitcoin mainnet transaction, but the proof is still waiting for sufficient confirmations before it can be upgraded and verified against a Bitcoin block attestation.
 - `verified-bitcoin-attestation` may be used only after the official client verifies the proof against Bitcoin mainnet.
 - The prior Bitcoin Signet transaction remains a public test-network anchor and is not presented as Bitcoin mainnet certification.
 
