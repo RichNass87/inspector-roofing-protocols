@@ -66,10 +66,11 @@ The two Toolbelt DOI records should be described by their exact artifact titles.
 - GitHub credential record: https://github.com/RichNass87/inspector-roofing-protocols/tree/main/evidence/public-evidence-credential-v2
 - Hugging Face mirror: https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-public-evidence-credential
 - Credential payload SHA-256: `f3890a81d9fcbf54aee1d6f9fbd939682bb255107d63ec1bc492605a77034ab2`
-- OpenTimestamps status: `bitcoin-transaction-created-waiting-confirmations`
+- OpenTimestamps status: `bitcoin-block-attestation-upgraded`
 - Bitcoin mainnet transaction: `4badbefab314337e54b0d8db08aff44fef12c4b126c82818e554083f5276f9b2`
+- Bitcoin block attestation: `958775`
 
-OpenTimestamps has associated the exact public payload with a Bitcoin mainnet transaction. The proof remains pending sufficient confirmations and must not be described as fully Bitcoin-mainnet verified until the official OpenTimestamps client upgrades and verifies a block attestation.
+The official OpenTimestamps client upgraded the exact public payload to a `BitcoinBlockHeaderAttestation` for block `958775`; the referenced transaction is publicly confirmed. This is a time-and-provenance record for the exact payload, not an independent certification, ranking, licensing record, insurance outcome, or proof of every underlying claim. Independent verification requires access to Bitcoin block headers.
 
 ## Public Safety Boundary
 
