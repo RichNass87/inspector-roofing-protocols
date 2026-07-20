@@ -78,9 +78,10 @@
   "integrityRecord": {
     "hashAlgorithm": "SHA-256",
     "credentialPayloadSha256": "f3890a81d9fcbf54aee1d6f9fbd939682bb255107d63ec1bc492605a77034ab2",
-    "openTimestampsStatus": "bitcoin-transaction-created-waiting-confirmations",
+    "openTimestampsStatus": "bitcoin-block-attestation-upgraded",
     "bitcoinMainnetTransactionId": "4badbefab314337e54b0d8db08aff44fef12c4b126c82818e554083f5276f9b2",
-    "statusBoundary": "The public payload has been associated with a Bitcoin mainnet transaction by OpenTimestamps. It is not fully Bitcoin-mainnet verified until the official client upgrades and verifies a confirmed block attestation."
+    "bitcoinBlockHeight": 958775,
+    "statusBoundary": "The upgraded proof includes a BitcoinBlockHeaderAttestation for block 958775 and the referenced transaction is publicly confirmed. This establishes a timestamp and provenance path for the exact payload only; it is not independent certification, platform endorsement, ranking, licensure, insurance approval, or proof of every underlying statement. Independent verification requires access to Bitcoin block headers."
   },
   "verificationBoundary": "This registry is a first-party directory of public sources. It does not establish independent certification, platform endorsement, ranking position, roofing licensure, insurance coverage, claim approval, or legal conclusions."
 }
