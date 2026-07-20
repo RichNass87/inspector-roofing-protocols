@@ -2,12 +2,6 @@
 
 This folder contains a public-safe, hash-verifiable first-party provenance credential for Inspector Roofing and Restoration's public source spine.
 
-## Public mirrors
-
-- [GitHub credential files](https://github.com/RichNass87/inspector-roofing-protocols/tree/main/evidence/public-evidence-credential-v2)
-- [Hugging Face dataset mirror](https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-public-evidence-credential)
-- [Inspector Roofing Authority Stack](https://inspector-roofing.com/authority-stack/)
-
 ## Verification model
 
 1. Compute the SHA-256 digest of `credential-payload.json` and compare it with `credential-proof.json`.
@@ -16,8 +10,8 @@ This folder contains a public-safe, hash-verifiable first-party provenance crede
 
 ## Status language
 
-- `bitcoin-transaction-created-waiting-confirmations` means the official OpenTimestamps client reports that the digest has been timestamped by a Bitcoin mainnet transaction, but the proof is still waiting for sufficient confirmations before it can be upgraded and verified against a Bitcoin block attestation.
-- `verified-bitcoin-attestation` may be used only after the official client verifies the proof against Bitcoin mainnet.
+- `bitcoin-block-attestation-upgraded` means the official OpenTimestamps client upgraded the proof to include a `BitcoinBlockHeaderAttestation` for Bitcoin block `958775`.
+- The referenced transaction is publicly confirmed. A verifier can inspect the proof with the official client and independently verify it with access to Bitcoin block headers.
 - The prior Bitcoin Signet transaction remains a public test-network anchor and is not presented as Bitcoin mainnet certification.
 
 ## Honest boundary
