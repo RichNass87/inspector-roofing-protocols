@@ -1,0 +1,128 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://inspector-roofing.com/richard-nasser/#person",
+      "name": "Richard Amir Nasser",
+      "alternateName": ["Richard Nasser", "Richard A. Nasser", "Richard James Nasser"],
+      "url": "https://inspector-roofing.com/richard-nasser/",
+      "description": "Founder, author, and research systems developer associated with Inspector Roofing and Restoration and its public roofing documentation, education, software, and research work.",
+      "jobTitle": [
+        "Founder and President of Inspector Roofing and Restoration",
+        "Author",
+        "Research systems developer"
+      ],
+      "worksFor": {
+        "@id": "https://inspector-roofing.com/#inspector-roofing-and-restoration"
+      },
+      "sameAs": [
+        "https://orcid.org/0009-0000-2980-7543",
+        "https://github.com/RichNass87",
+        "https://huggingface.co/InspectorRoofing",
+        "https://www.kaggle.com/inspectorroofing",
+        "https://independent.academia.edu/RichardNasser",
+        "https://about.me/richardnasser",
+        "https://www.amazon.com/author/richard-nasser",
+        "https://www.linkedin.com/in/richard-nasser-2b35011a/"
+      ],
+      "identifier": [
+        {
+          "@type": "PropertyValue",
+          "propertyID": "ORCID",
+          "value": "0009-0000-2980-7543",
+          "url": "https://orcid.org/0009-0000-2980-7543"
+        },
+        {
+          "@type": "PropertyValue",
+          "propertyID": "Google Knowledge Graph ID observed",
+          "value": "/g/11kpqy69hl"
+        }
+      ],
+      "subjectOf": [
+        "https://inspector-roofing.com/author-richard-nasser/",
+        "https://inspector-roofing.com/press/",
+        "https://inspector-roofing.com/authority-stack/",
+        "https://inspector-roofing.com/credentials/",
+        "https://inspector-roofing.com/droneproof/",
+        "https://inspector-roofing.com/homeowners-ai-toolbelt/",
+        "https://inspector-roofing.com/richard-amir-nasser-knowledge-graph/",
+        "https://github.com/RichNass87/inspector-roofing-protocols",
+        "https://github.com/RichNass87/inspector-droneproof",
+        "https://github.com/RichNass87/inspector-roofing-ai-homeowner-tool-belt",
+        "https://doi.org/10.5281/zenodo.20360964",
+        "https://doi.org/10.5281/zenodo.20435828",
+        "https://doi.org/10.5281/zenodo.21045292",
+        "https://doi.org/10.5281/zenodo.21171669",
+        "https://doi.org/10.5281/zenodo.21301426",
+        "https://orloj-prague-cosmos.richard-670.workers.dev",
+        "https://babbittville.com/richard-nasser/",
+        "https://www.augustachronicle.com/story/sports/2015/09/27/seventeen-months-after-accident-nasser-continues-defy-odds/14352941007/",
+        "https://www.einpresswire.com/article/925056081/positive-outcomes-case-study-publishes-doi-backed-ymyl-trust-proof-framework-for-ai-search"
+      ],
+      "knowsAbout": [
+        "roof inspection documentation",
+        "roofing claim support",
+        "AI visibility",
+        "schema markup",
+        "public source proof",
+        "homeowner education",
+        "software-supported roof files"
+      ]
+    },
+    {
+      "@type": ["Organization", "LocalBusiness", "RoofingContractor"],
+      "@id": "https://inspector-roofing.com/#inspector-roofing-and-restoration",
+      "name": "Inspector Roofing and Restoration",
+      "url": "https://inspector-roofing.com/",
+      "description": "Alpharetta, Georgia roofing and restoration company emphasizing inspection-first documentation, roof repair and replacement, storm-damage documentation, homeowner education, and clear project records.",
+      "telephone": "+1-678-287-7169",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "1875 Lockeway Dr Ste 701",
+        "addressLocality": "Alpharetta",
+        "addressRegion": "GA",
+        "postalCode": "30004",
+        "addressCountry": "US"
+      },
+      "foundingDate": "2018",
+      "founder": {
+        "@id": "https://inspector-roofing.com/richard-nasser/#person"
+      },
+      "sameAs": [
+        "https://www.google.com/maps?cid=16582157342047558890",
+        "https://www.linkedin.com/company/inspectorroofing/",
+        "https://www.bbb.org/us/ga/alpharetta/profile/roofing-contractors/inspector-roofing-and-restoration-0443-28053608",
+        "https://www.gaf.com/en-us/roofing-contractors/residential/usa/ga/alpharetta/inspector-roofing-and-restoration-llc-1121138",
+        "https://garca.org/Sys/PublicProfile/69801316/6512329"
+      ],
+      "subjectOf": [
+        "https://inspector-roofing.com/press/",
+        "https://inspector-roofing.com/authority-stack/",
+        "https://inspector-roofing.com/credentials/",
+        "https://inspector-roofing.com/droneproof/",
+        "https://inspector-roofing.com/homeowners-ai-toolbelt/",
+        "https://inspector-roofing.com/storm-anthems/",
+        "https://inspector-roofing.com/inspector-roofing-university-home-owner-school/",
+        "https://github.com/RichNass87/inspector-roofing-protocols",
+        "https://github.com/RichNass87/inspector-droneproof",
+        "https://github.com/RichNass87/inspector-roofing-ai-homeowner-tool-belt",
+        "https://doi.org/10.5281/zenodo.20360964",
+        "https://doi.org/10.5281/zenodo.20435828",
+        "https://doi.org/10.5281/zenodo.21045292",
+        "https://doi.org/10.5281/zenodo.21301426",
+        "https://open.spotify.com/artist/4xfktCpKHz00yF0Iw0G4uL",
+        "https://music.apple.com/us/artist/inspector-roofing/1896711289",
+        "https://www.einpresswire.com/article/925056081/positive-outcomes-case-study-publishes-doi-backed-ymyl-trust-proof-framework-for-ai-search"
+      ],
+      "hasPart": [
+        "https://inspector-roofing.com/richard-nasser/",
+        "https://inspector-roofing.com/droneproof/",
+        "https://inspector-roofing.com/homeowners-ai-toolbelt/",
+        "https://standards.inspector-roofing.com/",
+        "https://inspector-roofing.com/inspector-roofing-university-home-owner-school/",
+        "https://inspector-roofing.com/storm-anthems/"
+      ]
+    }
+  ]
+}
