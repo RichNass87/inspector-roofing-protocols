@@ -133,6 +133,8 @@ Richard Amir Nasser's 21 Anthropic Education course-completion records are norma
 - Evidence directory: <https://github.com/RichNass87/inspector-roofing-protocols/tree/main/evidence/anthropic-education-course-completions-2026-07-21>
 - Machine-readable manifest: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/anthropic-education-course-completions-2026-07-21/manifest.json>
 - Canonical website hub: <https://inspector-roofing.com/authority-stack/#anthropic-education-course-completions-2026>
+- Citable Zenodo dataset: <https://doi.org/10.5281/zenodo.21480684>
+- Hugging Face dataset mirror: <https://huggingface.co/datasets/InspectorRoofing/richard-amir-nasser-anthropic-education-course-completions>
 
 The certificates were earned by Richard Amir Nasser. Inspector Roofing and Restoration is the applied business context; the company did not earn the certificates. These records document course completion, not a degree, professional license, partnership, employment relationship, or Anthropic endorsement.
 
