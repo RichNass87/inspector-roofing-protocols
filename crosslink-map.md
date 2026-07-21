@@ -32,6 +32,10 @@ Primary research and standards links:
 - Inspector DroneProof: https://inspector-roofing.com/droneproof/
 - ORCID: https://orcid.org/0009-0000-2980-7543
 - USPTO service mark application status: https://tsdr.uspto.gov/statusview/sn99910245
+- Public Evidence Credential v2 directory: https://github.com/RichNass87/inspector-roofing-protocols/tree/main/evidence/public-evidence-credential-v2
+- Public Evidence Credential v2 proof manifest: https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/public-evidence-credential-v2/credential-proof.json
+- Bitcoin mainnet transaction referenced by v2 proof: https://mempool.space/tx/4badbefab314337e54b0d8db08aff44fef12c4b126c82818e554083f5276f9b2
+- Hugging Face v2 provenance mirror: https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-public-evidence-credential
 
 ## GitHub
 
@@ -92,6 +96,10 @@ Keep the ORCID works list focused on citeable, public records:
 - Related standards site: https://standards.inspector-roofing.com/
 
 ORCID should use the same name, public biography, and website links as the canonical Richard Amir Nasser page.
+
+## Provenance boundary
+
+The v2 proof set is a first-party publication-timing and file-integrity record for the exact source-spine payload. It does not certify Richard Amir Nasser, Inspector Roofing and Restoration, any license, ranking, endorsement, insurance outcome, or customer result. Harvey L. Gayer, Ph.D. and Positive Outcomes Psychological Services, P.C. are separate YMYL case-study entities.
 
 ## Registry hygiene
 
