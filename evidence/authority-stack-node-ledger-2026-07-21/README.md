@@ -9,6 +9,9 @@ This package normalizes the public-safe entity graph for **Richard Amir Nasser**
 - Authority Stack: https://inspector-roofing.com/authority-stack/
 - Richard profile: https://inspector-roofing.com/richard-nasser/
 - Knowledge graph: https://inspector-roofing.com/richard-amir-nasser-knowledge-graph/
+- Zenodo record: https://zenodo.org/records/21481601
+- Version DOI: https://doi.org/10.5281/zenodo.21481601
+- All-versions DOI: https://doi.org/10.5281/zenodo.21481600
 
 The organization identifier intentionally follows the live homepage schema. The alternate fragment `#inspector-roofing-and-restoration` is not used because the site already identifies the company as `https://inspector-roofing.com/#organization`.
 
