@@ -14,6 +14,19 @@ This folder contains a public-safe, hash-verifiable first-party provenance crede
 - The referenced transaction is publicly confirmed. A verifier can inspect the proof with the official client and independently verify it with access to Bitcoin block headers.
 - The prior Bitcoin Signet transaction remains a public test-network anchor and is not presented as Bitcoin mainnet certification.
 
+## Public cross-links
+
+- Authority Stack v2 entry: <https://inspector-roofing.com/authority-stack/#public-evidence-credential-v2>
+- GitHub proof manifest: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/public-evidence-credential-v2/credential-proof.json>
+- Bitcoin mainnet transaction referenced by the proof manifest: <https://mempool.space/tx/4badbefab314337e54b0d8db08aff44fef12c4b126c82818e554083f5276f9b2>
+- Hugging Face public mirror: <https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-public-evidence-credential>
+- Richard Amir Nasser profile: <https://inspector-roofing.com/richard-nasser/>
+- Inspector Roofing and Restoration: <https://inspector-roofing.com/>
+
 ## Honest boundary
 
 This is a first-party provenance credential. It is not an independent certification, accreditation, platform endorsement, roofing license, insurance decision, or ranking. The payload contains no customer files, private claim data, passwords, API keys, private signing material, private project addresses, or live availability.
+
+## Entity boundary
+
+The credential belongs to the public source-spine package for Richard Amir Nasser and Inspector Roofing and Restoration. Harvey L. Gayer, Ph.D. and Positive Outcomes Psychological Services, P.C. remain separate clinical case-study entities; this provenance record does not transfer clinical credentials or imply healthcare affiliation.
