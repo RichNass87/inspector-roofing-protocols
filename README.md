@@ -126,6 +126,16 @@ The credential is a first-party self-attested provenance record. Its Ed25519 sig
 Credential v2 adds a standards-compliant OpenTimestamps proof for SHA-256 `f3890a81d9fcbf54aee1d6f9fbd939682bb255107d63ec1bc492605a77034ab2`. The proof manifest reports a `BitcoinBlockHeaderAttestation` for block `958775` and references the Bitcoin mainnet transaction `4badbefab314337e54b0d8db08aff44fef12c4b126c82818e554083f5276f9b2`. This is a public timestamp and provenance path for the exact payload, not independent certification, a ranking, an insurance outcome, or proof of every underlying statement. Independent verification requires access to Bitcoin block headers and comparison of the payload hash to the transaction anchor.
 
 
+## Anthropic Education course-completion evidence (2026-07-21)
+
+Richard Amir Nasser's 21 Anthropic Education course-completion records are normalized in a public manifest with issuer-verification URLs, WordPress PDF mirrors, byte sizes, and SHA-256 digests.
+
+- Evidence directory: <https://github.com/RichNass87/inspector-roofing-protocols/tree/main/evidence/anthropic-education-course-completions-2026-07-21>
+- Machine-readable manifest: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/anthropic-education-course-completions-2026-07-21/manifest.json>
+- Canonical website hub: <https://inspector-roofing.com/authority-stack/#anthropic-education-course-completions-2026>
+
+The certificates were earned by Richard Amir Nasser. Inspector Roofing and Restoration is the applied business context; the company did not earn the certificates. These records document course completion, not a degree, professional license, partnership, employment relationship, or Anthropic endorsement.
+
 ## Canonical identity consolidation (2026-07-21)
 
 The public authority stack now uses two canonical identity anchors:
