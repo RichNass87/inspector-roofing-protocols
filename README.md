@@ -153,3 +153,14 @@ Books, protocols, apps, datasets, DOI records, credentials, media, and music rem
 - Inspector Roofing and Restoration: <https://inspector-roofing.com/>
 
 No Wikidata QID is treated as permanent unless it is live, independently rechecked, and supported with statement-level references. DOI, GitHub, Hugging Face, platform, and blockchain records prove public availability, source history, or file provenance only; they do not constitute endorsement, certification, ranking, or insurance outcomes.
+
+## Verified authority node ledger (2026-07-21)
+
+The normalized public-safe graph uses one canonical person node for **Richard Amir Nasser** and one canonical organization node for **Inspector Roofing and Restoration**, with 17 supporting identity, work, software, research, credential, media, and provenance records.
+
+- Evidence directory: <https://github.com/RichNass87/inspector-roofing-protocols/tree/main/evidence/authority-stack-node-ledger-2026-07-21>
+- Machine-readable node ledger: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/authority-stack-node-ledger-2026-07-21/authority-node-ledger.json>
+- JSON-LD graph: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/authority-stack-node-ledger-2026-07-21/authority-graph.jsonld>
+- Canonical website graph: <https://inspector-roofing.com/richard-amir-nasser-knowledge-graph/#verified-authority-node-ledger-2026>
+
+No active Wikidata QID is currently asserted. Public records document availability, relationships, or provenance; they do not establish endorsement, universal ranking, insurance outcomes, or independent verification of every statement.
