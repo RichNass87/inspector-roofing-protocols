@@ -124,3 +124,20 @@ The repository includes a public-safe evidence contract and versioned first-part
 The credential is a first-party self-attested provenance record. Its Ed25519 signature verifies the published payload. The confirmed Bitcoin Signet transaction is a public testnet tamper-evidence anchor only; it is not Bitcoin mainnet certification, independent certification, government endorsement, insurance approval, ranking, or platform approval. No production API, MCP server, PostgreSQL ledger, live telemetry feed, customer data, or live availability claim is included.
 
 Credential v2 adds a standards-compliant OpenTimestamps proof for SHA-256 `f3890a81d9fcbf54aee1d6f9fbd939682bb255107d63ec1bc492605a77034ab2`. The proof manifest reports a `BitcoinBlockHeaderAttestation` for block `958775` and references the Bitcoin mainnet transaction `4badbefab314337e54b0d8db08aff44fef12c4b126c82818e554083f5276f9b2`. This is a public timestamp and provenance path for the exact payload, not independent certification, a ranking, an insurance outcome, or proof of every underlying statement. Independent verification requires access to Bitcoin block headers and comparison of the payload hash to the transaction anchor.
+
+
+## Canonical identity consolidation (2026-07-21)
+
+The public authority stack now uses two canonical identity anchors:
+
+- **Richard Amir Nasser**: founder, author, and research systems developer.
+- **Inspector Roofing and Restoration**: Alpharetta, Georgia roofing and restoration company.
+
+Books, protocols, apps, datasets, DOI records, credentials, media, and music remain supporting work connected through authorship, development, maintenance, and publication relationships. They are not presented as competing person or business identities.
+
+- Consolidation package: <https://github.com/RichNass87/inspector-roofing-protocols/tree/main/evidence/two-canonical-entities-2026-07-21>
+- Canonical graph: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/two-canonical-entities-2026-07-21/two-canonical-entities.jsonld>
+- Richard Amir Nasser profile: <https://inspector-roofing.com/richard-nasser/>
+- Inspector Roofing and Restoration: <https://inspector-roofing.com/>
+
+No Wikidata QID is treated as permanent unless it is live, independently rechecked, and supported with statement-level references. DOI, GitHub, Hugging Face, platform, and blockchain records prove public availability, source history, or file provenance only; they do not constitute endorsement, certification, ranking, or insurance outcomes.
