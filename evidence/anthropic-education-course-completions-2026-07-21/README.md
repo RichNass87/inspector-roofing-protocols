@@ -7,6 +7,8 @@ This directory preserves a public evidence manifest for 21 Anthropic Education c
 - Knowledge-graph page: <https://inspector-roofing.com/richard-amir-nasser-knowledge-graph/>
 - Combined evidence image: <https://inspector-roofing.com/wp-content/uploads/2026/07/richard-amir-nasser-21-anthropic-education-course-completions-inspector-roofing.png>
 - Machine-readable manifest: [manifest.json](./manifest.json)
+- Zenodo DOI archive: <https://doi.org/10.5281/zenodo.21480684>
+- Hugging Face mirror: <https://huggingface.co/datasets/InspectorRoofing/richard-amir-nasser-anthropic-education-course-completions>
 
 ## Verification model
 
