@@ -6,8 +6,14 @@
   "appliedBusinessContext": "Inspector Roofing and Restoration",
   "issuer": "Anthropic Education",
   "completionDate": "2026-07-21",
-  "generatedAt": "2026-07-21T21:29:05.902Z",
+  "generatedAt": "2026-07-21T22:01:40.613Z",
   "canonicalHub": "https://inspector-roofing.com/authority-stack/#anthropic-education-course-completions-2026",
+  "publicMirrors": {
+    "githubEvidenceUrl": "https://github.com/RichNass87/inspector-roofing-protocols/tree/main/evidence/anthropic-education-course-completions-2026-07-21",
+    "githubManifestUrl": "https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/anthropic-education-course-completions-2026-07-21/manifest.json",
+    "zenodoUrl": "https://doi.org/10.5281/zenodo.21480684",
+    "huggingFaceUrl": "https://huggingface.co/datasets/InspectorRoofing/richard-amir-nasser-anthropic-education-course-completions"
+  },
   "image": {
     "fileName": "richard-amir-nasser-21-anthropic-education-course-completions-inspector-roofing.png",
     "url": "https://inspector-roofing.com/wp-content/uploads/2026/07/richard-amir-nasser-21-anthropic-education-course-completions-inspector-roofing.png",
