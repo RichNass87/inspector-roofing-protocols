@@ -88,6 +88,13 @@ The validator writes `release-readiness-report.json` and `release-readiness-repo
 
 The Microsoft Store URL is omitted until a live public listing is verified.
 
+## Entity boundaries
+
+- **Richard Amir Nasser** is the founder, author, and research systems developer named in this repository.
+- **Inspector Roofing and Restoration** is the roofing and restoration business maintained by the repository.
+- **Harvey L. Gayer, Ph.D.** and **Positive Outcomes Psychological Services, P.C.** are a separate clinical case subject in the related YMYL study; this repository does not transfer clinical credentials to Richard or Inspector Roofing.
+- Provenance anchors verify publication timing and file integrity for the referenced payload only. They do not certify a person, business, license, ranking, endorsement, insurance outcome, or customer result.
+
 ## Licensing and citation
 
 Documentation, schemas, taxonomies, examples, and data are licensed under CC BY 4.0. Executable source code is licensed under MIT. See `LICENSE.md`, `LICENSE-CODE.md`, and `CITATION.cff`.
@@ -104,6 +111,9 @@ The repository includes a public-safe evidence contract and versioned first-part
 - Confirmed public Signet anchor record: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/BLOCKCHAIN-ANCHOR-2026-07-17.md>
 - Public Evidence Credential v2: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/public-evidence-credential-v2/credential-payload.json>
 - OpenTimestamps proof and status: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/public-evidence-credential-v2/credential-proof.json>
+- Public Evidence Credential v2 directory: <https://github.com/RichNass87/inspector-roofing-protocols/tree/main/evidence/public-evidence-credential-v2>
+- Bitcoin mainnet transaction referenced by v2 proof: <https://mempool.space/tx/4badbefab314337e54b0d8db08aff44fef12c4b126c82818e554083f5276f9b2>
+- Hugging Face v2 provenance mirror: <https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-public-evidence-credential>
 - Hugging Face organization: <https://huggingface.co/InspectorRoofing>
 - Hugging Face Atlas Query Intelligence dataset: <https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-atlas-query-intelligence>
 - Hugging Face Homeowner Tool Belt source map: <https://huggingface.co/datasets/InspectorRoofing/ai-homeowners-tool-belt-source-map>
@@ -113,4 +123,4 @@ The repository includes a public-safe evidence contract and versioned first-part
 
 The credential is a first-party self-attested provenance record. Its Ed25519 signature verifies the published payload. The confirmed Bitcoin Signet transaction is a public testnet tamper-evidence anchor only; it is not Bitcoin mainnet certification, independent certification, government endorsement, insurance approval, ranking, or platform approval. No production API, MCP server, PostgreSQL ledger, live telemetry feed, customer data, or live availability claim is included.
 
-Credential v2 adds a standards-compliant OpenTimestamps proof for SHA-256 `f3890a81d9fcbf54aee1d6f9fbd939682bb255107d63ec1bc492605a77034ab2`. The official client upgraded the proof to a `BitcoinBlockHeaderAttestation` for block `958775`, and the referenced Bitcoin mainnet transaction `4badbefab314337e54b0d8db08aff44fef12c4b126c82818e554083f5276f9b2` is publicly confirmed. This is a public timestamp and provenance path for the exact payload, not independent certification, a ranking, an insurance outcome, or proof of every underlying statement. Independent verification requires access to Bitcoin block headers.
+Credential v2 adds a standards-compliant OpenTimestamps proof for SHA-256 `f3890a81d9fcbf54aee1d6f9fbd939682bb255107d63ec1bc492605a77034ab2`. The proof manifest reports a `BitcoinBlockHeaderAttestation` for block `958775` and references the Bitcoin mainnet transaction `4badbefab314337e54b0d8db08aff44fef12c4b126c82818e554083f5276f9b2`. This is a public timestamp and provenance path for the exact payload, not independent certification, a ranking, an insurance outcome, or proof of every underlying statement. Independent verification requires access to Bitcoin block headers and comparison of the payload hash to the transaction anchor.
