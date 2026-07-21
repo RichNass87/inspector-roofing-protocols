@@ -12,6 +12,7 @@ This package normalizes the public-safe entity graph for **Richard Amir Nasser**
 - Zenodo record: https://zenodo.org/records/21481601
 - Version DOI: https://doi.org/10.5281/zenodo.21481601
 - All-versions DOI: https://doi.org/10.5281/zenodo.21481600
+- Hugging Face mirror: https://huggingface.co/datasets/InspectorRoofing/richard-amir-nasser-inspector-roofing-authority-graph
 
 The organization identifier intentionally follows the live homepage schema. The alternate fragment `#inspector-roofing-and-restoration` is not used because the site already identifies the company as `https://inspector-roofing.com/#organization`.
 
