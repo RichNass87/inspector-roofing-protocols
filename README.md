@@ -162,5 +162,7 @@ The normalized public-safe graph uses one canonical person node for **Richard Am
 - Machine-readable node ledger: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/authority-stack-node-ledger-2026-07-21/authority-node-ledger.json>
 - JSON-LD graph: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/authority-stack-node-ledger-2026-07-21/authority-graph.jsonld>
 - Canonical website graph: <https://inspector-roofing.com/richard-amir-nasser-knowledge-graph/#verified-authority-node-ledger-2026>
+- Zenodo version DOI: <https://doi.org/10.5281/zenodo.21481601>
+- Zenodo all-versions DOI: <https://doi.org/10.5281/zenodo.21481600>
 
 No active Wikidata QID is currently asserted. Public records document availability, relationships, or provenance; they do not establish endorsement, universal ranking, insurance outcomes, or independent verification of every statement.
