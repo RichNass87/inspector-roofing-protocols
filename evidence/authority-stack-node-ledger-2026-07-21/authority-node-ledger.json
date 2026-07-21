@@ -1,0 +1,340 @@
+{
+  "schemaVersion": "1.0.0",
+  "recordType": "Public-safe authority graph ledger",
+  "title": "Richard Amir Nasser and Inspector Roofing and Restoration Authority Stack",
+  "statusDate": "2026-07-21",
+  "canonicalPerson": {
+    "name": "Richard Amir Nasser",
+    "id": "https://inspector-roofing.com/richard-nasser/#person",
+    "url": "https://inspector-roofing.com/richard-nasser/"
+  },
+  "canonicalOrganization": {
+    "name": "Inspector Roofing and Restoration",
+    "id": "https://inspector-roofing.com/#organization",
+    "url": "https://inspector-roofing.com/"
+  },
+  "canonicalHubs": {
+    "authorityUrl": "https://inspector-roofing.com/authority-stack/",
+    "profileUrl": "https://inspector-roofing.com/richard-nasser/",
+    "graphUrl": "https://inspector-roofing.com/richard-amir-nasser-knowledge-graph/"
+  },
+  "image": "https://inspector-roofing.com/wp-content/uploads/2026/07/richard-amir-nasser-inspector-roofing-public-authority-stack.png",
+  "nodes": [
+    {
+      "number": 1,
+      "slug": "richard-amir-nasser",
+      "name": "Richard Amir Nasser",
+      "type": "Person",
+      "schemaType": "Person",
+      "id": "https://inspector-roofing.com/richard-nasser/#person",
+      "url": "https://inspector-roofing.com/richard-nasser/",
+      "relationship": "Canonical person; founder and president of Inspector Roofing and Restoration; author and research systems developer.",
+      "evidence": [
+        "https://orcid.org/0009-0000-2980-7543",
+        "https://www.linkedin.com/in/richard-amir-nasser-2b35011a/",
+        "https://github.com/RichNass87",
+        "https://huggingface.co/InspectorRoofing",
+        "https://independent.academia.edu/RichardNasser",
+        "https://about.me/richardnasser"
+      ],
+      "boundary": "No active Wikidata QID is currently confirmed."
+    },
+    {
+      "number": 2,
+      "slug": "inspector-roofing-and-restoration",
+      "name": "Inspector Roofing and Restoration",
+      "type": "Organization / LocalBusiness / RoofingContractor",
+      "schemaType": [
+        "Organization",
+        "LocalBusiness",
+        "RoofingContractor"
+      ],
+      "id": "https://inspector-roofing.com/#organization",
+      "url": "https://inspector-roofing.com/",
+      "relationship": "Canonical organization; founded by Richard Amir Nasser.",
+      "evidence": [
+        "https://www.bbb.org/us/ga/alpharetta/profile/roofing-contractors/inspector-roofing-and-restoration-0443-28053608",
+        "https://www.gaf.com/en-us/roofing-contractors/residential/usa/ga/alpharetta/inspector-roofing-and-restoration-llc-1121138",
+        "https://garca.org/Sys/PublicProfile/69801316/6512329"
+      ],
+      "boundary": "No active Wikidata QID is currently confirmed."
+    },
+    {
+      "number": 3,
+      "slug": "roofing-search-integrity-report",
+      "name": "The Roofing Search Integrity Report",
+      "type": "Book / research report",
+      "schemaType": "Book",
+      "id": "https://inspector-roofing.com/roofing-search-integrity-report/#book",
+      "url": "https://inspector-roofing.com/roofing-search-integrity-report/",
+      "relationship": "Authored by Richard Amir Nasser.",
+      "evidence": [
+        "https://doi.org/10.5281/zenodo.21045292",
+        "https://github.com/RichNass87/inspector-roofing-search-integrity-report",
+        "https://huggingface.co/datasets/InspectorRoofing/roofing-search-integrity-report"
+      ],
+      "identifiers": [
+        "ISBN-13 979-8184859057"
+      ],
+      "boundary": "Supporting authored work, not an independent credential."
+    },
+    {
+      "number": 4,
+      "slug": "inspector-roofing-protocols",
+      "name": "Inspector Roofing Protocols",
+      "type": "Technical documentation method",
+      "schemaType": "CreativeWork",
+      "id": "https://standards.inspector-roofing.com/#protocols",
+      "url": "https://standards.inspector-roofing.com/",
+      "relationship": "Created by Richard Amir Nasser; applied by Inspector Roofing and Restoration.",
+      "evidence": [
+        "https://github.com/RichNass87/inspector-roofing-protocols",
+        "https://doi.org/10.5281/zenodo.20360964",
+        "https://doi.org/10.5281/zenodo.20435828"
+      ],
+      "identifiers": [
+        "USPTO serial 99910245"
+      ],
+      "boundary": "Pending application awaiting examination, not a registered trademark or government endorsement."
+    },
+    {
+      "number": 5,
+      "slug": "inspector-droneproof",
+      "name": "Inspector DroneProof",
+      "type": "SoftwareApplication",
+      "schemaType": "SoftwareApplication",
+      "id": "https://inspector-roofing.com/droneproof/#software",
+      "url": "https://inspector-roofing.com/droneproof/",
+      "relationship": "Developed by Richard Amir Nasser; published and operated by Inspector Roofing and Restoration.",
+      "evidence": [
+        "https://github.com/RichNass87/inspector-droneproof/releases/tag/v0.5.0",
+        "https://doi.org/10.5281/zenodo.21301426",
+        "https://huggingface.co/datasets/InspectorRoofing/inspector-droneproof-evidence-samples"
+      ],
+      "identifiers": [
+        "Package com.inspectorroofing.droneproofpilot"
+      ],
+      "boundary": "No DJI ownership, sponsorship, endorsement, or public DJI-store listing is claimed."
+    },
+    {
+      "number": 6,
+      "slug": "ai-homeowners-tool-belt",
+      "name": "AI Homeowner's Tool Belt",
+      "type": "SoftwareApplication",
+      "schemaType": "SoftwareApplication",
+      "id": "https://inspector-roofing.com/homeowners-ai-toolbelt/#software",
+      "url": "https://inspector-roofing.com/homeowners-ai-toolbelt/",
+      "relationship": "Developed by Richard Amir Nasser; published and operated by Inspector Roofing and Restoration.",
+      "evidence": [
+        "https://github.com/RichNass87/inspector-roofing-ai-homeowner-tool-belt",
+        "https://doi.org/10.5281/zenodo.20585267",
+        "https://huggingface.co/datasets/InspectorRoofing/ai-homeowners-tool-belt-source-map"
+      ],
+      "boundary": "Store and developer records must be described by their current listing or review status; no platform endorsement is claimed."
+    },
+    {
+      "number": 7,
+      "slug": "orloj-prague-cosmos",
+      "name": "ORLOJ: Prague Cosmos",
+      "type": "SoftwareApplication",
+      "schemaType": "SoftwareApplication",
+      "id": "https://orloj-prague-cosmos.richard-670.workers.dev/#software",
+      "url": "https://orloj-prague-cosmos.richard-670.workers.dev",
+      "relationship": "Developed by Richard Amir Nasser / ORLOJ Engineering.",
+      "evidence": [
+        "https://orloj-prague-cosmos.richard-670.workers.dev/.well-known/assetlinks.json",
+        "https://inspector-roofing.com/richard-amir-nasser-knowledge-graph/"
+      ],
+      "identifiers": [
+        "Package com.inspectorroofing.orloj"
+      ],
+      "boundary": "Google Play internal testing is not public production availability or Google endorsement."
+    },
+    {
+      "number": 8,
+      "slug": "atlas-query-intelligence",
+      "name": "Atlas Query Intelligence",
+      "type": "Dataset / software research record",
+      "schemaType": "Dataset",
+      "id": "https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-atlas-query-intelligence#dataset",
+      "url": "https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-atlas-query-intelligence",
+      "relationship": "Supporting developer evidence for Richard Amir Nasser and Inspector Roofing and Restoration.",
+      "evidence": [
+        "https://huggingface.co/InspectorRoofing"
+      ],
+      "boundary": "Supporting software and dataset evidence; no active Wikidata QID is claimed."
+    },
+    {
+      "number": 9,
+      "slug": "claim-verifiability",
+      "name": "Claim Verifiability",
+      "type": "DefinedTerm / evidence methodology",
+      "schemaType": "DefinedTerm",
+      "id": "https://inspector-roofing.com/authority-stack/#claim-verifiability",
+      "url": "https://inspector-roofing.com/authority-stack/",
+      "relationship": "Methodology term used in Inspector Roofing Protocols and related public records.",
+      "evidence": [
+        "https://github.com/RichNass87/inspector-roofing-protocols"
+      ],
+      "identifiers": [
+        "USPTO serial 99910275"
+      ],
+      "boundary": "Pending application only; not a government, insurance, legal, or industry certification."
+    },
+    {
+      "number": 10,
+      "slug": "verifiable-roof",
+      "name": "Verifiable Roof",
+      "type": "CreativeWork / evidence package concept",
+      "schemaType": "CreativeWork",
+      "id": "https://doi.org/10.5281/zenodo.21298744#work",
+      "url": "https://doi.org/10.5281/zenodo.21298744",
+      "relationship": "Methodology and public-safe evidence package created by Richard Amir Nasser.",
+      "evidence": [
+        "https://github.com/RichNass87/verifiable-roof-evidence",
+        "https://huggingface.co/datasets/InspectorRoofing/verifiable-roof-evidence"
+      ],
+      "identifiers": [
+        "USPTO serial 99910284"
+      ],
+      "boundary": "Pending application only; no government, insurer, legal, or industry endorsement is claimed."
+    },
+    {
+      "number": 11,
+      "slug": "positive-outcomes-ymyl-blueprint",
+      "name": "Positive Outcomes YMYL Blueprint",
+      "type": "Dataset / bounded research study",
+      "schemaType": "Dataset",
+      "id": "https://doi.org/10.5281/zenodo.21171669#dataset",
+      "url": "https://doi.org/10.5281/zenodo.21171669",
+      "relationship": "Richard Amir Nasser is implementation lead and research systems author; Harvey L. Gayer, Ph.D. is clinical subject-matter authority.",
+      "evidence": [
+        "https://www.academia.edu/169828502/Trust_Proof_as_Cognitive_Alignment_A_Two_Voice_YMYL_Case_Study_in_Google_AI_Search_Source_Proof_Entity_Separation_and_Human_Trust_Psychology",
+        "https://github.com/RichNass87/positive-outcomes-doctor-ymyl-blueprint",
+        "https://inspectorroofing-doctor-ymyl-blueprint.hf.space/"
+      ],
+      "boundary": "Positive Outcomes Psychological Services, P.C. and Harvey L. Gayer, Ph.D. are separate from Inspector Roofing and Richard Amir Nasser. This is not a clinical credential or medical advice."
+    },
+    {
+      "number": 12,
+      "slug": "inspector-roofing-university",
+      "name": "Inspector Roofing University / Homeowner School",
+      "type": "CreativeWork / homeowner education system",
+      "schemaType": "CreativeWork",
+      "id": "https://inspector-roofing.com/inspector-roofing-university-home-owner-school/#education",
+      "url": "https://inspector-roofing.com/inspector-roofing-university-home-owner-school/",
+      "relationship": "Supporting educational work of Inspector Roofing and Restoration.",
+      "evidence": [
+        "https://inspector-roofing.com/inspector-roofing-university-home-owner-school/"
+      ],
+      "boundary": "Homeowner education content, not an accredited school, degree, professional license, or insurer guidance."
+    },
+    {
+      "number": 13,
+      "slug": "storm-anthems-roof-beats",
+      "name": "Storm Anthems / Roof Beats",
+      "type": "CreativeWork / music project",
+      "schemaType": "CreativeWork",
+      "id": "https://inspector-roofing.com/storm-anthems/#creative-work",
+      "url": "https://inspector-roofing.com/storm-anthems/",
+      "relationship": "Related creative-media work of Inspector Roofing and Restoration.",
+      "evidence": [
+        "https://open.spotify.com/artist/4xfktCpKHz00yF0Iw0G4uL",
+        "https://music.apple.com/us/artist/inspector-roofing/1896711289",
+        "https://www.youtube.com/@inspectorroofingandrestoration"
+      ],
+      "boundary": "Creative media, not a roofing credential or independent authority source."
+    },
+    {
+      "number": 14,
+      "slug": "richard-amir-nasser-bibliography",
+      "name": "Richard Amir Nasser bibliography",
+      "type": "CollectionPage",
+      "schemaType": "CollectionPage",
+      "id": "https://inspector-roofing.com/author-richard-nasser/#bibliography",
+      "url": "https://inspector-roofing.com/author-richard-nasser/",
+      "relationship": "First-party bibliography and supporting-work index for Richard Amir Nasser.",
+      "evidence": [
+        "https://www.amazon.com/author/richard-nasser"
+      ],
+      "boundary": "Individual books remain supporting works unless independently covered. Amazon is a platform record, not editorial validation."
+    },
+    {
+      "number": 15,
+      "slug": "public-evidence-credential-v2",
+      "name": "Public Evidence Credential v2",
+      "type": "DigitalDocument / first-party provenance record",
+      "schemaType": "DigitalDocument",
+      "id": "https://inspector-roofing.com/authority-stack/#public-evidence-credential-v2",
+      "url": "https://inspector-roofing.com/authority-stack/#public-evidence-credential-v2",
+      "relationship": "First-party publication timing and file-integrity evidence maintained by Inspector Roofing and Restoration.",
+      "evidence": [
+        "https://github.com/RichNass87/inspector-roofing-protocols/tree/main/evidence/public-evidence-credential-v2",
+        "https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-public-evidence-credential",
+        "https://mempool.space/tx/4badbefab314337e54b0d8db08aff44fef12c4b126c82818e554083f5276f9b2"
+      ],
+      "identifiers": [
+        "SHA-256 f3890a81d9fcbf54aee1d6f9fbd939682bb255107d63ec1bc492605a77034ab2"
+      ],
+      "boundary": "Supports publication timing and file-integrity review only; it does not certify the person, company, licenses, rankings, insurance outcomes, or customer results."
+    },
+    {
+      "number": 16,
+      "slug": "anthropic-education-course-completions-2026",
+      "name": "Anthropic Education Course Completions 2026",
+      "type": "EducationalOccupationalCredential",
+      "schemaType": "EducationalOccupationalCredential",
+      "id": "https://inspector-roofing.com/richard-amir-nasser-knowledge-graph/#anthropic-education-course-completions-2026",
+      "url": "https://inspector-roofing.com/richard-amir-nasser-knowledge-graph/#anthropic-education-course-completions-2026",
+      "relationship": "Twenty-one course-completion records earned personally by Richard Amir Nasser on July 21, 2026.",
+      "evidence": [
+        "https://doi.org/10.5281/zenodo.21480684",
+        "https://github.com/RichNass87/inspector-roofing-protocols/tree/main/evidence/anthropic-education-course-completions-2026-07-21",
+        "https://huggingface.co/datasets/InspectorRoofing/richard-amir-nasser-anthropic-education-course-completions"
+      ],
+      "identifiers": [
+        "Completion count 21",
+        "Completion date 2026-07-21"
+      ],
+      "boundary": "Course completion is not a degree, professional license, Anthropic employment, partnership, endorsement, or certification of Inspector Roofing and Restoration."
+    },
+    {
+      "number": 17,
+      "slug": "harvey-gayer-positive-outcomes-edge",
+      "name": "Harvey Gayer / Positive Outcomes case-study edge",
+      "type": "CreativeWork / bounded relationship record",
+      "schemaType": "CreativeWork",
+      "id": "https://doi.org/10.5281/zenodo.21171669#case-study-edge",
+      "url": "https://doi.org/10.5281/zenodo.21171669",
+      "relationship": "Documents the separate case-study roles of Richard Amir Nasser, Harvey L. Gayer, Ph.D., and Positive Outcomes Psychological Services, P.C.",
+      "evidence": [
+        "https://positive-outcomes.com/",
+        "https://psychology.uga.edu/directory/people/harvey-louis-gayer"
+      ],
+      "boundary": "Harvey L. Gayer, Ph.D. and Positive Outcomes Psychological Services, P.C. are separate from Richard Amir Nasser and Inspector Roofing and Restoration."
+    }
+  ],
+  "retiredHistoricalQids": [
+    "Q140475713",
+    "Q140480476",
+    "Q140491550",
+    "Q140506630",
+    "Q140481799",
+    "Q140482857",
+    "Q140480722",
+    "Q140503328",
+    "Q140503274",
+    "Q140484709",
+    "Q140484695",
+    "Q140485275",
+    "Q140506668",
+    "Q140484699",
+    "Q140484697",
+    "Q140506685",
+    "Q140456045",
+    "Q140463275",
+    "Q140513557"
+  ],
+  "retiredQidRule": "Audit history only. Do not publish these identifiers as live or place them in sameAs.",
+  "evidenceBoundary": "Public records document identity, coursework, company participation, platform activity, authorship, research publication, application status, or file provenance only. They do not establish platform endorsement, universal ranking, insurance outcomes, or the truth of every underlying statement."
+}
