@@ -13,7 +13,9 @@
         "https://github.com/RichNass87",
         "https://huggingface.co/InspectorRoofing",
         "https://independent.academia.edu/RichardNasser",
-        "https://about.me/richardnasser"
+        "https://about.me/richardnasser",
+        "https://www.kaggle.com/inspectorroofing",
+        "https://www.amazon.com/author/richard-nasser"
       ],
       "worksFor": {
         "@id": "https://inspector-roofing.com/#organization"
@@ -516,7 +518,7 @@
       "primaryImageOfPage": {
         "@id": "https://inspector-roofing.com/wp-content/uploads/2026/07/richard-amir-nasser-inspector-roofing-public-authority-stack.png#image"
       },
-      "dateModified": "2026-07-21"
+      "dateModified": "2026-07-22"
     }
   ]
 }
