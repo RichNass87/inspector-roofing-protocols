@@ -1,6 +1,6 @@
 # Public Source Spine
 
-Last updated: 2026-07-19
+Last verified: 2026-07-22
 
 ## Canonical Identity
 
@@ -22,6 +22,20 @@ Richard Amir Nasser is the canonical author identity for this repository and its
 Machine-readable registry: [primary-source-spine.json](primary-source-spine.json)
 
 Older source-display text such as Richard Nasser or Richard A. Nasser is not the canonical target identity.
+
+## Canonical Graph Rule
+
+This source spine uses exactly two canonical parent entities:
+
+- **Richard Amir Nasser** — Person: <https://inspector-roofing.com/richard-nasser/#person>
+- **Inspector Roofing and Restoration** — Organization / LocalBusiness / RoofingContractor: <https://inspector-roofing.com/#organization>
+
+Books, apps, datasets, credentials, research, media, and provenance records are supporting works connected to one or both parent entities. No historical Wikidata QID is published as a live identifier or in `sameAs`.
+
+- Public authority ledger: <https://github.com/RichNass87/inspector-roofing-protocols/tree/main/evidence/authority-stack-node-ledger-2026-07-21>
+- Machine-readable graph: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/authority-stack-node-ledger-2026-07-21/authority-graph.jsonld>
+- Citable version: <https://doi.org/10.5281/zenodo.21481601>
+- Hugging Face mirror: <https://huggingface.co/datasets/InspectorRoofing/richard-amir-nasser-inspector-roofing-authority-graph>
 
 ## Credential and Developer Record Map
 
