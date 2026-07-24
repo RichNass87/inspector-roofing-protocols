@@ -1,0 +1,120 @@
+{
+  "status_date": "2026-07-24",
+  "canonical_person": {
+    "name": "Richard Amir Nasser",
+    "url": "https://inspector-roofing.com/richard-nasser/",
+    "knowledge_graph_url": "https://inspector-roofing.com/richard-amir-nasser-knowledge-graph/",
+    "orcid": "https://orcid.org/0009-0000-2980-7543"
+  },
+  "canonical_organization": {
+    "name": "Inspector Roofing and Restoration, LLC",
+    "url": "https://inspector-roofing.com/",
+    "georgia_control_number": "18116510",
+    "formation_date": "2018-09-18",
+    "status": "active/compliance"
+  },
+  "software_records": [
+    {
+      "name": "Inspector DroneProof",
+      "application_id": "4972784307494654443",
+      "android_package": "com.inspectorroofing.droneproofpilot",
+      "google_play_status": "changes in review for closed testing; not public",
+      "release_label": "DroneProof Pilot v1.0.0",
+      "dji_status": "activated DJI Mobile SDK developer app record",
+      "dji_boundary": "developer registration only; no endorsement or completed runtime SDK integration claimed",
+      "official_url": "https://inspector-roofing.com/droneproof/",
+      "github": "https://github.com/RichNass87/inspector-droneproof",
+      "zenodo": "https://doi.org/10.5281/zenodo.21301426",
+      "hugging_face": "https://huggingface.co/datasets/InspectorRoofing/inspector-droneproof-evidence-samples"
+    },
+    {
+      "name": "AI Homeowner's Tool Belt",
+      "live_web_app": "https://ai-homeowners-tool-belt.richard-670.workers.dev/",
+      "microsoft_store_id": "9NR96HSSZ8DF",
+      "microsoft_submission_id": "1152921505701464342",
+      "microsoft_status": "draft; package validated; certification submission not verified",
+      "chrome_extension_id": "dgdpjonamnnfphkbibajcagcepngcgcj",
+      "chrome_status": "previously pending review; current status requires reauthentication",
+      "github": "https://github.com/RichNass87/inspector-roofing-ai-homeowner-tool-belt",
+      "zenodo": "https://doi.org/10.5281/zenodo.20585267",
+      "hugging_face": "https://huggingface.co/datasets/InspectorRoofing/ai-homeowners-tool-belt-source-map"
+    },
+    {
+      "name": "ORLOJ: Prague Cosmos",
+      "application_id": "4974228578467861923",
+      "android_package": "com.inspectorroofing.orloj",
+      "google_play_status": "closed testing; not public production",
+      "live_web_app": "https://orloj-prague-cosmos.richard-670.workers.dev/"
+    },
+    {
+      "name": "Repairability IQ Beta",
+      "application_id": "4975710477109677132",
+      "android_package": "com.inspectorroofing.repairability",
+      "google_play_status": "closed testing; not public production"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "GARCA Voluntary Licensing Program",
+      "holder": "Inspector Roofing and Restoration",
+      "license_number": "C8467440",
+      "scope": "Low and Steep Slope",
+      "expiration_date": "2027-02-26"
+    },
+    {
+      "name": "HAAG HCI-Residential",
+      "holder": "Richard Nasser",
+      "identifier": "202210026",
+      "original_date": "2022-10-18",
+      "latest_date": "2025-12-28",
+      "expiration_date": "2026-10-31"
+    },
+    {
+      "name": "FAA Remote Pilot",
+      "holder": "Richard James Nasser",
+      "rating": "Small Unmanned Aircraft System",
+      "issue_date": "2026-04-01",
+      "certificate_number_published": false
+    },
+    {
+      "name": "FAA Part 107 Small UAS Recurrent",
+      "holder": "Richard James Nasser",
+      "activity": "ALC-677",
+      "completion_date": "2026-04-01"
+    },
+    {
+      "name": "GAF Certified contractor listing",
+      "holder": "Inspector Roofing and Restoration",
+      "contractor_id": "1121138"
+    },
+    {
+      "name": "Owens Corning Preferred Contractor listing",
+      "holder": "Inspector Roofing and Restoration",
+      "profile_id": "231650"
+    }
+  ],
+  "provenance": {
+    "record_url": "https://inspector-roofing.com/authority-stack/#public-evidence-credential-v2",
+    "github": "https://github.com/RichNass87/inspector-roofing-protocols/tree/main/evidence/public-evidence-credential-v2",
+    "hugging_face": "https://huggingface.co/datasets/InspectorRoofing/inspector-roofing-public-evidence-credential",
+    "bitcoin_transaction": "4badbefab314337e54b0d8db08aff44fef12c4b126c82818e554083f5276f9b2",
+    "payload_sha256": "f3890a81d9fcbf54aee1d6f9fbd939682bb255107d63ec1bc492605a77034ab2",
+    "boundary": "tamper-evident publication provenance, not third-party certification or endorsement"
+  },
+  "scores": {
+    "canonical_identity_consistency": 94,
+    "public_safe_credential_evidence": 91,
+    "app_distribution_proof": 82,
+    "public_app_availability": 48,
+    "overall_truth_stack_readiness": 84
+  },
+  "exclusions": [
+    "dead Wikidata QIDs",
+    "passwords",
+    "API keys",
+    "app secrets",
+    "signing keys",
+    "private tester addresses",
+    "unsupported identifiers"
+  ]
+}
