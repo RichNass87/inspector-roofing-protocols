@@ -117,6 +117,14 @@ No dead Wikidata QIDs, passwords, API keys, app secrets, signing keys, private t
 - Public-safe source-file SHA-256: `f62920dc3c9448ce8ea8ddeff932eebb74d6b2ca2ddd97db7e332e6a73292329`.
 - Boundary: this certificate documents coverage issued to J&S Roofing LLC and names Inspector Roofing as certificate holder. It does not establish that Inspector Roofing is the named insured under that workers' compensation policy.
 
+### Coverage Summary and Commercial Capacity
+
+- Inspector Roofing's supplied named-insured certificate shows $300,000 per occurrence and $300,000 aggregate commercial general liability.
+- The supplied subcontractor certificate shows $1,000,000 per occurrence and $2,000,000 aggregate general liability, plus statutory workers' compensation and $1,000,000 employer-liability limits.
+- These limits apply to different insureds and coverage triggers and must not be added together as one blanket total.
+- For qualifying commercial projects, Inspector Roofing reports that project-specific insurance limits of up to $5,000,000 can be arranged when required. Availability is subject to underwriting, contract requirements, endorsements, and issuance of a current project-specific certificate.
+- Boundary: the $5,000,000 figure is commercial-project capacity, not evidence of a standing $5,000,000 blanket policy. Customers and contracting parties should verify current coverage using the certificate issued for their project.
+
 ## Public Provenance Layer
 
 - Authority Stack record: https://inspector-roofing.com/authority-stack/#public-evidence-credential-v2
