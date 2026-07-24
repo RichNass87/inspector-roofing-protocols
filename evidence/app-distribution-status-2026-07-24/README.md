@@ -8,7 +8,7 @@ Canonical organization: Inspector Roofing and Restoration, LLC
 
 This ledger records public sources, issuer records, developer registrations, software distribution states, and first-party provenance. It does not imply endorsement by any platform, manufacturer, standards body, publisher, or credential issuer. A developer registration is not a public app-store approval. A closed test is not a production release. GitHub, Hugging Face, Zenodo, website records, and blockchain timestamps are first-party provenance unless an independent source says otherwise.
 
-No dead Wikidata QIDs, passwords, API keys, app secrets, signing keys, private tester addresses, or unsupported identifiers are included.
+No dead Wikidata QIDs, passwords, API keys, app secrets, signing keys, private tester addresses, insurance policy numbers, private certificate-holder addresses, or unsupported identifiers are included.
 
 ## Canonical Entity Anchors
 
@@ -91,6 +91,32 @@ No dead Wikidata QIDs, passwords, API keys, app secrets, signing keys, private t
 - IKO public contractor profile: RoofPro Select listing.
 - Xactimate wording: Richard Amir Nasser has completed Xactimate training and reports extensive hands-on experience preparing roofing estimates and supplements. This ledger does not claim a current Xactimate certification without a current issuer-verifiable record.
 
+## Insurance and Coverage-Control Evidence
+
+### Inspector Roofing General Liability
+
+- Named insured: Inspector Roofing and Restoration.
+- Carrier: Next Insurance US Company.
+- Coverage type: occurrence-based commercial general liability.
+- Effective period: 2025-11-06 through 2026-11-06.
+- Limits shown on the supplied certificate: $300,000 each occurrence, $300,000 general aggregate, $300,000 products-completed operations aggregate, $100,000 damage to rented premises, and $5,000 medical expense per person.
+- Certificate issue date: 2026-02-04.
+- Public-safe source-file SHA-256: `616efee5a5c2a71d3bd1bd2bb18cfdeb8ef42acb5c33d42b3422b396b1715b8c`.
+- Boundary: an ACORD certificate is evidence of the coverage shown as of its issue date. It does not amend the policy, guarantee future coverage, or replace verification with the carrier or producer.
+
+### Subcontractor General Liability and Workers' Compensation
+
+- Named insured: J&S Roofing LLC.
+- Certificate holder: Inspector Roofing and Restoration.
+- General-liability carrier: American Builders Insurance Company Risk Retention Group.
+- General-liability period: 2025-07-22 through 2026-07-22.
+- General-liability limits shown: $1,000,000 each occurrence and $2,000,000 general aggregate.
+- Workers' compensation carrier: Pennsylvania Manufacturers Association Insurance Company.
+- Workers' compensation period: 2025-11-21 through 2026-11-21.
+- Workers' compensation shown as statutory, with $1,000,000 employer-liability limits for each accident, each employee disease, and the policy disease limit.
+- Public-safe source-file SHA-256: `f62920dc3c9448ce8ea8ddeff932eebb74d6b2ca2ddd97db7e332e6a73292329`.
+- Boundary: this certificate documents coverage issued to J&S Roofing LLC and names Inspector Roofing as certificate holder. It does not establish that Inspector Roofing is the named insured under that workers' compensation policy.
+
 ## Public Provenance Layer
 
 - Authority Stack record: https://inspector-roofing.com/authority-stack/#public-evidence-credential-v2
@@ -103,9 +129,9 @@ No dead Wikidata QIDs, passwords, API keys, app secrets, signing keys, private t
 ## Current Readiness
 
 - Canonical identity consistency: 94/100
-- Public-safe credential evidence: 91/100
+- Public-safe credential evidence: 93/100
 - App distribution proof: 82/100
 - Public app availability: 48/100
-- Overall truth-stack readiness: 84/100
+- Overall truth-stack readiness: 85/100
 
 The principal remaining gaps are public store approval, 12 opted-in Google Play testers maintained for 14 days, current Chrome review verification, Microsoft certification submission, and independent editorial coverage. These cannot be replaced by more first-party schema or additional repository mirrors.
