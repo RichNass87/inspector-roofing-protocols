@@ -167,3 +167,12 @@ The normalized public-safe graph uses one canonical person node for **Richard Am
 - Hugging Face mirror: <https://huggingface.co/datasets/InspectorRoofing/richard-amir-nasser-inspector-roofing-authority-graph>
 
 No active Wikidata QID is currently asserted. Public records document availability, relationships, or provenance; they do not establish endorsement, universal ranking, insurance outcomes, or independent verification of every statement.
+
+## Colten 26.2.9 local Creator foundation install record (2026-09-03)
+
+The Colten 26.2.9 local Creator foundation was installed and verified on the Mac Studio (arm64) on 2026-09-03. The record preserves the verified checks, the local artifact list, and the explicit boundary that this is the installed Creator foundation, not the complete Ultimate Creator execution system.
+
+- Evidence directory: <https://github.com/RichNass87/inspector-roofing-protocols/tree/main/evidence/colten-26.2.9-local-creator-foundation-2026-09-03>
+- Machine-readable record: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/colten-26.2.9-local-creator-foundation-2026-09-03/install-verification.json>
+
+The live Creator status reports inventory-and-contracts-only. The detected creative applications are not automated, Instant360 is not registered, the RTX workers still need live attestation, the 127 inventoried models are not selectable through the Creator surface, and paid provider credits were not exercised. The DMG, install report, and receipt remain local files; their checksums are recorded in the local install report and are not reproduced here. This is a first-party install record, not a public release, app-store listing, or independent certification.
