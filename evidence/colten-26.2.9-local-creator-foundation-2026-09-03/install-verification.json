@@ -70,7 +70,9 @@
     "subtests": 1093
   },
   "localArtifacts": {
-    "directory": "/Users/m4studio128/Documents/Codex/2026-09-03/can/outputs/",
+    "collectionRoot": "the 2026-09-03 install output directory on the Mac Studio",
+    "absolutePathPublished": false,
+    "pathBoundary": "The absolute path is not published, because it carries a host account identifier, and METHODOLOGY.md requires account identifiers to be removed from public records. The file names below are relative to that collection root.",
     "published": false,
     "checksumSource": "SHA-256 checksums are recorded in Colten-26.2.9-install-report.md on the Mac Studio and have not been imported into this record.",
     "files": [

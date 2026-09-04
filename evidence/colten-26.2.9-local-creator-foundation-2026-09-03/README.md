@@ -28,7 +28,7 @@ No Keychain owner credential, API key, provider credential, signing key, or paid
 
 ## Local Artifacts (Mac Studio, not published)
 
-Directory: `/Users/m4studio128/Documents/Codex/2026-09-03/can/outputs/`
+Collection root: the 2026-09-03 install output directory on the Mac Studio. The absolute path is not published, because it carries a host account identifier, and `METHODOLOGY.md` requires account identifiers to be removed from public records. The files below are named relative to that collection root.
 
 | File | Role | SHA-256 in this record |
 | --- | --- | --- |
