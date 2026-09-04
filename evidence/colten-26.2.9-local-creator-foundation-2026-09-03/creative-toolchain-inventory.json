@@ -35,11 +35,12 @@
     "collected": "An export was run for this class on the recorded date and returned the listed items. itemCount equals items.length."
   },
   "detectionMeaning": "Detection means the application was present on the Mac Studio on 2026-09-03. It does not mean the application was launched, driven, rendered from, or integrated with Colten, and it does not mean any of its content was read.",
+  "classStructureRule": "A class carries either importRequirements, a flat list, or subScopes, a grouped list in which each entry carries its own importRequirements. Unreal and iOS use subScopes because their surface is broad enough that a flat list would obscure which requirement belongs to which part of the toolchain. The two forms are equivalent for import purposes, and a class never carries both. assetInventory.state governs every class identically regardless of which form it uses.",
   "classes": [
     {
       "id": "unreal",
       "label": "Unreal",
-      "requestedScope": "Unreal projects, enabled plug-ins, and content and asset packs",
+      "requestedScope": "Unreal projects and their engine targets, plug-ins and modules, content, asset packs, rendering configuration, and packaged builds",
       "hostApplication": {
         "name": "Unreal",
         "version": "5.8.2",
@@ -52,15 +53,70 @@
         "collectedOn": null,
         "items": []
       },
-      "importRequirements": [
-        "Project display name and path for each project.",
-        "Engine version recorded per project, because a project may target an engine other than the detected 5.8.2.",
-        "Enabled plug-in list per project, with each plug-in marked first-party, Epic-supplied, or third-party.",
-        "Content and asset pack identifiers.",
-        "License type and vendor name per third-party pack, so redistribution rights are never assumed. Account identifiers, order or receipt numbers, and license keys are never recorded here.",
-        "Total content directory size in bytes per project.",
-        "SHA-256 per packaged artifact that is intended to be cited."
-      ]
+      "subScopes": [
+        {
+          "id": "projects-and-engine",
+          "label": "Projects and engine targets",
+          "importRequirements": [
+            "Project display name for each project, and its path recorded relative to a stated collection root.",
+            "Engine version per project, because a project may target an engine other than the detected 5.8.2.",
+            "Target platforms configured per project.",
+            "Source control provider and whether the project working copy is clean, recorded as a state only."
+          ]
+        },
+        {
+          "id": "plugins-and-modules",
+          "label": "Plug-ins and code modules",
+          "importRequirements": [
+            "Enabled plug-in list per project, with each plug-in marked first-party, Epic-supplied, or third-party.",
+            "C++ module names per project, where the project contains code.",
+            "Third-party integrations and their versions, where present.",
+            "License type and vendor name per third-party plug-in. Account identifiers, order or receipt numbers, and license keys are never recorded here."
+          ]
+        },
+        {
+          "id": "content",
+          "label": "Maps, Blueprints, and content assets",
+          "importRequirements": [
+            "Map and level count per project, and level names only after the privacy review below.",
+            "Blueprint class count per project.",
+            "Static mesh, skeletal mesh, material, and texture counts per project.",
+            "Niagara and other visual effect system counts, where present.",
+            "Animation and audio asset counts, where present.",
+            "Total content directory size in bytes per project."
+          ]
+        },
+        {
+          "id": "asset-packs",
+          "label": "Content and asset packs",
+          "importRequirements": [
+            "Pack identifier and version for each installed pack.",
+            "Whether each pack is Epic-supplied, marketplace-acquired, or authored in-house.",
+            "License type and vendor name per third-party pack, so redistribution rights are never assumed. Account identifiers, order or receipt numbers, and license keys are never recorded here.",
+            "Installed size in bytes per pack."
+          ]
+        },
+        {
+          "id": "rendering",
+          "label": "Rendering and sequencer configuration",
+          "importRequirements": [
+            "Configured renderer and feature level per project.",
+            "Movie Render Queue or Sequencer preset names and output formats, where present.",
+            "Output resolution and frame rate settings, where present.",
+            "Whether any render has actually been produced, recorded as a boolean. Absent a produced render, no render capability is claimed."
+          ]
+        },
+        {
+          "id": "builds",
+          "label": "Packaged builds",
+          "importRequirements": [
+            "Packaged target platform and build configuration per artifact.",
+            "Build product name and size in bytes.",
+            "SHA-256 per packaged artifact that is intended to be cited."
+          ]
+        }
+      ],
+      "classBoundary": "This class is anchored to Unreal because Unreal 5.8.2 was detected. The sub-scopes describe what an export would collect if the corresponding content exists. They are not a claim that any project, plug-in, map, pack, render configuration, or build is present on the machine."
     },
     {
       "id": "developer-tooling",
@@ -87,6 +143,83 @@
         "Presence of a code-signing identity and of provisioning profiles recorded as a boolean only. The identity, its serial, its team identifier, and the profile contents are never recorded here.",
         "SHA-256 per build artifact that is intended to be cited."
       ]
+    },
+    {
+      "id": "ios",
+      "label": "iOS",
+      "requestedScope": "iOS projects and targets, SDK and simulator runtimes, dependencies, app resources, and build products",
+      "hostApplication": {
+        "name": "Xcode",
+        "version": "27 (beta)",
+        "detected": true,
+        "automatedLaunchRenderRoundTrip": false,
+        "hostSharedWith": "developer-tooling"
+      },
+      "assetInventory": {
+        "state": "not-collected",
+        "itemCount": null,
+        "collectedOn": null,
+        "items": []
+      },
+      "subScopes": [
+        {
+          "id": "projects-and-targets",
+          "label": "Projects and targets",
+          "importRequirements": [
+            "Xcode project and workspace names, with paths recorded relative to a stated collection root.",
+            "Target names and product types per project.",
+            "Bundle identifier per target.",
+            "Deployment target version and supported device families per target."
+          ]
+        },
+        {
+          "id": "sdks-and-runtimes",
+          "label": "SDKs, runtimes, and toolchain",
+          "importRequirements": [
+            "iOS SDK identifiers and versions, where present.",
+            "Simulator runtime identifiers and versions, where present.",
+            "Swift and Objective-C toolchain versions, where present."
+          ]
+        },
+        {
+          "id": "dependencies",
+          "label": "Dependencies",
+          "importRequirements": [
+            "Swift Package Manager, CocoaPods, and Carthage dependency names and resolved versions, where present.",
+            "Whether each dependency is first-party or third-party.",
+            "License type and vendor name per third-party dependency. Account identifiers, order or receipt numbers, and license keys are never recorded here."
+          ]
+        },
+        {
+          "id": "app-resources",
+          "label": "App resources",
+          "importRequirements": [
+            "Asset catalog count and app icon set presence per target.",
+            "Localization identifiers present per target.",
+            "Storyboard, XIB, and SwiftUI view resource counts, where present.",
+            "Bundled media file counts, reported separately from source files."
+          ]
+        },
+        {
+          "id": "signing-and-distribution",
+          "label": "Signing and distribution",
+          "importRequirements": [
+            "Presence of a code-signing identity and of provisioning profiles recorded as a boolean only. The identity, its serial, its team identifier, and the profile contents are never recorded here.",
+            "Distribution method configured per target, recorded as a category only.",
+            "Whether any build has been submitted to a store, recorded as a boolean. A developer record is never described as a public listing."
+          ]
+        },
+        {
+          "id": "builds-and-archives",
+          "label": "Builds and archives",
+          "importRequirements": [
+            "Archive and build product names and build configurations.",
+            "Build product size in bytes.",
+            "SHA-256 per build product that is intended to be cited."
+          ]
+        }
+      ],
+      "classBoundary": "This class is anchored to Xcode because Xcode is the only detected developer application, and it shares that host with the developer assets and build tooling class. Two classes sharing one host does not mean two applications were detected. The source states only that Xcode 27 betas were detected. It does not state that any iOS project, target, SDK, dependency, resource, signing identity, or build exists on this machine, and this record does not assert that any iOS development is present. The sub-scopes define where such data would go if an export finds it."
     },
     {
       "id": "three-dimensional",
@@ -198,11 +331,12 @@
     }
   ],
   "summary": {
-    "classesDefined": 5,
+    "classesDefined": 6,
     "classesCollected": 0,
-    "classesNotCollected": 5,
-    "hostApplicationsDetected": 5,
+    "classesNotCollected": 6,
+    "distinctHostApplicationsDetected": 5,
     "hostApplicationsAutomated": 0,
+    "sharedHostNote": "Six classes are anchored to five distinct detected applications. The developer assets and build tooling class and the iOS class are both anchored to Xcode, because Xcode is the only detected developer application. Two classes sharing one host does not mean two applications were detected.",
     "totalAssetsEnumerated": null,
     "totalAssetsEnumeratedNote": "null, not zero. No export has been run for any class, so no asset count exists. A zero here would assert an empty machine, which this record does not establish.",
     "plainReading": "Five host applications were detected on the Mac Studio on 2026-09-03. No asset in any class has been enumerated, and no class is automated. This record is an inventory frame and an import instruction. It is not an asset inventory result."

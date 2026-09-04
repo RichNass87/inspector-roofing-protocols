@@ -55,7 +55,7 @@ This is the installed Creator foundation, not the complete Ultimate Creator exec
 
 ## Creative and Developer Toolchain Inventory Frame
 
-The five detected applications are expanded into per-class inventory slots in [creative-toolchain-inventory.json](./creative-toolchain-inventory.json). The classes are Unreal, developer assets and build tooling, 3D, Final Cut Pro, and Logic Pro.
+The five detected applications are expanded into per-class inventory slots in [creative-toolchain-inventory.json](./creative-toolchain-inventory.json). The classes are Unreal, developer assets and build tooling, iOS, 3D, Final Cut Pro, and Logic Pro. Six classes are anchored to five distinct applications, because the developer tooling and iOS classes both anchor to Xcode. Two classes sharing one host does not mean two applications were detected.
 
 Detection means the application was present on the Mac Studio on 2026-09-03. It does not mean the application was launched, driven, rendered from, or integrated with Colten, and it does not mean that any of its content was read.
 
@@ -63,9 +63,14 @@ Detection means the application was present on the Mac Studio on 2026-09-03. It 
 | --- | --- | --- | --- |
 | Unreal | Unreal 5.8.2, detected | No | Not collected |
 | Developer assets and build tooling | Xcode 27 betas, detected | No | Not collected |
+| iOS | Xcode 27 betas, detected | No | Not collected |
 | 3D | Reality Composer Pro 3.0, detected | No | Not collected |
 | Final Cut Pro | Final Cut Pro 12.3, detected | No | Not collected |
 | Logic Pro | Logic Pro 12.3.1, detected | No | Not collected |
+
+The Unreal and iOS classes carry grouped sub-scopes rather than one flat requirement list, because their surface is broad enough that a flat list would obscure which requirement belongs to which part of the toolchain. Unreal is grouped into projects and engine targets, plug-ins and code modules, maps and content assets, asset packs, rendering and sequencer configuration, and packaged builds. iOS is grouped into projects and targets, SDKs and runtimes, dependencies, app resources, signing and distribution, and builds and archives. A class carries one form or the other, never both, and the not-collected state governs every class identically.
+
+The iOS class records where iOS data would go if an export finds it. The reported boundary states only that Xcode 27 betas were detected. It does not state that any iOS project, target, SDK, dependency, resource, signing identity, or build exists on this machine, and this record does not assert that any iOS development is present.
 
 Not collected means that no export has been run for that class, so nothing is known about its contents. It does not mean that the class is empty. The record keeps that state separate from collected-empty, which is reserved for an export that genuinely returns zero items.
 
@@ -86,7 +91,7 @@ The local install report lists the exact remaining activation work. This record 
 5. Decide whether paid provider credits are exercised in a controlled test before any provider-backed capability is described as verified.
 6. Import the SHA-256 checksums from the install report into this record so the local artifacts can be matched byte for byte.
 
-Two further items arise from the toolchain inventory frame and are not part of the install report list: run the per-class export on the Mac Studio and populate the Unreal, developer assets and build tooling, 3D, Final Cut Pro, and Logic Pro inventory slots; and record what kind of model the 127 inventoried models are, so the count can be classified.
+Two further items arise from the toolchain inventory frame and are not part of the install report list: run the per-class export on the Mac Studio and populate the Unreal, developer assets and build tooling, iOS, 3D, Final Cut Pro, and Logic Pro inventory slots; and record what kind of model the 127 inventoried models are, so the count can be classified.
 
 ## Boundary
 

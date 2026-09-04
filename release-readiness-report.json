@@ -1,7 +1,7 @@
 {
   "validator": "Inspector Roofing Protocols internal release-readiness validator",
   "validatorVersion": "1.0.0",
-  "evaluatedAt": "2026-09-04T03:54:44.200Z",
+  "evaluatedAt": "2026-09-04T04:16:26.632Z",
   "packageVersion": "1.1.1",
   "minimumReleaseScore": 85,
   "strongTargetScore": 91,
