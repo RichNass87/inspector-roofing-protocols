@@ -53,6 +53,28 @@ This is the installed Creator foundation, not the complete Ultimate Creator exec
 | Inventoried models (127) | Not selectable through the Creator surface |
 | Paid provider credits | Not exercised during this install |
 
+## Creative and Developer Toolchain Inventory Frame
+
+The five detected applications are expanded into per-class inventory slots in [creative-toolchain-inventory.json](./creative-toolchain-inventory.json). The classes are Unreal, developer assets and build tooling, 3D, Final Cut Pro, and Logic Pro.
+
+Detection means the application was present on the Mac Studio on 2026-09-03. It does not mean the application was launched, driven, rendered from, or integrated with Colten, and it does not mean that any of its content was read.
+
+| Class | Host application on 2026-09-03 | Automated | Asset inventory state |
+| --- | --- | --- | --- |
+| Unreal | Unreal 5.8.2, detected | No | Not collected |
+| Developer assets and build tooling | Xcode 27 betas, detected | No | Not collected |
+| 3D | Reality Composer Pro 3.0, detected | No | Not collected |
+| Final Cut Pro | Final Cut Pro 12.3, detected | No | Not collected |
+| Logic Pro | Logic Pro 12.3.1, detected | No | Not collected |
+
+Not collected means that no export has been run for that class, so nothing is known about its contents. It does not mean that the class is empty. The record keeps that state separate from collected-empty, which is reserved for an export that genuinely returns zero items.
+
+The 127 inventoried models are carried separately and unclassified. The reported boundary states the count and states that the models are not selectable through the Creator surface. No breakdown of the 127 has been imported into this record. This record therefore does not assign them to the 3D class or to any other class, and does not assert what kind of model they are.
+
+Two further components are recorded without an established state. The RTX workers still require live attestation. Instant360 is not registered. This record does not state what either one does, and neither is connected to any class above.
+
+The record also carries the per-class import requirements, so that the export at the Mac Studio collects the right fields in the right units. If the export finds projects, libraries, events, or referenced assets, their names and file paths may carry customer names, property addresses, or claim identifiers. Each must be reviewed against the repository privacy rules in [METHODOLOGY.md](../../METHODOLOGY.md) before it is copied into the record. Absolute paths are not published: a path is recorded only as a form relative to a stated collection root, with any customer, property, or claim segment removed.
+
 ## Remaining Activation Work
 
 The local install report lists the exact remaining activation work. This record summarizes the reported boundary and does not replace that list.
@@ -63,6 +85,8 @@ The local install report lists the exact remaining activation work. This record 
 4. Make the 127 inventoried models selectable through the Creator surface.
 5. Decide whether paid provider credits are exercised in a controlled test before any provider-backed capability is described as verified.
 6. Import the SHA-256 checksums from the install report into this record so the local artifacts can be matched byte for byte.
+
+Two further items arise from the toolchain inventory frame and are not part of the install report list: run the per-class export on the Mac Studio and populate the Unreal, developer assets and build tooling, 3D, Final Cut Pro, and Logic Pro inventory slots; and record what kind of model the 127 inventoried models are, so the count can be classified.
 
 ## Boundary
 

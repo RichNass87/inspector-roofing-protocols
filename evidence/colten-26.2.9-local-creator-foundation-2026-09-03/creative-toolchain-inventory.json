@@ -1,0 +1,232 @@
+{
+  "schemaVersion": "1.0",
+  "recordType": "creative-and-developer-toolchain-inventory-frame",
+  "assetLevelDataImported": false,
+  "title": "Colten 26.2.9 Creative and Developer Toolchain Inventory Frame",
+  "statusDate": "2026-09-03",
+  "recordDate": "2026-09-04",
+  "canonicalPerson": {
+    "name": "Richard Amir Nasser",
+    "url": "https://inspector-roofing.com/richard-nasser/",
+    "orcid": "https://orcid.org/0009-0000-2980-7543"
+  },
+  "canonicalOrganization": {
+    "name": "Inspector Roofing and Restoration",
+    "url": "https://inspector-roofing.com/"
+  },
+  "publicRecord": {
+    "githubEvidenceUrl": "https://github.com/RichNass87/inspector-roofing-protocols/tree/main/evidence/colten-26.2.9-local-creator-foundation-2026-09-03",
+    "githubRecordUrl": "https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/colten-26.2.9-local-creator-foundation-2026-09-03/creative-toolchain-inventory.json"
+  },
+  "host": {
+    "model": "Mac Studio",
+    "architecture": "arm64 (Apple silicon)"
+  },
+  "relatedRecord": {
+    "title": "Colten 26.2.9 Local Creator Foundation Install Record",
+    "file": "install-verification.json",
+    "githubRecordUrl": "https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/colten-26.2.9-local-creator-foundation-2026-09-03/install-verification.json",
+    "relationship": "This frame expands capabilityStatus.detectedApplications from the install record into per-class inventory slots. It does not replace that array and does not restate the install verification."
+  },
+  "readingRule": "Every class below carries assetInventory.state. Only the value collected means assets were enumerated. Every class in this record is not-collected: the host applications were detected on the Mac Studio on 2026-09-03, and nothing about their projects, libraries, or assets has been opened, read, enumerated, or validated. An empty items array in this record therefore records that no collection has happened. It never records that a class is empty.",
+  "inventoryStateVocabulary": {
+    "not-collected": "No export has been run for this class. Nothing is known about its contents. itemCount is null.",
+    "collected-empty": "An export was run for this class on the recorded date and returned zero items. itemCount is 0.",
+    "collected": "An export was run for this class on the recorded date and returned the listed items. itemCount equals items.length."
+  },
+  "detectionMeaning": "Detection means the application was present on the Mac Studio on 2026-09-03. It does not mean the application was launched, driven, rendered from, or integrated with Colten, and it does not mean any of its content was read.",
+  "classes": [
+    {
+      "id": "unreal",
+      "label": "Unreal",
+      "requestedScope": "Unreal projects, enabled plug-ins, and content and asset packs",
+      "hostApplication": {
+        "name": "Unreal",
+        "version": "5.8.2",
+        "detected": true,
+        "automatedLaunchRenderRoundTrip": false
+      },
+      "assetInventory": {
+        "state": "not-collected",
+        "itemCount": null,
+        "collectedOn": null,
+        "items": []
+      },
+      "importRequirements": [
+        "Project display name and path for each project.",
+        "Engine version recorded per project, because a project may target an engine other than the detected 5.8.2.",
+        "Enabled plug-in list per project, with each plug-in marked first-party, Epic-supplied, or third-party.",
+        "Content and asset pack identifiers.",
+        "License type and vendor name per third-party pack, so redistribution rights are never assumed. Account identifiers, order or receipt numbers, and license keys are never recorded here.",
+        "Total content directory size in bytes per project.",
+        "SHA-256 per packaged artifact that is intended to be cited."
+      ]
+    },
+    {
+      "id": "developer-tooling",
+      "label": "Developer assets and build tooling",
+      "requestedScope": "Xcode, platform SDKs, simulator runtimes, and command line build tooling, where present",
+      "hostApplication": {
+        "name": "Xcode",
+        "version": "27 (beta)",
+        "detected": true,
+        "automatedLaunchRenderRoundTrip": false,
+        "versionNote": "The install record names this application Xcode 27 betas in the plural but records its version as 27 (beta). This record carries the version value as recorded and does not assert how many beta releases are installed or which beta build each one is, because the source does not state it."
+      },
+      "assetInventory": {
+        "state": "not-collected",
+        "itemCount": null,
+        "collectedOn": null,
+        "items": []
+      },
+      "importRequirements": [
+        "Xcode version and build number for each installed copy, and the path of each.",
+        "Platform SDK identifiers and versions, where present.",
+        "Simulator runtime identifiers and versions, where present.",
+        "Command line tools version, where present.",
+        "Presence of a code-signing identity and of provisioning profiles recorded as a boolean only. The identity, its serial, its team identifier, and the profile contents are never recorded here.",
+        "SHA-256 per build artifact that is intended to be cited."
+      ]
+    },
+    {
+      "id": "three-dimensional",
+      "label": "3D",
+      "requestedScope": "Reality Composer Pro packages and scenes, and the USD, USDZ, mesh, material, and texture assets they reference",
+      "hostApplication": {
+        "name": "Reality Composer Pro",
+        "version": "3.0",
+        "detected": true,
+        "automatedLaunchRenderRoundTrip": false
+      },
+      "assetInventory": {
+        "state": "not-collected",
+        "itemCount": null,
+        "collectedOn": null,
+        "items": []
+      },
+      "importRequirements": [
+        "Package or scene name for each Reality Composer Pro document.",
+        "Referenced USD and USDZ file identifiers, with file size in bytes.",
+        "Mesh, material, and texture counts per scene.",
+        "Originating application per asset where the asset was authored elsewhere.",
+        "License type and vendor name per third-party asset, so redistribution rights are never assumed. Account identifiers, order or receipt numbers, and license keys are never recorded here.",
+        "Confirmation that no scene or referenced asset carries captured customer or property content before any scene name is published.",
+        "SHA-256 per asset file that is intended to be cited."
+      ],
+      "classBoundary": "This class is anchored to Reality Composer Pro because that is the detected 3D authoring application. Class membership is an organizing convention of this frame. It is not a claim about where any file is stored, and the 127 inventoried models are not part of this class."
+    },
+    {
+      "id": "final-cut-pro",
+      "label": "Final Cut Pro",
+      "requestedScope": "Final Cut Pro libraries, events, projects, and referenced media",
+      "hostApplication": {
+        "name": "Final Cut Pro",
+        "version": "12.3",
+        "detected": true,
+        "automatedLaunchRenderRoundTrip": false
+      },
+      "assetInventory": {
+        "state": "not-collected",
+        "itemCount": null,
+        "collectedOn": null,
+        "items": []
+      },
+      "importRequirements": [
+        "Library name for each library.",
+        "Event count and project count per library.",
+        "Referenced media file count per library, and whether media is managed inside the library or referenced externally.",
+        "Total library size in bytes, reported separately from render and proxy file size.",
+        "Confirmation that no library carries customer or claim footage before any library name is published, because library names may carry property and customer identifiers.",
+        "SHA-256 per exported deliverable that is intended to be cited."
+      ]
+    },
+    {
+      "id": "logic-pro",
+      "label": "Logic Pro",
+      "requestedScope": "Logic Pro projects, instrument and sample libraries, and audio plug-ins",
+      "hostApplication": {
+        "name": "Logic Pro",
+        "version": "12.3.1",
+        "detected": true,
+        "automatedLaunchRenderRoundTrip": false
+      },
+      "assetInventory": {
+        "state": "not-collected",
+        "itemCount": null,
+        "collectedOn": null,
+        "items": []
+      },
+      "importRequirements": [
+        "Project name for each project.",
+        "Instrument and sample library identifiers, with installed size in bytes.",
+        "Audio plug-in list, with each plug-in marked first-party or third-party.",
+        "License type and vendor name per third-party library and plug-in, so redistribution rights are never assumed. Account identifiers, order or receipt numbers, and license keys are never recorded here.",
+        "SHA-256 per bounced or exported deliverable that is intended to be cited."
+      ]
+    }
+  ],
+  "unclassifiedInventory": {
+    "id": "inventoried-models",
+    "label": "Inventoried models",
+    "count": 127,
+    "selectableThroughCreatorSurface": false,
+    "classified": false,
+    "classificationNote": "The reported boundary states a count of 127 inventoried models and states that they are not selectable through the Creator surface. No breakdown has been imported into this record. This record therefore does not assign these models to the 3D class or to any other class, and does not assert what kind of model they are. The count is carried here unclassified so that it is not silently absorbed into a creative asset class it may not belong to.",
+    "importRequirements": [
+      "The model kind, so the count can be classified rather than left unassigned.",
+      "Per-model identifier and version.",
+      "The inventory source that produced the count of 127.",
+      "Whether each model is licensed for the use Colten would put it to."
+    ]
+  },
+  "crossCuttingCapacity": [
+    {
+      "id": "rtx-workers",
+      "label": "RTX workers",
+      "role": "Not stated in the source record. Recorded here only because live attestation is listed as outstanding.",
+      "liveAttestation": "required; not yet completed",
+      "state": "not-attested",
+      "note": "The source states that live attestation is still required. It does not state what the RTX workers do or which classes, if any, they serve."
+    },
+    {
+      "id": "instant360",
+      "label": "Instant360",
+      "role": "Not stated in the source record. Recorded here only because registration is listed as outstanding.",
+      "registered": false,
+      "state": "not-registered",
+      "note": "The source states that Instant360 is not registered. It does not state what Instant360 is or what registration would enable."
+    }
+  ],
+  "summary": {
+    "classesDefined": 5,
+    "classesCollected": 0,
+    "classesNotCollected": 5,
+    "hostApplicationsDetected": 5,
+    "hostApplicationsAutomated": 0,
+    "totalAssetsEnumerated": null,
+    "totalAssetsEnumeratedNote": "null, not zero. No export has been run for any class, so no asset count exists. A zero here would assert an empty machine, which this record does not establish.",
+    "plainReading": "Five host applications were detected on the Mac Studio on 2026-09-03. No asset in any class has been enumerated, and no class is automated. This record is an inventory frame and an import instruction. It is not an asset inventory result."
+  },
+  "importProcedure": [
+    "Run the per-class export on the Mac Studio and record the export date as collectedOn.",
+    "Confirm per class that no project, scene, library, or referenced asset carries customer, property, or claim content before any name, path, or title from that class is published.",
+    "Set assetInventory.state to collected, or to collected-empty when the export genuinely returns nothing.",
+    "Populate items and set itemCount to items.length.",
+    "Apply the privacy rule below before any name, path, or title is copied into this record.",
+    "Import the SHA-256 checksums from the install report into this record in the same pass, so the install record and this frame become citable together.",
+    "Regenerate the repository checksum ledger with npm run checksums and re-run npm run validate."
+  ],
+  "privacyRule": "If the export finds projects, libraries, events, or referenced assets, their names and file paths may carry customer names, property addresses, or claim identifiers. Each must be reviewed against the repository privacy rules in METHODOLOGY.md before it is copied into this record. Absolute paths are not published: record a path only as a form relative to a stated collection root, with any customer, property, or claim segment removed. Where a name or a path segment cannot be published, publish the count and the SHA-256 and omit it.",
+  "evidenceBoundary": "This frame records which creative and developer host applications were detected on one machine on one date, and defines the slots their assets would occupy. It does not establish that any project, library, plug-in, model, or asset exists, is licensed, is usable by Colten, or is integrated with the Creator surface. Detection is presence only. Public documentation of this record establishes availability and version history only; it is not endorsement, certification, ranking, insurance approval, or a customer outcome.",
+  "exclusions": [
+    "invented or estimated asset names, counts, paths, sizes, or checksums",
+    "code-signing identities, provisioning profile contents, and team identifiers",
+    "marketplace account identifiers, order or receipt numbers, and license keys",
+    "Keychain owner credential",
+    "API keys",
+    "provider credentials",
+    "signing keys",
+    "paid-provider account details",
+    "customer, property, or claim identifiers carried in project or library names"
+  ]
+}
