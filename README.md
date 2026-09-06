@@ -167,3 +167,15 @@ The normalized public-safe graph uses one canonical person node for **Richard Am
 - Hugging Face mirror: <https://huggingface.co/datasets/InspectorRoofing/richard-amir-nasser-inspector-roofing-authority-graph>
 
 No active Wikidata QID is currently asserted. Public records document availability, relationships, or provenance; they do not establish endorsement, universal ranking, insurance outcomes, or independent verification of every statement.
+
+## Colten 26.2.9 local Creator foundation install record (2026-09-03)
+
+The Colten 26.2.9 local Creator foundation was installed and verified on the Mac Studio (arm64) on 2026-09-03. The record preserves the verified checks, the local artifact list, and the explicit boundary that this is the installed Creator foundation, not the complete Ultimate Creator execution system.
+
+- Evidence directory: <https://github.com/RichNass87/inspector-roofing-protocols/tree/main/evidence/colten-26.2.9-local-creator-foundation-2026-09-03>
+- Machine-readable record: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/colten-26.2.9-local-creator-foundation-2026-09-03/install-verification.json>
+- Creative and developer toolchain inventory frame: <https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/colten-26.2.9-local-creator-foundation-2026-09-03/creative-toolchain-inventory.json>
+
+The detected creative and developer applications are expanded into per-class inventory slots for Unreal, developer assets and build tooling, iOS, 3D, Final Cut Pro, and Logic Pro. The Unreal and iOS classes carry grouped sub-scopes covering projects, plug-ins and dependencies, content and resources, configuration, and build products. The iOS class defines where iOS data would go if an export finds it; the reported boundary states only that Xcode was detected, and the record does not assert that any iOS development is present. Every class is recorded as not collected: the host applications were detected on the Mac Studio, and no project, library, plug-in, or asset has been enumerated. The frame keeps not collected separate from an export that genuinely returns zero items, carries the per-class import requirements for the export at the Mac Studio, and leaves the 127 inventoried models unclassified because no breakdown of them has been imported into this record. It is an inventory frame and an import instruction, not an asset inventory result.
+
+The live Creator status reports inventory-and-contracts-only. The detected creative applications are not automated, Instant360 is not registered, the RTX workers still need live attestation, the 127 inventoried models are not selectable through the Creator surface, and paid provider credits were not exercised. The DMG, install report, and receipt remain local files; their checksums are recorded in the local install report and are not reproduced here. This is a first-party install record, not a public release, app-store listing, or independent certification.

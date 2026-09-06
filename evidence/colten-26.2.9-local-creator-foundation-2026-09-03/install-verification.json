@@ -1,0 +1,163 @@
+{
+  "schemaVersion": "1.0",
+  "recordType": "local-install-verification-record",
+  "title": "Colten 26.2.9 Local Creator Foundation Install Record",
+  "statusDate": "2026-09-03",
+  "recordDate": "2026-09-04",
+  "canonicalPerson": {
+    "name": "Richard Amir Nasser",
+    "url": "https://inspector-roofing.com/richard-nasser/",
+    "orcid": "https://orcid.org/0009-0000-2980-7543"
+  },
+  "canonicalOrganization": {
+    "name": "Inspector Roofing and Restoration",
+    "url": "https://inspector-roofing.com/"
+  },
+  "publicRecord": {
+    "githubEvidenceUrl": "https://github.com/RichNass87/inspector-roofing-protocols/tree/main/evidence/colten-26.2.9-local-creator-foundation-2026-09-03",
+    "githubRecordUrl": "https://github.com/RichNass87/inspector-roofing-protocols/blob/main/evidence/colten-26.2.9-local-creator-foundation-2026-09-03/install-verification.json"
+  },
+  "software": {
+    "name": "Colten 26",
+    "version": "26.2.9",
+    "architecture": "arm64",
+    "installPath": "/Applications/Colten 26.app",
+    "installClass": "local candidate build",
+    "distributionState": "local DMG install; not a public release, app-store listing, or notarized distribution",
+    "authorshipBoundary": "Recorded only as locally installed software on the Mac Studio. This record does not assert authorship, publisher, licensing, or distribution rights for Colten."
+  },
+  "host": {
+    "model": "Mac Studio",
+    "architecture": "arm64 (Apple silicon)"
+  },
+  "verifiedChecks": [
+    {
+      "id": "app-version",
+      "description": "/Applications/Colten 26.app reports version 26.2.9 (arm64)",
+      "result": "pass"
+    },
+    {
+      "id": "core-health",
+      "description": "Core health returns HTTP 200 and version 26.2.9",
+      "result": "pass"
+    },
+    {
+      "id": "services-restored",
+      "description": "All five previously loaded Colten services were restored",
+      "result": "pass"
+    },
+    {
+      "id": "creator-routes-auth",
+      "description": "Creator status, inventory, and contracts routes return HTTP 200 with the Keychain owner credential and HTTP 401 without it",
+      "result": "pass"
+    },
+    {
+      "id": "rollback-and-runtime-preservation",
+      "description": "Rollback receipt and runtime preservation checks passed",
+      "result": "pass"
+    },
+    {
+      "id": "installer-audit",
+      "description": "Installer audit reported no remaining release blocker",
+      "result": "pass",
+      "boundary": "A separate audit pass from the install run; not third-party certification."
+    }
+  ],
+  "coreTestSuite": {
+    "passed": 1896,
+    "skipped": 4,
+    "expectedFailures": 2,
+    "subtests": 1093
+  },
+  "localArtifacts": {
+    "collectionRoot": "the 2026-09-03 install output directory on the Mac Studio",
+    "absolutePathPublished": false,
+    "pathBoundary": "The absolute path is not published, because it carries a host account identifier, and METHODOLOGY.md requires account identifiers to be removed from public records. The file names below are relative to that collection root.",
+    "published": false,
+    "checksumSource": "SHA-256 checksums are recorded in Colten-26.2.9-install-report.md on the Mac Studio and have not been imported into this record.",
+    "files": [
+      {
+        "fileName": "Colten-26.2.9-local-candidate-aarch64.dmg",
+        "role": "local candidate installer image",
+        "sha256": null
+      },
+      {
+        "fileName": "Colten-26.2.9-install-report.md",
+        "role": "full install report with checksums and the exact remaining activation work",
+        "sha256": null
+      },
+      {
+        "fileName": "Colten-26.2.9-install-receipt.json",
+        "role": "machine-readable install receipt",
+        "sha256": null
+      }
+    ]
+  },
+  "capabilityStatus": {
+    "installedScope": "Creator foundation only; not the complete Ultimate Creator execution system",
+    "creatorSurface": "inventory-and-contracts-only",
+    "detectedApplications": [
+      {
+        "name": "Unreal",
+        "version": "5.8.2",
+        "detected": true,
+        "automatedLaunchRenderRoundTrip": false
+      },
+      {
+        "name": "Final Cut Pro",
+        "version": "12.3",
+        "detected": true,
+        "automatedLaunchRenderRoundTrip": false
+      },
+      {
+        "name": "Logic Pro",
+        "version": "12.3.1",
+        "detected": true,
+        "automatedLaunchRenderRoundTrip": false
+      },
+      {
+        "name": "Reality Composer Pro",
+        "version": "3.0",
+        "detected": true,
+        "automatedLaunchRenderRoundTrip": false
+      },
+      {
+        "name": "Xcode 27 betas",
+        "version": "27 (beta)",
+        "detected": true,
+        "automatedLaunchRenderRoundTrip": false
+      }
+    ],
+    "instant360": {
+      "registered": false
+    },
+    "rtxWorkers": {
+      "liveAttestation": "required; not yet completed"
+    },
+    "inventoriedModels": {
+      "count": 127,
+      "selectableThroughCreatorSurface": false
+    },
+    "paidProviderCredits": {
+      "exercisedDuringInstall": false
+    }
+  },
+  "remainingActivationWork": [
+    "Enable automated launching, rendering, and round trips for the detected creative applications.",
+    "Register Instant360.",
+    "Complete live attestation for the RTX workers.",
+    "Make the 127 inventoried models selectable through the Creator surface.",
+    "Decide whether paid provider credits are exercised in a controlled test before any provider-backed capability is described as verified.",
+    "Import the SHA-256 checksums from the install report into this record so the local artifacts can be matched byte for byte."
+  ],
+  "remainingWorkSource": "The local install report lists the exact remaining activation work; this record summarizes the reported boundary and does not replace that list.",
+  "evidenceBoundary": "Install verification establishes that the recorded build was installed, responded to the recorded checks, and passed the recorded test suite on one machine on one date. It does not establish that every Colten capability works, that the detected creative applications are integrated, that any inventoried model is available for selection, or that any paid provider path has been exercised. Public documentation of this record establishes availability and version history only; it is not endorsement, certification, ranking, insurance approval, or a customer outcome.",
+  "exclusions": [
+    "Keychain owner credential",
+    "API keys",
+    "provider credentials",
+    "signing keys",
+    "paid-provider account details",
+    "the DMG, install report, and install receipt files themselves"
+  ]
+}

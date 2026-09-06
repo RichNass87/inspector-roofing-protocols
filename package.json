@@ -8,7 +8,9 @@
     "start": "node server.js",
     "smoke": "node server.js --smoke",
     "validate": "node scripts/validate-release.mjs",
-    "checksums": "node scripts/generate-checksums.mjs"
+    "checksums": "node scripts/generate-checksums.mjs",
+    "check:inventory": "node scripts/check-inventory.mjs",
+    "check:privacy": "node scripts/privacy-gate.mjs"
   },
   "repository": {
     "type": "git",

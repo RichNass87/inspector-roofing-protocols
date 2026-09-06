@@ -6,6 +6,9 @@ All notable changes are recorded here. Dates use ISO 8601.
 
 ### Added
 
+- Added the Colten 26.2.9 local Creator foundation install-verification record for 2026-09-03, with the verified checks, the local artifact list, and the inventory-and-contracts-only boundary.
+- Added a creative and developer toolchain inventory frame to the Colten 26.2.9 record covering Unreal, developer assets and build tooling, 3D, Final Cut Pro, and Logic Pro, with every class recorded as not collected, the per-class import requirements, and the 127 inventoried models left unclassified.
+- Expanded the Unreal class into grouped sub-scopes for projects and engine targets, plug-ins and code modules, content, asset packs, rendering configuration, and packaged builds, and added an iOS class with sub-scopes for targets, SDKs and runtimes, dependencies, app resources, signing presence, and build products.
 - Added a canonical person credential source map separating field credentials, learning records, developer publication records, and publication identifiers.
 - Added public OpenAI Academy, Coursera, Google Skillshop, LinkedIn, ORCID, GitHub, and Hugging Face relationships with issuer and identity boundaries.
 - Added a Hugging Face-ready credential summary without merging credential claims into book metadata.
@@ -13,6 +16,10 @@ All notable changes are recorded here. Dates use ISO 8601.
 ### Changed
 
 - Extended the public-safe credential register with direct issuer URLs, credential IDs, source-display names, dates, and no-endorsement limits.
+
+### Fixed
+
+- Regenerated `CHECKSUMS.sha256` so the ledger matches the current README and covers the evidence directories; the release validator returns `PASS` again.
 
 ## [1.1.1] - 2026-07-16
 
