@@ -1,6 +1,6 @@
 # Inspector Roofing Protocols release-readiness report
 
-- Evaluated: 2026-09-06T19:40:04.446Z
+- Evaluated: 2026-09-06T20:06:45.989Z
 - Version: 1.1.1
 - Score: **100/100**
 - Release minimum: **85/100**

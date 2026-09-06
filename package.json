@@ -10,7 +10,7 @@
     "validate": "node scripts/validate-release.mjs",
     "checksums": "node scripts/generate-checksums.mjs",
     "check:inventory": "node scripts/check-inventory.mjs",
-    "check:privacy": "bash scripts/privacy-gate.sh"
+    "check:privacy": "node scripts/privacy-gate.mjs"
   },
   "repository": {
     "type": "git",

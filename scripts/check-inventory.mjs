@@ -10,9 +10,9 @@ const installPath = `${dir}/install-verification.json`;
 const read = file => JSON.parse(readFileSync(join(root, file), "utf8"));
 
 const EXPECTED_CLASSES = [
-  { id: "unreal", form: "subScopes", count: 6 },
+  { id: "unreal", form: "subScopes", count: 6, subScopes: [["projects-and-engine", 4], ["plugins-and-modules", 4], ["content", 6], ["asset-packs", 4], ["rendering", 4], ["builds", 3]] },
   { id: "developer-tooling", form: "importRequirements", count: 6 },
-  { id: "ios", form: "subScopes", count: 6 },
+  { id: "ios", form: "subScopes", count: 6, subScopes: [["projects-and-targets", 4], ["sdks-and-runtimes", 3], ["dependencies", 3], ["app-resources", 4], ["signing-and-distribution", 3], ["builds-and-archives", 3]] },
   { id: "three-dimensional", form: "importRequirements", count: 7 },
   { id: "final-cut-pro", form: "importRequirements", count: 6 },
   { id: "logic-pro", form: "importRequirements", count: 5 }
@@ -76,13 +76,15 @@ const anyImported = classes.some(c => c.assetInventory?.state !== "not-collected
 if (frame.assetLevelDataImported !== anyImported) {
   fail("5", `assetLevelDataImported is ${frame.assetLevelDataImported} but ${anyImported ? "a class is populated" : "no class is populated"}`);
 }
-const enumerated = classes.filter(c => c.assetInventory?.state === "collected").reduce((n, c) => n + c.assetInventory.items.length, 0);
+const itemsOf = c => (Array.isArray(c.assetInventory?.items) ? c.assetInventory.items : []);
+const enumerated = classes.filter(c => c.assetInventory?.state === "collected").reduce((n, c) => n + itemsOf(c).length, 0);
 if (!anyImported && summary.totalAssetsEnumerated !== null) fail("5", "totalAssetsEnumerated must be null while every class is not-collected");
 if (anyImported && summary.totalAssetsEnumerated !== enumerated) fail("5", `totalAssetsEnumerated ${summary.totalAssetsEnumerated} != actual ${enumerated}`);
 
 // 6: every item names the command that produced it
 for (const c of classes) {
-  for (const [i, item] of (c.assetInventory?.items ?? []).entries()) {
+  for (const [i, item] of itemsOf(c).entries()) {
+    if (!item || typeof item !== "object") { fail(`6:${c.id}`, `items[${i}] is not an object`); continue; }
     if (typeof item.collectionMethod !== "string" || !item.collectionMethod.trim()) {
       fail(`6:${c.id}`, `items[${i}] has no collectionMethod; a value with no command behind it is a guess`);
     }
@@ -103,6 +105,15 @@ EXPECTED_CLASSES.forEach((exp, i) => {
   if (!hasFlat && !hasGrouped) fail(`7:${c.id}`, "carries neither importRequirements nor subScopes");
   const actual = exp.form === "subScopes" ? c.subScopes?.length : c.importRequirements?.length;
   if (actual !== exp.count) fail(`7:${c.id}`, `${exp.form} count ${actual} != frozen ${exp.count}`);
+  if (exp.subScopes && Array.isArray(c.subScopes)) {
+    exp.subScopes.forEach(([sid, n], k) => {
+      const s = c.subScopes[k];
+      if (!s) return;
+      if (s.id !== sid) fail(`7:${c.id}`, `subScopes[${k}] is ${s.id}, expected ${sid}`);
+      const reqs = Array.isArray(s.importRequirements) ? s.importRequirements.length : null;
+      if (reqs !== n) fail(`7:${c.id}`, `subScopes[${k}] ${sid} importRequirements count ${reqs} != frozen ${n}`);
+    });
+  }
 });
 
 // 8: no published absolute path outside the allowlist, in either file
@@ -113,24 +124,36 @@ function walkStrings(value, path, visit) {
 }
 for (const [label, doc] of [["frame", frame], ["install", install]]) {
   walkStrings(doc, "", (s, p) => {
-    const tokens = s.match(/(?:^|[\s"'`(])(\/[^\s"'`)]+)/g) ?? [];
-    for (const raw of tokens) {
-      const token = raw.replace(/^[\s"'`(]/, "");
-      if (token === "/" || /^\/[A-Za-z0-9_-]+\/?$/.test(token) && !token.startsWith("/Users")) continue;
+    const tokens = s.match(/(?<![\w/.])\/[^\s"'`)\]]+/g) ?? [];
+    for (const token of tokens) {
+      if (token.startsWith("//")) continue; // URL authority after a scheme, never a filesystem path
+      const single = /^\/[A-Za-z0-9_-]+\/?$/.test(token);
+      if (token === "/" || single && !token.toLowerCase().startsWith("/users")) continue;
       if (!PATH_ALLOWLIST.some(prefix => token.startsWith(prefix))) fail("8", `${label} ${p}: absolute path outside allowlist: ${token}`);
     }
   });
 }
 
-// 9: the two Xcode-anchored classes match by prefix, never by equality
-const detected = install.capabilityStatus?.detectedApplications ?? [];
-const xcodeEntry = detected.find(a => typeof a.name === "string" && a.name.startsWith("Xcode"));
-if (!xcodeEntry) fail("9", "no detectedApplications entry begins with Xcode");
-for (const id of ["developer-tooling", "ios"]) {
-  const c = classes.find(x => x.id === id);
-  const name = c?.hostApplication?.name;
-  if (typeof name !== "string" || !name.startsWith("Xcode")) fail(`9:${id}`, `hostApplication.name ${JSON.stringify(name)} does not begin with Xcode`);
+// 9: every class anchors to a detected application in the install record. Xcode matches by
+// prefix, never by equality: the install record says "Xcode 27 betas" while the classes say
+// "Xcode", and that difference is deliberate (see developer-tooling.hostApplication.versionNote).
+const detected = (install.capabilityStatus?.detectedApplications ?? []).filter(a => a && typeof a.name === "string");
+const matchFor = host => host.startsWith("Xcode")
+  ? detected.find(a => a.name.startsWith("Xcode"))
+  : detected.find(a => a.name === host);
+for (const c of classes) {
+  const h = c.hostApplication ?? {};
+  const entry = typeof h.name === "string" ? matchFor(h.name) : undefined;
+  if (!entry) { fail(`9:${c.id}`, `hostApplication.name ${JSON.stringify(h.name)} matches no detectedApplications entry`); continue; }
+  if (h.version !== entry.version) fail(`9:${c.id}`, `version ${JSON.stringify(h.version)} != detected ${JSON.stringify(entry.version)}`);
+  if (h.automatedLaunchRenderRoundTrip !== entry.automatedLaunchRenderRoundTrip) fail(`9:${c.id}`, "automatedLaunchRenderRoundTrip disagrees with the install record");
+  if (h.detected !== true) fail(`9:${c.id}`, "hostApplication.detected must be true for an anchored class");
 }
+const distinctHosts = new Set(classes.map(c => c.hostApplication?.name).filter(Boolean)).size;
+if (summary.distinctHostApplicationsDetected !== distinctHosts) fail("9", `distinctHostApplicationsDetected ${summary.distinctHostApplicationsDetected} != actual ${distinctHosts}`);
+if (summary.distinctHostApplicationsDetected !== detected.length) fail("9", `distinctHostApplicationsDetected ${summary.distinctHostApplicationsDetected} != install record count ${detected.length}`);
+const automated = detected.filter(a => a.automatedLaunchRenderRoundTrip === true).length;
+if (summary.hostApplicationsAutomated !== automated) fail("9", `hostApplicationsAutomated ${summary.hostApplicationsAutomated} != actual ${automated}`);
 
 if (failures.length) {
   console.error(`check-inventory: FAIL (${failures.length})`);
