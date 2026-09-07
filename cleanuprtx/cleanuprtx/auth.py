@@ -12,6 +12,7 @@ from __future__ import annotations
 import base64
 import getpass
 import hashlib
+import html
 import http.server
 import secrets
 import sys
@@ -26,6 +27,7 @@ from .http import HttpError, request_json
 from .keychain import KeychainError, read_secret, store_secret
 
 LOOPBACK_TIMEOUT = 300  # seconds to wait for the browser round trip
+MAX_STRAY_REQUESTS = 12  # non-callback hits tolerated before giving up
 
 
 class AuthError(RuntimeError):
@@ -49,14 +51,20 @@ class _Callback(http.server.BaseHTTPRequestHandler):
         """Never log: the request line carries ?code=."""
 
     def do_GET(self) -> None:  # noqa: N802
-        query = urllib.parse.urlparse(self.path).query
-        params = {k: v[0] for k, v in urllib.parse.parse_qs(query).items()}
+        parsed = urllib.parse.urlparse(self.path)
+        params = {k: v[0] for k, v in urllib.parse.parse_qs(parsed.query).items()}
+        if "state" not in params and "code" not in params and "error" not in params:
+            # A stray local request (favicon, a browser prefetch): not the callback.
+            self._respond(404, "Waiting for Google to redirect here.")
+            return
         if params.get("state") != self.expected_state:
+            # A code delivered with the wrong state is never accepted; keep
+            # waiting (bounded) for the genuine redirect.
             self._respond(400, "State mismatch. Close this tab and run the command again.")
             return
         if "error" in params:
             _Callback.received = {"error": params["error"]}
-            self._respond(200, f"Google reported: {params['error']}. You can close this tab.")
+            self._respond(200, f"Google reported: {html.escape(params['error'])}. You can close this tab.")
             return
         _Callback.received = {"code": params.get("code", "")}
         self._respond(200, "cleanuprtx is connected to Search Console. You can close this tab.")
@@ -113,7 +121,15 @@ def google_login(open_browser: bool = True, out=sys.stdout) -> str:
     if open_browser:
         threading.Thread(target=webbrowser.open, args=(url,), daemon=True).start()
 
-    server.handle_request()   # blocks for one request or until timeout
+    # Serve until the real callback arrives or the deadline passes; a few stray
+    # local requests (favicon, prefetch) must not end the wait.
+    import time as _time
+    deadline = _time.time() + LOOPBACK_TIMEOUT
+    for _ in range(MAX_STRAY_REQUESTS):
+        if _Callback.received or _time.time() >= deadline:
+            break
+        server.timeout = max(1, int(deadline - _time.time()))
+        server.handle_request()
     server.server_close()
 
     if not _Callback.received:
@@ -145,8 +161,11 @@ def google_login(open_browser: bool = True, out=sys.stdout) -> str:
             "run 'cleanuprtx auth google' again."
         )
     granted = token.get("scope", "")
-    if READONLY_SCOPE not in granted.split() or "auth/webmasters " in granted + " ":
-        raise AuthError(f"Google granted {granted!r}; expected only {READONLY_SCOPE}. Not stored.")
+    if set(granted.split()) != {READONLY_SCOPE}:
+        raise AuthError(f"Google granted {granted!r}; cleanuprtx stores a token only when the grant is "
+                        f"exactly {READONLY_SCOPE}. Not stored. Revoke the app at "
+                        "myaccount.google.com/permissions and sign in again, allowing only the "
+                        "read-only Search Console permission.")
 
     store_secret(config.KC_GOOGLE_REFRESH_TOKEN, refresh)
     return granted

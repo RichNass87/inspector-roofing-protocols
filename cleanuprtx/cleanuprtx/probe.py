@@ -43,23 +43,19 @@ class RobotsInfo:
 
 
 def parse_robots(text: str) -> RobotsInfo:
+    """Parse robots.txt the way Google does: the most specific matching
+    User-agent group wins, so a 'Googlebot' group overrides '*'."""
     info = RobotsInfo(status=200)
     current_agents: List[str] = []
     block_lines: List[str] = []
+    groups: List[tuple] = []   # (agents, lines)
 
     def flush() -> None:
-        if not block_lines:
-            return
-        agents = {a.lower() for a in current_agents}
-        if agents & {"*", "googlebot", "googlebot-image"}:
-            for line in block_lines:
-                if re.match(r"(?i)disallow:\s*/\s*$", line):
-                    if agents & {"googlebot", "*"}:
-                        info.googlebot_disallow_all = True
-                    info.blocks.append("\n".join(block_lines))
-                    break
+        if block_lines:
+            groups.append(({a.lower() for a in current_agents}, list(block_lines)))
 
-    for raw in (text or "").splitlines():
+    text = (text or "").lstrip("\ufeff")
+    for raw in text.splitlines():
         line = raw.split("#", 1)[0].strip()
         if not line:
             continue
@@ -78,6 +74,20 @@ def parse_robots(text: str) -> RobotsInfo:
             continue
         block_lines.append(line)
     flush()
+
+    def disallows_all(lines: List[str]) -> bool:
+        return any(re.match(r"(?i)disallow:\s*/\s*$", l) for l in lines)
+
+    specific = [g for g in groups if g[0] & {"googlebot"}]
+    wildcard = [g for g in groups if "*" in g[0]]
+    effective = specific or wildcard
+    for agents, lines in effective:
+        if disallows_all(lines):
+            info.googlebot_disallow_all = True
+            info.blocks.append("\n".join(lines))
+    for agents, lines in groups:
+        if agents & {"googlebot-image"} and disallows_all(lines):
+            info.blocks.append("\n".join(lines))
     return info
 
 

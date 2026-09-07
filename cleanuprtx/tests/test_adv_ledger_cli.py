@@ -92,7 +92,7 @@ class StubWordPress:
         return self
 
     # --- what cmd_audit needs -------------------------------------------
-    def iter_all(self, kinds=None, progress=None):
+    def iter_all(self, kinds=None, progress=None, warn=None):
         self.iter_kinds.append(kinds)
         for p in self.pages.values():
             yield p
@@ -108,9 +108,17 @@ class StubWordPress:
         return self.pages.get((kind, content_id))
 
     def stage_block_repair(self, content, front_block, target, patch):
+        return self.stage_content(content, self.prepare_block_repair(content, front_block, target, patch))
+
+    # v0.2.1: cmd_apply folds every repair on a page into one write.
+    def prepare_block_repair(self, content, front_block, target, patch, working_raw=None):
         self.staged.append({"id": content.id, "block": front_block.index, "target": target.to_dict(), "patch": patch})
         if self.stage_error:
             raise self.stage_error
+        return (working_raw or content.content_raw or "") + "<!-- patched -->"
+
+    def stage_content(self, content, patched_raw):
+        self.writes = getattr(self, "writes", []) + [{"id": content.id, "content": patched_raw}]
         return "autosave", content.edit_link
 
 

@@ -9,20 +9,23 @@ field, never publishes, never deletes, and never touches post meta.
 from __future__ import annotations
 
 import base64
-import json
 import sys
 import time
 from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, Iterator, List, Optional, Set, Tuple
+from typing import Any, Callable, Dict, Iterator, List, Optional, Tuple
+from urllib.parse import urlparse
 
 from . import config
 from .http import HttpError, fetch_text, request_json, request_json_with_headers
-from .jsonld import Block, PatchError, Target, apply_patch, find_blocks, match_block_in_raw, splice_block
+from .jsonld import (AlreadyApplied, Block, PatchError, Target, apply_patch, find_blocks,
+                     match_block_in_raw, normalise_block_text, references_outside,
+                     rename_references, splice_block)
 from .keychain import read_secret
 
 DEFAULT_PER_PAGE = 25
 MIN_PER_PAGE = 5
 ITEM_FIELDS = "id,slug,link,title,status,type,date_gmt,modified_gmt,content"
+EDIT_FIELDS = "id,status,content,title,excerpt"
 
 # Post types that exist but should never be audited or written.
 SKIP_TYPES = {"wp_block", "wp_template", "wp_template_part", "wp_navigation",
@@ -30,11 +33,17 @@ SKIP_TYPES = {"wp_block", "wp_template", "wp_template_part", "wp_navigation",
 # Kinds whose content the tool reads for the audit but must never write.
 READ_ONLY_KINDS = {"media", "author"}
 WRITABLE_STATUSES = {"publish", "draft", "pending", "private", "future"}
+PUBLIC_STATUSES = {"publish", "inherit"}   # attachments report 'inherit'
 
 STRIPPED_AUTH = "rest_not_logged_in"
 APP_PW_DISABLED = "application_passwords_disabled"
 BAD_CREDENTIAL = {"incorrect_password", "invalid_username", "invalid_email",
                   "rest_forbidden", "rest_cannot_view"}
+
+# Capabilities the audit and the write path exercise.
+AUDIT_CAPS = ("edit_pages", "edit_posts", "edit_others_pages", "edit_others_posts",
+              "edit_private_pages", "edit_private_posts")
+WRITE_CAPS = ("edit_published_pages", "edit_published_posts", "unfiltered_html")
 
 
 class AuthDiagnosis(RuntimeError):
@@ -57,9 +66,12 @@ class Content:
     body_rendered: str         # content.rendered - the post body only
     raw: Dict[str, Any] = field(default_factory=dict)
     site_breakdance: bool = False
-    front_html: Optional[str] = None   # what Googlebot sees; None = not fetched
+    front_html: Optional[str] = None   # what Googlebot sees; None = not fetched / not public
     front_status: int = 0
+    front_redirected_to: str = ""      # set when the permalink redirects elsewhere
     content_raw: Optional[str] = None  # content.raw via context=edit; None = not fetched
+    title_raw: Optional[str] = None    # title.raw, only if the post type has one
+    excerpt_raw: Optional[str] = None  # excerpt.raw, only if the post type has one
 
     @property
     def is_breakdance(self) -> bool:
@@ -67,8 +79,8 @@ class Content:
 
         On a Breakdance site every page is rendered from the canvas in post
         meta. Per-page markers on the front end can only confirm that, never
-        clear it. This property changes how drafts are judged and what the
-        report says; the write guard is separate and structural.
+        clear it. This changes how drafts are judged and what the report says;
+        the write guard is separate and structural.
         """
         if self.post_type.startswith("breakdance_"):
             return True
@@ -78,6 +90,10 @@ class Content:
         return f"/uploads/breakdance/css/post-{self.id}.css" in html or 'class="breakdance' in html
 
     @property
+    def is_public(self) -> bool:
+        return self.status in PUBLIC_STATUSES and bool(self.link)
+
+    @property
     def writable(self) -> bool:
         return (self.kind not in READ_ONLY_KINDS
                 and not self.post_type.startswith("breakdance_")
@@ -85,9 +101,6 @@ class Content:
 
     @property
     def edit_link(self) -> str:
-        base = self.link.split("/wp-json")[0]
-        # link is a front-end URL; derive the admin URL from its origin.
-        from urllib.parse import urlparse
         p = urlparse(self.link)
         return f"{p.scheme}://{p.netloc}/wp-admin/post.php?post={self.id}&action=edit"
 
@@ -111,6 +124,15 @@ def _to_content(item: Dict[str, Any], kind: str, site: config.Site) -> Content:
         raw=item,
         site_breakdance=site.breakdance,
     )
+
+
+def _same_url(a: str, b: str) -> bool:
+    def norm(u: str) -> str:
+        p = urlparse(u)
+        host = (p.hostname or "").lower()
+        host = host[4:] if host.startswith("www.") else host
+        return host + p.path.rstrip("/")
+    return norm(a) == norm(b)
 
 
 class WordPressClient:
@@ -146,8 +168,8 @@ class WordPressClient:
     def verify(self) -> Dict[str, Any]:
         """Confirm the credential works and report who we are.
 
-        Returns {"name", "capabilities", "roles"}. Raises AuthDiagnosis with an
-        owner-actionable message for the three common first-run failures.
+        Returns {"name", "roles", "capabilities"}. Raises AuthDiagnosis with an
+        owner-actionable message for the common first-run failures.
         """
         try:
             me = request_json(
@@ -170,23 +192,22 @@ class WordPressClient:
         if exc.code in BAD_CREDENTIAL:
             return (f"WordPress rejected the credential for {self.site.wp_account}. "
                     f"Re-create the application password (Users > Profile > Application "
-                    f"Passwords) and run 'cleanuprtx auth wordpress --site {self.site.slug}'.")
+                    f"Passwords) and run 'auth wordpress --site {self.site.slug}'.")
         if exc.code == STRIPPED_AUTH:
             # Distinguish "header never arrived" from "header arrived, rejected".
             probe = self._probe_bad_password()
             if probe == STRIPPED_AUTH:
-                return ("WordPress never received the Authorization header - the host "
-                        "strips it before PHP. Add to .htaccess:\n"
+                return ("WordPress never saw a usable Authorization header. Either the host "
+                        "strips it before PHP - add to .htaccess:\n"
                         "    SetEnvIf Authorization \"(.*)\" HTTP_AUTHORIZATION=$1\n"
-                        "or enable Authorization pass-through in the hosting panel.")
+                        "- or application passwords are unavailable on this install (the site "
+                        "must be served over HTTPS and the feature not disabled by a plugin).")
             return (f"WordPress saw the header but did not accept the credential for "
                     f"{self.site.wp_account}. Check the username and re-create the "
                     f"application password.")
         if exc.status == 403 and not exc.code:
             return ("The REST API is blocked before WordPress (403 with no WordPress "
                     "error code) - a WAF or hosting rule. Allow /wp-json/ for your IP.")
-        if exc.status in (301, 302, 307, 308):
-            return str(exc)
         return f"{exc}"
 
     def _probe_bad_password(self) -> str:
@@ -237,14 +258,17 @@ class WordPressClient:
         progress: Optional[Callable[[str, int, int, int], None]] = None,
         statuses: str = "publish,draft,pending,private,future",
     ) -> Iterator[Content]:
-        """Yield every item of one kind, adapting batch size on slow hosts."""
+        """Yield every item of one kind, adapting batch size on slow hosts.
+
+        Ordered by id so an offset walk is stable while content changes.
+        """
         offset = 0
         total = -1
+        # media items carry status 'inherit' and reject the status filter.
         status_q = "" if kind == "media" else f"&status={statuses}"
-        # media returns 'inherit' status items; status filter is not accepted.
         while True:
             url = self._url(f"{kind}?per_page={per_page}&offset={offset}{status_q}"
-                            f"&_fields={ITEM_FIELDS}&context=view")
+                            f"&orderby=id&order=asc&_fields={ITEM_FIELDS}&context=view")
             try:
                 batch, headers = request_json_with_headers(
                     url, headers=self._headers(), timeout=90
@@ -274,7 +298,7 @@ class WordPressClient:
                 return
 
     def iter_authors(self) -> Iterator[Content]:
-        """Author archives, read-only. RankMath emits ProfilePage schema here."""
+        """Author archives, read-only. Rank Math emits ProfilePage schema here."""
         users = request_json(
             self._url("users?who=authors&per_page=100&_fields=id,slug,link,name"),
             headers=self._headers(),
@@ -291,26 +315,38 @@ class WordPressClient:
         self,
         kinds: Optional[List[str]] = None,
         progress: Optional[Callable[[str, int, int, int], None]] = None,
+        warn: Optional[Callable[[str], None]] = None,
     ) -> Iterator[Content]:
-        """Every auditable item across all post types plus author archives."""
+        """Every auditable item across all post types plus author archives.
+
+        A post type that refuses to list (403/404 on a plugin CPT) is reported
+        through warn() and skipped; it never aborts the inventory.
+        """
         if kinds is None:
             try:
                 types = self.list_types()
             except HttpError:
                 types = {"page": "pages", "post": "posts", "attachment": "media"}
             kinds = sorted(set(types.values()))
-            # Pages and posts first: they are what the owner cares about most.
             kinds.sort(key=lambda k: (k not in ("pages", "posts"), k))
         for kind in kinds:
-            if kind == "author":
-                yield from self.iter_authors()
-                continue
-            yield from self.iter_content(kind, progress=progress)
+            try:
+                if kind == "author":
+                    yield from self.iter_authors()
+                else:
+                    yield from self.iter_content(kind, progress=progress)
+            except HttpError as exc:
+                if exc.status in (401, 403, 404):
+                    if warn:
+                        warn(f"skipping {kind}: {exc}")
+                    continue
+                raise
         if kinds and "author" not in kinds and any(k in ("pages", "posts") for k in kinds):
             try:
                 yield from self.iter_authors()
-            except HttpError:
-                pass
+            except HttpError as exc:
+                if warn:
+                    warn(f"skipping author archives: {exc}")
 
     def get_content(self, kind: str, content_id: int) -> Optional[Content]:
         """One fresh item, or None if it no longer exists."""
@@ -326,38 +362,53 @@ class WordPressClient:
         return _to_content(item, kind, self.site)
 
     def load_front_html(self, content: Content, delay: float = 0.0) -> None:
-        """Fetch what Googlebot sees. Unauthenticated; only public items."""
-        if content.status != "publish" or not content.link:
-            content.front_html = None
+        """Fetch what Googlebot sees. Unauthenticated; only public items.
+
+        A permalink that redirects elsewhere is recorded and not audited:
+        Google audits the target, and that target is its own item.
+        """
+        content.front_html = None
+        content.front_redirected_to = ""
+        if not content.is_public:
             return
         if delay:
             time.sleep(delay)
         fetched = fetch_text(content.link)
         content.front_status = fetched.status
+        if fetched.ok and not _same_url(fetched.final_url, content.link):
+            content.front_redirected_to = fetched.final_url
+            return
         content.front_html = fetched.text if fetched.ok else None
 
     def load_content_raw(self, content: Content) -> None:
-        """Fetch post_content as stored (context=edit). Requires edit capability."""
+        """Fetch post_content, title and excerpt as stored (context=edit)."""
         if content.kind in READ_ONLY_KINDS:
             content.content_raw = None
             return
         item = request_json(
-            self._url(f"{content.kind}/{content.id}?context=edit&_fields=id,status,content"),
+            self._url(f"{content.kind}/{content.id}?context=edit&_fields={EDIT_FIELDS}"),
             headers=self._headers(),
         ) or {}
-        raw = (item.get("content") or {}).get("raw")
+        raw = (item.get("content") or {}).get("raw") if isinstance(item.get("content"), dict) else None
         content.content_raw = raw if isinstance(raw, str) else ""
+        for key, attr in (("title", "title_raw"), ("excerpt", "excerpt_raw")):
+            value = item.get(key)
+            if isinstance(value, dict) and isinstance(value.get("raw"), str):
+                setattr(content, attr, value["raw"])
         if item.get("status"):
             content.status = item["status"]
 
     # --- writing ---------------------------------------------------------
 
-    def stage_block_repair(
-        self, content: Content, front_block: Block, target: Target, patch: Dict[str, Any]
-    ) -> Tuple[str, str]:
-        """Apply one patch to one JSON-LD block and stage the result.
+    def prepare_block_repair(
+        self, content: Content, front_block: Block, target: Target, patch: Dict[str, Any],
+        working_raw: Optional[str] = None,
+    ) -> str:
+        """Apply one patch and return the new working post_content. No write.
 
-        Returns (mode, review_url) where mode is 'autosave' or 'draft'.
+        Ownership is proven against the ORIGINAL post_content; the patch is
+        applied to the block with the same ordinal in the working copy, so
+        several repairs on one page can be folded into one write.
 
         Guards, in order:
           1. the item must be a writable kind and status (never media/author/
@@ -367,7 +418,6 @@ class WordPressClient:
              proof that this JSON-LD is ours to edit and not the SEO
              plugin's or the page builder's;
           4. the node must still match what the audit saw.
-        Only then is {"content": patched} sent. No other key, ever.
         """
         if not content.writable:
             raise PatchError(
@@ -376,6 +426,11 @@ class WordPressClient:
             )
         if content.content_raw is None:
             self.load_content_raw(content)
+            # The edit context refreshes status; the item may have been trashed.
+            if not content.writable:
+                raise PatchError(
+                    f"{content.kind}/{content.id} is now {content.status or 'read-only'}; not written."
+                )
         if not content.content_raw:
             raise PatchError(
                 "post_content is empty - the layout lives in the page builder. "
@@ -390,35 +445,80 @@ class WordPressClient:
         if raw_block.document is None:
             raise PatchError(f"post_content block does not parse: {raw_block.parse_error}")
 
-        patched_doc = apply_patch(raw_block.document, target, patch)
-        patched_raw = splice_block(content.content_raw, raw_block, patched_doc)
-        if patched_raw == content.content_raw:
-            raise PatchError("patch produced no change")
+        if working_raw is None:
+            working_raw = content.content_raw
+        working_blocks = find_blocks(working_raw)
+        if len(working_blocks) != len(find_blocks(content.content_raw)):
+            raise PatchError("an earlier repair changed the number of JSON-LD blocks; not stacking")
+        work_block = working_blocks[raw_block.index]
+        if work_block.document is None:
+            raise PatchError("working copy of the block no longer parses")
 
-        body = {"content": patched_raw}
-        assert set(body) == {"content"}, "write body must contain only content"
+        patched_doc = apply_patch(work_block.document, target, patch)
+        patched_raw = splice_block(working_raw, work_block, patched_doc)
+        if patch.get("op") == "rename_id":
+            # A reference in a block we do not own would be left dangling; the
+            # audit refuses those. Rename references in the other body blocks.
+            others = references_outside(find_blocks(content.content_raw), patch["old"], raw_block.index)
+            if others:
+                patched_raw = rename_references(patched_raw, patch["old"], patch["new"], work_block.index)
+        if patched_raw == working_raw:
+            raise AlreadyApplied("patch produced no change")
+        return patched_raw
+
+    def stage_content(self, content: Content, patched_raw: str) -> Tuple[str, str]:
+        """Write a corrected post_content. Returns (mode, review_url).
+
+        Published, private, pending and scheduled items get an autosave
+        revision (the editor offers to restore it; the live item is untouched).
+        Drafts are updated in place. The body carries content, and on the
+        autosave path the item's own unchanged title/excerpt so the revision is
+        complete - restoring an autosave with an empty title would blank the
+        page. Never status, never meta.
+        """
+        if not content.writable:
+            raise PatchError(f"{content.kind}/{content.id} is {content.status}; not written.")
+        if patched_raw == content.content_raw:
+            raise AlreadyApplied("nothing to write")
 
         if content.status == "draft":
+            body: Dict[str, Any] = {"content": patched_raw}
+            assert set(body) == {"content"}
             result = request_json(
                 self._url(f"{content.kind}/{content.id}"),
                 method="POST", headers=self._headers(), body=body,
             ) or {}
             mode = "draft"
         else:
+            body = {"content": patched_raw}
+            if content.title_raw is not None:
+                body["title"] = content.title_raw
+            if content.excerpt_raw is not None:
+                body["excerpt"] = content.excerpt_raw
+            assert set(body) <= {"content", "title", "excerpt"}
+            assert "status" not in body and "meta" not in body
             result = request_json(
                 self._url(f"{content.kind}/{content.id}/autosaves"),
                 method="POST", headers=self._headers(), body=body,
             ) or {}
             mode = "autosave"
 
-        # Confirm the server stored what we sent; a 200 alone proves nothing.
-        stored = (result.get("content") or {})
+        # A 200 alone proves nothing: the server must echo the patched content.
+        stored = result.get("content") if isinstance(result, dict) else None
         stored_raw = stored.get("raw") if isinstance(stored, dict) else None
-        if isinstance(stored_raw, str):
-            from .jsonld import normalise_block_text as _n
-            if _n(stored_raw) != _n(patched_raw):
-                raise PatchError("server response does not reflect the patched content")
+        if not isinstance(stored_raw, str):
+            raise PatchError("server response has no content.raw; cannot confirm the write was stored")
+        if normalise_block_text(stored_raw) != normalise_block_text(patched_raw):
+            hint = ""
+            if "<script" in patched_raw and "<script" not in stored_raw:
+                hint = " (the <script> block was stripped: this user probably lacks unfiltered_html)"
+            raise PatchError("server response does not reflect the patched content" + hint)
         if mode == "draft" and result.get("status") not in (None, "draft"):
             raise PatchError(f"unexpected status after draft update: {result.get('status')}")
-
         return mode, content.edit_link
+
+    def stage_block_repair(
+        self, content: Content, front_block: Block, target: Target, patch: Dict[str, Any]
+    ) -> Tuple[str, str]:
+        """One repair, one write. See prepare_block_repair and stage_content."""
+        return self.stage_content(content, self.prepare_block_repair(content, front_block, target, patch))

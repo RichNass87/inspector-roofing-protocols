@@ -7,6 +7,7 @@ and apply can be separate runs. Writes are atomic and the file is 0600.
 
 from __future__ import annotations
 
+import fcntl
 import hashlib
 import json
 import os
@@ -70,6 +71,29 @@ def make_repair_id(site: str, kind: str, page_id: int, rule: str,
     return digest[:8]
 
 
+class _Lock:
+    def __init__(self, path: Path) -> None:
+        self.path = path
+        self._fd: Optional[int] = None
+
+    def __enter__(self) -> "_Lock":
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        self._fd = os.open(str(self.path), os.O_CREAT | os.O_RDWR, 0o600)
+        try:
+            fcntl.flock(self._fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except OSError as exc:
+            os.close(self._fd)
+            self._fd = None
+            raise LedgerError("another cleanuprtx command holds the ledger; wait for it to finish") from exc
+        return self
+
+    def __exit__(self, *exc: Any) -> None:
+        if self._fd is not None:
+            fcntl.flock(self._fd, fcntl.LOCK_UN)
+            os.close(self._fd)
+            self._fd = None
+
+
 class Ledger:
     """Persisted set of proposed repairs."""
 
@@ -83,6 +107,8 @@ class Ledger:
             return
         try:
             data = json.loads(self.path.read_text(encoding="utf-8"))
+            if not isinstance(data, dict) or not isinstance(data.get("repairs") or {}, dict):
+                raise ValueError("not a ledger (expected a JSON object with a 'repairs' object)")
         except (OSError, ValueError) as exc:
             backup = self.path.with_suffix(".corrupt")
             try:
@@ -95,11 +121,17 @@ class Ledger:
             ) from exc
         known = {f.name for f in Repair.__dataclass_fields__.values()}
         for key, value in (data.get("repairs") or {}).items():
+            if not isinstance(value, dict):
+                continue
             clean = {k: v for k, v in value.items() if k in known}
             try:
                 self.repairs[key] = Repair(**clean)
             except TypeError:
                 continue   # a row from an incompatible older version
+
+    def lock(self):
+        """Advisory lock so 'apply' and a concurrent 'approve' cannot interleave."""
+        return _Lock(self.path.with_suffix(".lock"))
 
     def save(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
@@ -135,6 +167,10 @@ class Ledger:
         if existing is not None:
             existing.block_index = finding.block_index   # may shift between renders
             existing.target = target
+            if existing.state == STALE:
+                # The defect is back on the live page: ask for a fresh decision.
+                existing.state, existing.decided_at, existing.applied_at = PENDING, "", ""
+                existing.result, existing.attempts = "", 0
             return existing
         repair = Repair(
             repair_id=repair_id, site=site, kind=finding.kind, rule=finding.rule,

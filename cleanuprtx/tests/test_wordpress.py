@@ -68,6 +68,22 @@ class TestStageBlockRepair(unittest.TestCase):
         self.assertIn("<!-- wp:html -->", call["body"]["content"], "surrounding bytes preserved")
         self.assertIn("post.php?post=41&action=edit", link)
 
+    def test_autosave_carries_the_items_own_title_and_excerpt_when_returned(self):
+        """An autosave revision with an empty title would blank the page on restore, so the
+        current title/excerpt from the edit context are echoed unchanged - never invented."""
+        raw_html = "<!-- wp:html -->" + ld(PP) + "<!-- /wp:html -->"
+        rec = Recorder([{"id": 41, "status": "publish", "content": {"raw": raw_html},
+                         "title": {"raw": "Richard Amir Nasser"}, "excerpt": {"raw": ""}}])
+        p = page(PP, raw=None)
+        with mock.patch.object(wordpress, "request_json", rec):
+            mode, _ = client().stage_block_repair(p, front_block(p), target(), PATCH)
+        self.assertEqual(mode, "autosave")
+        body = rec.calls[-1]["body"]
+        self.assertEqual(set(body), {"content", "title", "excerpt"})
+        self.assertEqual(body["title"], "Richard Amir Nasser")
+        self.assertEqual(body["excerpt"], "")
+        self.assertNotIn("status", body)
+
     def test_private_and_pending_also_use_autosaves(self):
         for status in ("private", "pending", "future"):
             rec = Recorder()

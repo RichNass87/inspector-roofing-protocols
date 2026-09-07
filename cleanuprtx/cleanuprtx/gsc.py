@@ -27,9 +27,10 @@ WRITE_SCOPE = "https://www.googleapis.com/auth/webmasters"
 
 # URL Inspection quota per property: 2,000/day, 600/minute.
 INSPECT_MIN_INTERVAL = 0.11
-BLOCKED_FETCH_STATES = {"ACCESS_FORBIDDEN", "ACCESS_DENIED", "BLOCKED_ROBOTS_TXT",
-                        "BLOCKED_4XX", "SERVER_ERROR", "NOT_FOUND", "SOFT_404",
-                        "REDIRECT_ERROR", "INTERNAL_CRAWL_ERROR"}
+# Google's crawler was refused: the 403-to-Googlebot signature.
+BLOCKED_FETCH_STATES = {"ACCESS_FORBIDDEN", "ACCESS_DENIED", "BLOCKED_ROBOTS_TXT", "BLOCKED_4XX"}
+# Google could not use the page for another reason.
+PROBLEM_FETCH_STATES = {"SERVER_ERROR", "NOT_FOUND", "SOFT_404", "REDIRECT_ERROR", "INTERNAL_CRAWL_ERROR"}
 
 
 class ScopeError(HttpError):
@@ -76,6 +77,10 @@ class Inspection:
     @property
     def fetch_blocked(self) -> bool:
         return self.page_fetch_state in BLOCKED_FETCH_STATES
+
+    @property
+    def fetch_problem(self) -> bool:
+        return self.page_fetch_state in PROBLEM_FETCH_STATES
 
 
 def parse_inspection(url: str, data: Dict[str, Any]) -> Inspection:
@@ -149,12 +154,13 @@ class SearchConsoleClient:
                 ) from exc
             raise
 
+        # Google echoes the granted scope when it is narrower than or equal to the
+        # request; an absent field means "as requested" and is accepted.
         granted = set((payload.get("scope") or "").split())
-        if WRITE_SCOPE in granted or (granted and READONLY_SCOPE not in granted):
+        if granted and granted != {READONLY_SCOPE}:
             raise ScopeError(
                 f"the stored Google token grants {sorted(granted)}; cleanuprtx requires "
-                f"exactly {READONLY_SCOPE}. Run 'cleanuprtx auth google' to re-consent "
-                "with read-only access."
+                f"exactly {READONLY_SCOPE}. Run 'auth google' to re-consent with read-only access."
             )
 
         self._token = payload["access_token"]
@@ -218,9 +224,14 @@ class SearchConsoleClient:
             if exc.status == 429:
                 insp.error = "QUOTA: Google refused with 429; stop for today. " + _google_message(exc)
             elif exc.status == 403:
-                insp.error = ("PERMISSION: this Google account cannot inspect URLs on "
-                              f"{property_id} (needs Owner or Full user, and the URL must "
-                              "belong to the property). " + _google_message(exc))
+                msg = _google_message(exc)
+                if "has not been used" in msg or "is disabled" in msg or "not enabled" in msg.lower():
+                    insp.error = ("API: the Search Console API is not enabled in the Google Cloud "
+                                  "project that owns the OAuth client. " + msg)
+                else:
+                    insp.error = ("PERMISSION: this Google account cannot inspect URLs on "
+                                  f"{property_id} (needs Owner or Full user, and the URL must "
+                                  "belong to the property). " + msg)
             elif exc.status == 400:
                 insp.error = "REQUEST: " + _google_message(exc)
             else:

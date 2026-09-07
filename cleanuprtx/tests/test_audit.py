@@ -136,12 +136,16 @@ class TestObjectFields(unittest.TestCase):
         f = findings(audit_pages([body_page(graph({"@type": "ImageObject", "creator": ["A", "https://unknown/x"]}))], SITE), "object-field-type")
         self.assertIsNone(f[0].patch)
 
-    def test_mainentity_on_webpage_is_checked_here_not_on_profilepage(self):
-        r = audit_pages([body_page(graph({"@type": "WebPage", "mainEntity": "Richard"}))], SITE)
-        self.assertEqual(len(findings(r, "object-field-type")), 1)
+    def test_mainentity_is_only_checked_on_profilepage(self):
+        """schema.org's mainEntity range is Thing; Google constrains it only on ProfilePage."""
+        for doc in (graph({"@type": "WebPage", "mainEntity": "Richard"}),
+                    graph({"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Q?",
+                                                                "acceptedAnswer": {"@type": "Answer", "text": "A."}}]}),
+                    graph({"@type": "CollectionPage", "mainEntity": {"@type": "ItemList"}})):
+            r = audit_pages([body_page(doc)], SITE)
+            self.assertEqual(findings(r), [], doc)
         r = audit_pages([body_page(graph({"@type": "ProfilePage", "mainEntity": "Richard"}))], SITE)
-        self.assertEqual(len(findings(r, "object-field-type")), 0)
-        self.assertEqual(len(findings(r)), 1)
+        self.assertEqual([f.rule for f in findings(r)], ["profile-parent-node"])
 
 
 class TestDatetime(unittest.TestCase):
@@ -211,13 +215,25 @@ class TestStaleDraft(unittest.TestCase):
                               created="2026-07-01T09:00:00", modified="2026-08-30T12:00:00")], SITE)
         self.assertEqual(findings(r, "stale-draft"), [])
 
-    def test_breakdance_untitled_never_edited_is_flagged(self):
+    def test_breakdance_untitled_is_flagged_and_reasons_exported(self):
         r = audit_pages([page(None, status="draft", breakdance=True, title="", created="2026-07-01T09:00:00",
                               modified="2026-07-01T09:00:00")], SITE)
         f = findings(r, "stale-draft")
         self.assertEqual(len(f), 1)
-        self.assertIn("untitled", f[0].detail)
-        self.assertIn("never edited", f[0].detail)
+        self.assertEqual(f[0].reasons, ["untitled"])
+        self.assertEqual(f[0].to_dict()["reasons"], ["untitled"])
+
+    def test_never_edited_counts_only_when_old(self):
+        """Floating drafts make date_gmt track modified_gmt on every save, so
+        equality alone means nothing; it is a reason only past stale_days."""
+        recent = page(None, status="draft", breakdance=True, title="Storm checklist",
+                      created="2026-08-30T12:00:00", modified="2026-08-30T12:00:00")
+        self.assertEqual(findings(audit_pages([recent], SITE), "stale-draft"), [])
+        old = page(None, status="draft", breakdance=True, title="Storm checklist",
+                   created="2024-01-01T12:00:00", modified="2024-01-01T12:00:00")
+        f = findings(audit_pages([old], SITE), "stale-draft")
+        self.assertEqual(len(f), 1)
+        self.assertIn("never edited after creation", f[0].reasons)
 
     def test_non_breakdance_short_body_is_flagged(self):
         r = audit_pages([page(None, status="draft", body="<p>hi</p>", modified="2026-08-30T12:00:00")], SITE)

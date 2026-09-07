@@ -26,8 +26,16 @@ scheduled) page the patched content goes to `POST /wp/v2/{type}/{id}/autosaves`,
 which stores a revision the editor shows as *"There is an autosave of this post
 that is more recent"*. The live URL, its status and its content are untouched
 until you restore and publish. On a draft, the draft itself is updated. No
-request ever carries a `status` field — the body is `{"content": ...}` and
-nothing else, asserted in code and in tests.
+request ever carries a `status` field. The autosave body is the patched
+`content` plus the page's own current `title` and `excerpt`, echoed unchanged
+from the same read — WordPress stores an autosave with exactly the fields it is
+given, and restoring one with an empty title would blank the page. A draft
+update sends `content` only. Both are asserted in code and in tests.
+
+**One write per page.** WordPress keeps a single autosave per page per user,
+so every approved repair on a page is folded into one patched `post_content`
+and staged with one request. A page with three repairs gets one autosave
+carrying all three.
 
 Nothing is published, deleted, or written to post meta. Search Console access is
 read-only: the token is requested with, and verified to carry, exactly the
@@ -50,16 +58,22 @@ python3 -m cleanuprtx doctor
 each one. Three credential flows:
 
 ```sh
-# 1. WordPress: an application password for each site
-#    (WP admin > Users > Profile > Application Passwords > name it "cleanuprtx")
+# 1. WordPress: an application password for each site, minted on that site
+#    (WP admin > Users > Profile > Application Passwords > name it "cleanuprtx").
+#    The login used per site is shown by doctor and set in config.py (wp_account).
 python3 -m cleanuprtx auth wordpress --site inspector-roofing
+python3 -m cleanuprtx auth wordpress --site positive-outcomes
+python3 -m cleanuprtx auth wordpress --site pnagolfcarts
 
 # 2. Google: a Desktop-app OAuth client
 #    console.cloud.google.com > APIs & Services > Library > enable "Google Search Console API"
+#    > OAuth consent screen > External > add your own Google account under Test users
 #    > Credentials > Create credentials > OAuth client ID > Desktop app
 python3 -m cleanuprtx auth google-client      # prompts for the client ID and secret
 
-# 3. Google: sign in once; a browser opens, you allow read-only access
+# 3. Google: sign in once; a browser opens, you allow read-only access.
+#    Sign in with the account that owns the Search Console properties - the same
+#    one you added as a test user. Any other account is refused by Google.
 python3 -m cleanuprtx auth google
 ```
 
@@ -82,6 +96,9 @@ too old for it, and Homebrew's refuses to install outside a virtualenv.
   *Disable WordPress application passwords*
 - **Credential rejected** — re-create the application password and re-run `auth wordpress`
 
+If the browser tab says *access blocked* or *app not verified*, the account you
+signed in with is not on the consent screen's test-user list. Add it and retry.
+
 ### If Google says `invalid_grant` later
 
 While the OAuth consent screen is in *Testing*, Google expires refresh tokens
@@ -92,6 +109,9 @@ after seven days. Run `auth google` again, or publish the consent screen
 
 ```sh
 # Audit the whole site the way Google sees it. Read-only.
+# ~1,100 live pages at --delay 0.25 takes 15-40 minutes; progress prints as it goes.
+# Ctrl-C keeps what was fetched and reports on it. Re-run with --resume to reuse
+# pages fetched in the last 24 hours instead of fetching them again.
 python3 -m cleanuprtx audit --json audit.json
 
 # Same, and record repairable findings as pending repairs
@@ -110,6 +130,14 @@ python3 -m cleanuprtx apply
 
 After `apply`, each staged repair prints its edit link. Open it, restore the
 autosave, check the page, publish.
+
+**What to expect on inspector-roofing.com.** The site runs Breakdance and Rank
+Math, so most JSON-LD Google sees is plugin-generated and the audit will report
+it for hand-editing rather than staging drafts — `hand-edits` is the working
+list, grouped by the plugin screen to open. Repairs are only staged for schema
+that lives in a page's own `post_content` (a pasted `<script>` block). Drafts
+are not public, so their schema is audited only with `--include-drafts`, which
+reads each draft's `post_content` (one request per draft).
 
 Audit anything that is not in WordPress — the standards subdomain, which the
 `sc-domain:inspector-roofing.com` property also covers:
@@ -140,9 +168,9 @@ by Cloudflare and Wordfence, the `indexing` command is the confirmation: its
 `fetch` line is `pageFetchState` from Google's real crawler. `ACCESS_FORBIDDEN`
 there is the definitive answer.
 
-`indexing --from-search-console` inspects every URL that had impressions in
-the last 90 days. URL Inspection is limited to 2,000 requests per property per
-day; the tool stops the moment Google answers 429 rather than burn the quota.
+`indexing --from-search-console` inspects the URLs with the most impressions in
+the last 90 days, 200 by default (`--max`). URL Inspection is limited to 2,000
+requests per property per day; the tool stops the moment Google answers 429.
 
 ## Rules
 
@@ -151,13 +179,15 @@ day; the tool stops the moment Google answers 429 rather than burn the quota.
 | `profile-parent-node` | critical | *Invalid object type for field "\<parent_node\>"* | `mainEntity` → reference to the canonical Person if that node exists on the page, otherwise an embedded Person node |
 | `object-field-type` | warning | *Invalid object type for field "creator"* | A name → `{"@type": "Person"/"Organization", "name"}`; a URL matching a node on the page → `{"@id"}`; an unknown URL or unresolvable `@id` → report only |
 | `invalid-datetime` | warning | *Invalid datetime value for "dateModified"* | `dateModified` ← the page's `modified_gmt`; `datePublished` ← `date_gmt`; both with explicit UTC offset |
-| `entity-fragmentation` | warning | — (splits the knowledge graph) | Rename the node's `@id` **and every reference to it** in the block. Fires only for nodes that name or link to the canonical person/organization; other people are left alone |
+| `entity-fragmentation` | warning | — (splits the knowledge graph) | Rename the node's `@id` and every reference to it, across every block in `post_content`. Fires only for nodes that name or link to the canonical person/organization; other people are left alone. Report-only when a plugin block references the old `@id`, since renaming would leave that reference dangling |
 | `invalid-jsonld` | critical | — | Report only |
 | `stale-draft` | notice | — | Report only. On Breakdance sites judged by title and edit history, not body length |
 
 `object-field-type` checks that the value is a Person/Organization object or a
-reference that resolves to one *on the same page*; `mainEntity` is checked here
-on ordinary pages and by `profile-parent-node` on a `ProfilePage`, never both.
+reference that resolves to one *on the same page*. `mainEntity` is never checked
+here: its schema.org range is Thing (FAQPage → Question, WebPage → Article) and
+Google only requires a Person/Organization on a `ProfilePage`, which
+`profile-parent-node` handles.
 
 Canonical identities live in `config.py` per site. Only inspector-roofing has
 them; the other two sites are never asked to merge anyone.
@@ -165,11 +195,14 @@ them; the other two sites are never asked to merge anyone.
 ## Ledger
 
 Approvals live in `~/.cleanuprtx/approvals.json` (`0600`, directory `0700`,
-written atomically). Repair IDs are content-hashed over site, type, page, rule,
-the node's `@id` and the patch, so re-running an audit never renumbers a pending
-decision and two identical defects on different nodes never collide. Repairs
-whose target vanished are marked `stale`; failed applies stay in the queue and
-are retried on the next `apply`.
+written atomically, locked while `apply` runs). Repair IDs are content-hashed
+over site, type, page, rule, the node's identity (its `@id`, or its block in
+`post_content` plus a content hash) and the patch, so re-running an audit never
+renumbers a pending decision and two identical defects on different nodes never
+collide. Repairs whose target vanished are marked `stale` and come back as
+`pending` if the audit sees the defect again; failed applies stay in the queue
+and are retried on the next `apply`; a repair already fixed by hand is marked
+applied rather than retried forever.
 
 ## Tests
 
@@ -177,12 +210,16 @@ are retried on the next `apply`.
 python3 -m unittest discover -s tests -t .
 ```
 
-95 tests, no network and no Keychain. They include every write-path guard (the
-body is only ever `{"content"}`, published pages go to `/autosaves`, media and
-Breakdance templates are refused, a block that is not in `post_content` is
-refused), the three WordPress auth diagnoses, Search Console response parsing
-and scope enforcement, and a regression check that this repository's own
-JSON-LD stays clean.
+273 tests, no network and no Keychain. They include every write-path guard (the
+body is only ever `content` plus the echoed `title`/`excerpt` on autosaves;
+published pages go to `/autosaves`; media and Breakdance templates are refused; a
+block that is not in `post_content`, or only inside an HTML comment, is
+refused; two repairs on one page fold into one write), the three WordPress auth
+diagnoses, Search Console response parsing and exact-scope enforcement, the
+OAuth loopback handler, Keychain command construction, and a regression check
+that this repository's own JSON-LD stays clean. Four of the files
+(`test_adv_*.py`) were written by adversarial reviewers against the promises in
+this README rather than against the code.
 
 ## Scope
 

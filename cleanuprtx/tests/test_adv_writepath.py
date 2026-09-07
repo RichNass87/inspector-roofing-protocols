@@ -188,15 +188,15 @@ class TestOwnershipGuard(unittest.TestCase):
         self.assertIn("not in post_content", str(cm.exception))
         self.assertEqual(rec.calls, [])
 
-    def test_block_text_present_only_inside_an_html_comment_is_still_matched_as_a_script(self):
-        """A commented-out copy is not a live block; but if the only script is inside
-        <!-- --> the regex still finds it. The promise is 'exact block in post_content':
-        it IS there byte for byte, so this documents that the guard accepts it."""
+    def test_block_text_present_only_inside_an_html_comment_is_refused(self):
+        """A commented-out copy in post_content did not produce the live block (no
+        browser or crawler parses it), so post_content does not own the block and
+        the guard must refuse rather than patch dead markup."""
         p = page(PP, raw="<!-- " + ld(PP) + " -->")
-        rec, (mode, _) = stage(p, front_block(p), target(), PATCH)
-        self.assertEqual(mode, "autosave")
-        sent = rec.writes[0]["body"]["content"]
-        self.assertTrue(sent.startswith("<!-- ") and sent.endswith(" -->"))
+        rec = Recorder()
+        with mock.patch.object(wordpress, "request_json", rec), self.assertRaises(PatchError):
+            client().stage_block_repair(p, front_block(p), target(), PATCH)
+        self.assertEqual(rec.writes, [])
 
     def test_front_block_with_empty_text_is_refused(self):
         p = page(None, raw=raw_html(ld(PP)), extra_front='<script type="application/ld+json"></script>')
@@ -387,10 +387,10 @@ class TestRenameId(unittest.TestCase):
         self.assertNotIn(self.OLD, json.dumps([n.get("@id") for n in out["@graph"]] +
                                               [article["author"][0]["@id"], article["about"]["@id"]]))
 
-    def test_reference_in_a_second_block_is_left_byte_identical(self):
-        """README: rename 'every reference to it in the block'. The second block is
-        another byte of the document and must not change (a separate finding
-        addresses it)."""
+    def test_reference_in_a_second_body_block_follows_the_rename(self):
+        """A rename that left a {"@id": old} reference in another block of the same
+        post_content would dangle - Google would then report an unresolved author.
+        The reference follows the rename; every other byte of that block is kept."""
         doc = self._graph()
         second = {"@type": "ImageObject", "@id": "https://inspector-roofing.com/#img", "creator": {"@id": self.OLD}}
         raw = raw_html(ld(doc), ld(second))
@@ -399,8 +399,10 @@ class TestRenameId(unittest.TestCase):
         rec, _ = stage(p, front_block(p), t, {"op": "rename_id", "old": self.OLD, "new": PERSON})
         sent = rec.writes[0]["body"]["content"]
         blocks = find_blocks(sent)
-        self.assertEqual(blocks[1].text, json.dumps(second))
         self.assertEqual(blocks[0].document["@graph"][0]["@id"], PERSON)
+        self.assertEqual(blocks[1].document["creator"], {"@id": PERSON})
+        self.assertEqual(blocks[1].document["@id"], second["@id"])
+        self.assertEqual(sent[blocks[1].end:], raw[find_blocks(raw)[1].end:], "bytes after the block untouched")
 
     def test_rename_when_node_id_no_longer_matches_is_refused_without_write(self):
         doc = self._graph()

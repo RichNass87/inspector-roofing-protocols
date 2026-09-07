@@ -12,6 +12,7 @@ Two distinct paths:
 
 from __future__ import annotations
 
+import http.client
 import json
 import socket
 import ssl
@@ -148,7 +149,13 @@ def request_json_with_headers(
         req = urllib.request.Request(url, data=payload, headers=all_headers, method=method)
         try:
             with _API_OPENER.open(req, timeout=timeout) as resp:
-                raw = resp.read().decode("utf-8", "replace")
+                try:
+                    raw = resp.read().decode("utf-8", "replace")
+                except (OSError, http.client.HTTPException) as exc:
+                    if attempt < retries:
+                        time.sleep(2 ** attempt)
+                        continue
+                    raise HttpError(0, url, f"connection dropped while reading: {exc}") from exc
                 resp_headers = {k.lower(): v for k, v in resp.headers.items()}
                 if not raw.strip():
                     return None, resp_headers
@@ -168,7 +175,10 @@ def request_json_with_headers(
                     f"unexpected redirect to {target}; refusing to follow with credentials. "
                     "Check the site's base URL (scheme, www, trailing slash) or a host/WAF rule.",
                 ) from exc
-            detail = exc.read().decode("utf-8", "replace") if exc.fp else ""
+            try:
+                detail = exc.read().decode("utf-8", "replace") if exc.fp else ""
+            except (OSError, http.client.HTTPException):
+                detail = ""
             if exc.code in retry_on and attempt < retries:
                 time.sleep(_backoff(exc.headers, attempt))
                 continue
@@ -184,6 +194,11 @@ def request_json_with_headers(
                 time.sleep(2 ** attempt)
                 continue
             raise HttpError(0, url, "timed out") from exc
+        except (OSError, http.client.HTTPException) as exc:
+            if attempt < retries:
+                time.sleep(2 ** attempt)
+                continue
+            raise HttpError(0, url, f"connection dropped: {exc}") from exc
 
     raise HttpError(0, url, "retries exhausted")  # pragma: no cover
 
@@ -237,13 +252,18 @@ def fetch_text(
                 text=_decode(body, resp.headers.get_content_charset()),
             )
     except urllib.error.HTTPError as exc:
-        body = exc.read() if exc.fp else b""
+        try:
+            body = exc.read() if exc.fp else b""
+        except (OSError, http.client.HTTPException):
+            body = b""   # a 403 whose body was cut is still a 403
         return Fetched(
             url=url, status=exc.code, final_url=exc.geturl() or url,
             headers={k.lower(): v for k, v in (exc.headers or {}).items()},
             text=_decode(body, None),
         )
-    except (urllib.error.URLError, socket.timeout, TimeoutError, ValueError):
+    except (OSError, http.client.HTTPException, ValueError):
+        # URLError, socket.timeout, ConnectionResetError are OSError subclasses;
+        # IncompleteRead is an HTTPException. Covers a drop during resp.read().
         return Fetched(url=url, status=0, final_url=url)
 
 
