@@ -61,19 +61,38 @@ def _now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
+def patch_identity(patch: Dict[str, Any]) -> Dict[str, Any]:
+    """The part of a patch that names the defect, not the value it writes.
+
+    Values derived from page metadata (a dateModified fix tracks modified_gmt)
+    or from sibling repairs would otherwise renumber a repair on every save.
+    """
+    op = patch.get("op")
+    if op == "set":
+        return {"op": "set", "key": patch.get("key")}
+    if op == "rename_id":
+        return {"op": "rename_id", "old": patch.get("old")}
+    return dict(patch)
+
+
 def make_repair_id(site: str, kind: str, page_id: int, rule: str,
                    target_key: str, patch: Dict[str, Any]) -> str:
     """Stable short ID: same defect on the same node always hashes the same,
     two identical defects on different nodes never collide."""
     digest = hashlib.sha256(
-        json.dumps([site, kind, page_id, rule, target_key, patch], sort_keys=True).encode("utf-8")
+        json.dumps([site, kind, page_id, rule, target_key, patch_identity(patch)],
+                   sort_keys=True).encode("utf-8")
     ).hexdigest()
     return digest[:8]
 
 
 class _Lock:
-    def __init__(self, path: Path) -> None:
-        self.path = path
+    """Advisory lock; on acquisition the ledger is re-read from disk so the
+    holder works from the state it is about to replace."""
+
+    def __init__(self, ledger: "Ledger") -> None:
+        self.ledger = ledger
+        self.path = ledger.path.with_suffix(".lock")
         self._fd: Optional[int] = None
 
     def __enter__(self) -> "_Lock":
@@ -85,6 +104,7 @@ class _Lock:
             os.close(self._fd)
             self._fd = None
             raise LedgerError("another cleanuprtx command holds the ledger; wait for it to finish") from exc
+        self.ledger.load()
         return self
 
     def __exit__(self, *exc: Any) -> None:
@@ -103,6 +123,7 @@ class Ledger:
         self.load()
 
     def load(self) -> None:
+        self.repairs = {}
         if not self.path.exists():
             return
         try:
@@ -130,8 +151,9 @@ class Ledger:
                 continue   # a row from an incompatible older version
 
     def lock(self):
-        """Advisory lock so 'apply' and a concurrent 'approve' cannot interleave."""
-        return _Lock(self.path.with_suffix(".lock"))
+        """Advisory lock so 'audit --propose', 'approve'/'reject' and 'apply'
+        cannot interleave; re-reads the file once held."""
+        return _Lock(self)
 
     def save(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
@@ -167,10 +189,22 @@ class Ledger:
         if existing is not None:
             existing.block_index = finding.block_index   # may shift between renders
             existing.target = target
+            existing.message = finding.message
+            if existing.state == REJECTED:
+                return existing                            # a rejection is final
             if existing.state == STALE:
                 # The defect is back on the live page: ask for a fresh decision.
                 existing.state, existing.decided_at, existing.applied_at = PENDING, "", ""
                 existing.result, existing.attempts = "", 0
+                existing.patch = finding.patch
+            elif existing.state in (APPROVED, FAILED) and existing.patch != finding.patch:
+                # Same defect, different repair value: the approval was for the old one.
+                existing.state, existing.decided_at, existing.applied_at = PENDING, "", ""
+                existing.result = "patch changed since approval; re-approve"
+                existing.attempts = 0
+                existing.patch = finding.patch
+            elif existing.state == PENDING:
+                existing.patch = finding.patch
             return existing
         repair = Repair(
             repair_id=repair_id, site=site, kind=finding.kind, rule=finding.rule,
@@ -202,6 +236,17 @@ class Ledger:
     def mark_stale(self, repair_id: str, result: str) -> None:
         r = self.repairs[repair_id]
         r.state, r.result = STALE, result
+
+    def retire_unreported(self, site: str, audited_pages: set, reported_ids: set) -> List[str]:
+        """Rows for audited pages that this audit did not reproduce are no
+        longer defects: mark them stale (revived if a later audit sees them)."""
+        retired = []
+        for r in self.repairs.values():
+            if (r.site == site and r.state in (PENDING, APPROVED, FAILED)
+                    and (r.kind, r.page_id) in audited_pages and r.repair_id not in reported_ids):
+                self.mark_stale(r.repair_id, "no longer reported by the audit")
+                retired.append(r.repair_id)
+        return retired
 
     def in_state(self, state: str, site: Optional[str] = None) -> List[Repair]:
         states = {APPROVED, FAILED} if state == APPROVED else {state}

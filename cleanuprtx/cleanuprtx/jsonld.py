@@ -155,30 +155,32 @@ class Target:
     node_id: str = ""
     node_types: List[str] = field(default_factory=list)
     raw_block: int = -1        # index of the owning block in post_content, if any
-    shared_id: bool = False    # the same @id is defined in more than one block
-    fingerprint: str = ""      # content hash for id-less nodes
+    shared_id: bool = False    # the same @id is defined in more than one body block
+    duplicate_id: bool = False # the same @id is defined more than once in this block
+    fingerprint: str = ""      # content hash for id-less nodes (identity at apply time)
 
     def key(self) -> str:
         """Stable identity for hashing repairs.
 
         An @id is stable across renders. Where the same @id is defined in
-        several blocks the block in post_content disambiguates. Id-less nodes
-        are keyed by their block in post_content plus path and content, so a
-        plugin block appearing ahead of them on the live page does not
-        renumber their repairs.
+        several body blocks, or twice in one block, the block in post_content
+        and the path disambiguate. Id-less nodes are keyed by their block in
+        post_content plus path - never by content, which the tool's own
+        sibling repairs change.
         """
         path = "/".join(map(str, self.path))
-        if self.node_id and not self.shared_id:
-            return self.node_id
         block = f"raw:{self.raw_block}" if self.raw_block >= 0 else f"live:{self.block}"
-        if self.node_id:
+        if self.node_id and not self.shared_id and not self.duplicate_id:
+            return self.node_id
+        if self.node_id and not self.duplicate_id:
             return f"{block}:{self.node_id}"
-        return f"{block}:{path}:{self.fingerprint}"
+        return f"{block}:{path}"
 
     def to_dict(self) -> Dict[str, Any]:
         return {"block": self.block, "path": list(self.path), "node_id": self.node_id,
                 "node_types": list(self.node_types), "raw_block": self.raw_block,
-                "shared_id": self.shared_id, "fingerprint": self.fingerprint}
+                "shared_id": self.shared_id, "duplicate_id": self.duplicate_id,
+                "fingerprint": self.fingerprint}
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Target":
@@ -187,6 +189,7 @@ class Target:
                    node_types=list(data.get("node_types", [])),
                    raw_block=int(data.get("raw_block", -1)),
                    shared_id=bool(data.get("shared_id", False)),
+                   duplicate_id=bool(data.get("duplicate_id", False)),
                    fingerprint=str(data.get("fingerprint", "") or ""))
 
 
@@ -330,19 +333,21 @@ def references_outside(blocks: List[Block], old: str, defining_block: int) -> Li
     return out
 
 
-def match_block_in_raw(front_block: Block, raw_html: str) -> Optional[Block]:
+def match_block_in_raw(front_block: Block, raw_html: str,
+                       exclude: Optional[Set[int]] = None) -> Optional[Block]:
     """Find the block in post_content that produced front_block on the live
     page, or None if the plugin/theme generated it.
 
     This is the ownership test that gates every write: a block we cannot find
-    in post_content is not ours to rewrite.
+    in post_content is not ours to rewrite. `exclude` lets a caller that maps
+    many live blocks give each its own raw block when two are identical.
     """
     if not raw_html:
         return None
     want = normalise_block_text(front_block.text)
     if not want:
         return None
-    raw_blocks = find_blocks(raw_html)
+    raw_blocks = [b for b in find_blocks(raw_html) if b.index not in (exclude or ())]
     candidates = [b for b in raw_blocks if normalise_block_text(b.text) == want]
     if candidates:
         exact = [b for b in candidates if b.text == front_block.text]

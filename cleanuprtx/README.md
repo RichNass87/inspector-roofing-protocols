@@ -11,8 +11,10 @@ exactly where to fix the rest.
 
 The only thing cleanuprtx ever writes is a corrected `post_content`, and only
 when it can prove the JSON-LD block it is fixing **lives in `post_content`**:
-the block on the live page must match, byte for byte after whitespace, a block
-in the REST `content.raw`. That single test is the write guard:
+the block on the live page must match a block in the REST `content.raw` — byte
+for byte after whitespace between tokens, or failing that as the same parsed
+JSON document (key order and string escaping such as `<\/` may differ). Blocks
+inside HTML comments never count. That test is the write guard:
 
 | Where the schema comes from | What happens |
 |---|---|
@@ -32,18 +34,23 @@ from the same read — WordPress stores an autosave with exactly the fields it i
 given, and restoring one with an empty title would blank the page. A draft
 update sends `content` only. Both are asserted in code and in tests.
 
-**One write per page.** WordPress keeps a single autosave per page per user,
-so every approved repair on a page is folded into one patched `post_content`
-and staged with one request. A page with three repairs gets one autosave
-carrying all three.
+**One write per page, across runs.** WordPress keeps a single autosave per
+page per user, so every approved repair on a page is folded into one patched
+`post_content` and staged with one request — and a later run re-carries the
+repairs it staged earlier and you have not yet restored, so approving repairs
+one at a time never loses one. If an earlier staged repair can no longer be
+re-applied (the page changed by hand), the page is not written at all and the
+new repairs are marked failed with the reason.
 
 Nothing is published, deleted, or written to post meta. Search Console access is
 read-only: the token is requested with, and verified to carry, exactly the
 `webmasters.readonly` scope.
 
 **Credentials never leave the Keychain.** Every secret is read from the macOS
-login Keychain at run time. Nothing is stored in this package, cached to disk,
-printed, or placed on a command line where `ps` could see it.
+login Keychain at run time. Nothing secret is stored in this package, cached to
+disk, printed, or placed on a command line where `ps` could see it. (Fetched
+public page HTML and the approval ledger are the only things written to disk,
+under `~/.cleanuprtx/`, mode `0600`.)
 
 ## Setup — first evening
 
@@ -110,8 +117,9 @@ after seven days. Run `auth google` again, or publish the consent screen
 ```sh
 # Audit the whole site the way Google sees it. Read-only.
 # ~1,100 live pages at --delay 0.25 takes 15-40 minutes; progress prints as it goes.
-# Ctrl-C keeps what was fetched and reports on it. Re-run with --resume to reuse
-# pages fetched in the last 24 hours instead of fetching them again.
+# Ctrl-C during the fetch keeps what was fetched and reports on it. Every fetched
+# page is appended to ~/.cleanuprtx/cache/<site>.jsonl; re-run with --resume to
+# reuse pages fetched in the last 24 hours (failed fetches are always retried).
 python3 -m cleanuprtx audit --json audit.json
 
 # Same, and record repairable findings as pending repairs
@@ -176,9 +184,9 @@ requests per property per day; the tool stops the moment Google answers 429.
 
 | Rule | Severity | Google's wording | Repair |
 |---|---|---|---|
-| `profile-parent-node` | critical | *Invalid object type for field "\<parent_node\>"* | `mainEntity` → reference to the canonical Person if that node exists on the page, otherwise an embedded Person node |
+| `profile-parent-node` | critical | *Invalid object type for field "\<parent_node\>"* | Keeps the identity the author named: a name gets a `@type`, a canonical name/URL becomes the canonical reference. Only an *absent* `mainEntity` is filled with the canonical Person, and only where that node exists on the page or on the canonical profile page itself. A wrong `@type` or a stranger's dangling `@id` is report only |
 | `object-field-type` | warning | *Invalid object type for field "creator"* | A name → `{"@type": "Person"/"Organization", "name"}`; a URL matching a node on the page → `{"@id"}`; an unknown URL or unresolvable `@id` → report only |
-| `invalid-datetime` | warning | *Invalid datetime value for "dateModified"* | `dateModified` ← the page's `modified_gmt`; `datePublished` ← `date_gmt`; both with explicit UTC offset |
+| `invalid-datetime` | warning | *Invalid datetime value for "dateModified"* | On the node that stands for the page: `dateModified` ← the page's `modified_gmt`, `datePublished` ← `date_gmt`, both with explicit UTC offset. A nested Review, Comment or video keeps its own date: report only |
 | `entity-fragmentation` | warning | — (splits the knowledge graph) | Rename the node's `@id` and every reference to it, across every block in `post_content`. Fires only for nodes that name or link to the canonical person/organization; other people are left alone. Report-only when a plugin block references the old `@id`, since renaming would leave that reference dangling |
 | `invalid-jsonld` | critical | — | Report only |
 | `stale-draft` | notice | — | Report only. On Breakdance sites judged by title and edit history, not body length |
@@ -190,19 +198,23 @@ Google only requires a Person/Organization on a `ProfilePage`, which
 `profile-parent-node` handles.
 
 Canonical identities live in `config.py` per site. Only inspector-roofing has
-them; the other two sites are never asked to merge anyone.
+them; the other two sites are never asked to merge anyone. "Organization"
+means any schema.org Organization subtype (`RoofingContractor`,
+`GeneralContractor`, `Store`, ...), never a fixed short list.
 
 ## Ledger
 
 Approvals live in `~/.cleanuprtx/approvals.json` (`0600`, directory `0700`,
-written atomically, locked while `apply` runs). Repair IDs are content-hashed
-over site, type, page, rule, the node's identity (its `@id`, or its block in
-`post_content` plus a content hash) and the patch, so re-running an audit never
-renumbers a pending decision and two identical defects on different nodes never
-collide. Repairs whose target vanished are marked `stale` and come back as
-`pending` if the audit sees the defect again; failed applies stay in the queue
-and are retried on the next `apply`; a repair already fixed by hand is marked
-applied rather than retried forever.
+written atomically; every writer takes a lock and re-reads the file first).
+Repair IDs are hashed over site, type, page, rule, the node's identity (its
+`@id`, or its block in `post_content` plus path) and the *kind* of patch — never
+the value it writes, which a page save or a sibling repair can change. So
+re-running an audit never renumbers a decision, two identical defects on
+different nodes never collide, and a rejection is final. If a re-audit changes
+what an approved repair would write, it goes back to pending for re-approval.
+Rows for pages the audit read but no longer reports are retired as `stale`,
+and any stale row comes back as `pending` if the defect reappears; a repair
+already fixed by hand is marked applied rather than retried forever.
 
 ## Tests
 
@@ -210,7 +222,7 @@ applied rather than retried forever.
 python3 -m unittest discover -s tests -t .
 ```
 
-273 tests, no network and no Keychain. They include every write-path guard (the
+287 tests, no network and no Keychain. They include every write-path guard (the
 body is only ever `content` plus the echoed `title`/`excerpt` on autosaves;
 published pages go to `/autosaves`; media and Breakdance templates are refused; a
 block that is not in `post_content`, or only inside an HTML comment, is

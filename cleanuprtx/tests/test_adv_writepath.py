@@ -37,7 +37,10 @@ from tests.helpers import PERSON, SITE, body_page, findings, ld, page
 
 PP_ID = "https://inspector-roofing.com/richard-nasser/#pp"
 PP = {"@type": "ProfilePage", "@id": PP_ID, "name": "R"}
-PATCH = {"op": "set", "key": "mainEntity", "value": {"@id": PERSON}}
+# The repair embeds a Person definition: a bare {"@id"} reference is only written
+# when that node is defined on the page, and these fixtures do not define it.
+PATCH_VALUE = {"@type": "Person", "@id": PERSON, "name": "Richard Amir Nasser"}
+PATCH = {"op": "set", "key": "mainEntity", "value": PATCH_VALUE}
 LINK = "https://inspector-roofing.com/richard-nasser/"
 
 
@@ -126,7 +129,7 @@ class TestBodyShape(unittest.TestCase):
         self.assertIn("post=7&action=edit", link)
 
     def test_no_write_when_patch_changes_nothing(self):
-        p = body_page(dict(PP, mainEntity={"@id": PERSON}))
+        p = body_page(dict(PP, mainEntity=PATCH_VALUE))
         with self.assertRaises(PatchError):
             stage(p, front_block(p), target(), PATCH)
 
@@ -235,7 +238,7 @@ class TestOwnershipGuard(unittest.TestCase):
         self.assertEqual(len(blocks), 2)
         self.assertEqual(blocks[0].text, json.dumps(a), "block 0 was not on the live page; untouched")
         self.assertEqual(blocks[1].document["name"], "RichardNasser")
-        self.assertEqual(blocks[1].document["mainEntity"], {"@id": PERSON})
+        self.assertEqual(blocks[1].document["mainEntity"], PATCH_VALUE)
 
 
 # ---------------------------------------------------------------------------
@@ -259,7 +262,7 @@ class TestSpliceBytes(unittest.TestCase):
         rec, _ = stage(p, front_block(p), target(), PATCH)
         sent = rec.writes[0]["body"]["content"]
         self._assert_surroundings_preserved(raw, sent, 0)
-        self.assertEqual(find_blocks(sent)[0].document["mainEntity"], {"@id": PERSON})
+        self.assertEqual(find_blocks(sent)[0].document["mainEntity"], PATCH_VALUE)
 
     def test_second_block_is_patched_and_first_is_untouched(self):
         org = {"@context": "https://schema.org", "@type": "Organization", "@id": "https://inspector-roofing.com/#organization",
@@ -269,7 +272,7 @@ class TestSpliceBytes(unittest.TestCase):
         rec, _ = stage(p, front_block(p, 0), target(), PATCH)
         sent = rec.writes[0]["body"]["content"]
         self._assert_surroundings_preserved(raw, sent, 1)
-        self.assertEqual(find_blocks(sent)[1].document["mainEntity"], {"@id": PERSON})
+        self.assertEqual(find_blocks(sent)[1].document["mainEntity"], PATCH_VALUE)
 
     def test_non_ascii_and_entities_inside_the_block_round_trip(self):
         doc = dict(PP, description="Café — été &amp; <b>bold</b> 屋根")
@@ -305,7 +308,7 @@ class TestSpliceBytes(unittest.TestCase):
         self.assertEqual(len(blocks), 1, "the spliced block terminated early")
         self.assertEqual(blocks[0].parse_error, "", blocks[0].parse_error)
         self.assertEqual(blocks[0].document["description"], "see the </script> tag")
-        self.assertEqual(blocks[0].document["mainEntity"], {"@id": PERSON})
+        self.assertEqual(blocks[0].document["mainEntity"], PATCH_VALUE)
         self.assertEqual(raw[raw.index("</script>") + 9:], sent[sent.rindex("</script>") + 9:])
 
 

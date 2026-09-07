@@ -17,7 +17,7 @@ from urllib.parse import urlparse
 
 from . import config
 from .http import HttpError, fetch_text, request_json, request_json_with_headers
-from .jsonld import (AlreadyApplied, Block, PatchError, Target, apply_patch, find_blocks,
+from .jsonld import (AlreadyApplied, Block, PatchError, Target, apply_patch, find_blocks, iter_nodes,
                      match_block_in_raw, normalise_block_text, references_outside,
                      rename_references, splice_block)
 from .keychain import read_secret
@@ -50,6 +50,10 @@ class AuthDiagnosis(RuntimeError):
     """Authentication failed for a reason the owner can act on."""
 
 
+class OwnershipLost(PatchError):
+    """post_content no longer owns the block; a later audit must re-propose it."""
+
+
 @dataclass
 class Content:
     """One WordPress item: page, post, attachment, author archive, or CPT."""
@@ -72,6 +76,7 @@ class Content:
     content_raw: Optional[str] = None  # content.raw via context=edit; None = not fetched
     title_raw: Optional[str] = None    # title.raw, only if the post type has one
     excerpt_raw: Optional[str] = None  # excerpt.raw, only if the post type has one
+    edit_loaded: bool = False          # context=edit was read for this item
 
     @property
     def is_breakdance(self) -> bool:
@@ -197,11 +202,15 @@ class WordPressClient:
             # Distinguish "header never arrived" from "header arrived, rejected".
             probe = self._probe_bad_password()
             if probe == STRIPPED_AUTH:
-                return ("WordPress never saw a usable Authorization header. Either the host "
-                        "strips it before PHP - add to .htaccess:\n"
+                available = self._app_passwords_available()
+                if available is False:
+                    return ("Application passwords are unavailable on this install: WordPress only "
+                            "offers them over HTTPS and when no plugin or filter disables them. "
+                            "Check the site URL scheme and security-plugin settings.")
+                return ("WordPress never received the Authorization header - the host strips it "
+                        "before PHP. Add to .htaccess:\n"
                         "    SetEnvIf Authorization \"(.*)\" HTTP_AUTHORIZATION=$1\n"
-                        "- or application passwords are unavailable on this install (the site "
-                        "must be served over HTTPS and the feature not disabled by a plugin).")
+                        "or enable Authorization pass-through in the hosting panel.")
             return (f"WordPress saw the header but did not accept the credential for "
                     f"{self.site.wp_account}. Check the username and re-create the "
                     f"application password.")
@@ -209,6 +218,15 @@ class WordPressClient:
             return ("The REST API is blocked before WordPress (403 with no WordPress "
                     "error code) - a WAF or hosting rule. Allow /wp-json/ for your IP.")
         return f"{exc}"
+
+    def _app_passwords_available(self) -> Optional[bool]:
+        """Core advertises application passwords in the REST index only when
+        wp_is_application_passwords_available() is true. None if unknown."""
+        try:
+            auth = (self.rest_index().get("authentication") or {})
+        except HttpError:
+            return None
+        return "application-passwords" in auth
 
     def _probe_bad_password(self) -> str:
         token = base64.b64encode(f"{self.site.wp_account}:cleanuprtx-probe".encode()).decode()
@@ -319,8 +337,9 @@ class WordPressClient:
     ) -> Iterator[Content]:
         """Every auditable item across all post types plus author archives.
 
-        A post type that refuses to list (403/404 on a plugin CPT) is reported
-        through warn() and skipped; it never aborts the inventory.
+        A post type that refuses its first listing request (403/404 on a
+        plugin CPT) is reported through warn() and skipped. A refusal after
+        items were received propagates, so the inventory is reported partial.
         """
         if kinds is None:
             try:
@@ -330,13 +349,16 @@ class WordPressClient:
             kinds = sorted(set(types.values()))
             kinds.sort(key=lambda k: (k not in ("pages", "posts"), k))
         for kind in kinds:
+            yielded = 0
             try:
-                if kind == "author":
-                    yield from self.iter_authors()
-                else:
-                    yield from self.iter_content(kind, progress=progress)
+                items = self.iter_authors() if kind == "author" else self.iter_content(kind, progress=progress)
+                for item in items:
+                    yielded += 1
+                    yield item
             except HttpError as exc:
-                if exc.status in (401, 403, 404):
+                # A post type that refuses its FIRST listing is skipped; a refusal
+                # after items arrived (a WAF tripping mid-walk) aborts as partial.
+                if yielded == 0 and exc.status in (401, 403, 404):
                     if warn:
                         warn(f"skipping {kind}: {exc}")
                     continue
@@ -397,6 +419,7 @@ class WordPressClient:
                 setattr(content, attr, value["raw"])
         if item.get("status"):
             content.status = item["status"]
+        content.edit_loaded = True
 
     # --- writing ---------------------------------------------------------
 
@@ -432,15 +455,20 @@ class WordPressClient:
                     f"{content.kind}/{content.id} is now {content.status or 'read-only'}; not written."
                 )
         if not content.content_raw:
-            raise PatchError(
+            raise OwnershipLost(
                 "post_content is empty - the layout lives in the page builder. "
                 "Edit the schema in the builder or SEO plugin by hand."
             )
         raw_block = match_block_in_raw(front_block, content.content_raw)
         if raw_block is None:
-            raise PatchError(
+            raise OwnershipLost(
                 "this JSON-LD block is not in post_content; it is generated by the "
                 "SEO plugin or theme and must be edited there."
+            )
+        if target.raw_block >= 0 and raw_block.index != target.raw_block:
+            raise OwnershipLost(
+                f"block is post_content block {raw_block.index}; the audit keyed this repair "
+                f"on block {target.raw_block}. post_content changed - re-run the audit."
             )
         if raw_block.document is None:
             raise PatchError(f"post_content block does not parse: {raw_block.parse_error}")
@@ -457,11 +485,35 @@ class WordPressClient:
         patched_doc = apply_patch(work_block.document, target, patch)
         patched_raw = splice_block(working_raw, work_block, patched_doc)
         if patch.get("op") == "rename_id":
-            # A reference in a block we do not own would be left dangling; the
-            # audit refuses those. Rename references in the other body blocks.
-            others = references_outside(find_blocks(content.content_raw), patch["old"], raw_block.index)
-            if others:
-                patched_raw = rename_references(patched_raw, patch["old"], patch["new"], work_block.index)
+            old, new = patch["old"], patch["new"]
+            # A reference in a block we do not own (plugin/theme, on the live
+            # page but not in post_content) would be left dangling: refuse.
+            if content.front_html:
+                live_refs = references_outside(find_blocks(content.front_html), old, front_block.index)
+                foreign = [i for i in live_refs
+                           if match_block_in_raw(find_blocks(content.front_html)[i], content.content_raw) is None]
+                if foreign:
+                    raise PatchError(
+                        f"@id {old} is referenced by a plugin/theme-generated block on the live "
+                        "page; renaming it here would leave that reference dangling."
+                    )
+            # References in the other body blocks - as they stand in the working
+            # copy, earlier repairs in this fold included - follow the rename.
+            if references_outside(find_blocks(patched_raw), old, work_block.index):
+                patched_raw = rename_references(patched_raw, old, new, work_block.index)
+        elif patch.get("op") == "set":
+            # Every reference the patch writes must resolve on the page as it
+            # will be after the write (working copy plus plugin/theme blocks).
+            defined = set()
+            for blk in find_blocks(patched_raw) + find_blocks(content.front_html or ""):
+                if blk.document is not None:
+                    for _, n in iter_nodes(blk.document):
+                        if isinstance(n.get("@id"), str) and n.get("@type"):
+                            defined.add(n["@id"])
+            for _, n in iter_nodes(patch.get("value")):
+                ref = n.get("@id")
+                if isinstance(ref, str) and not n.get("@type") and ref not in defined:
+                    raise PatchError(f"the repair references @id {ref}, which is no longer defined on the page")
         if patched_raw == working_raw:
             raise AlreadyApplied("patch produced no change")
         return patched_raw
@@ -509,10 +561,16 @@ class WordPressClient:
         if not isinstance(stored_raw, str):
             raise PatchError("server response has no content.raw; cannot confirm the write was stored")
         if normalise_block_text(stored_raw) != normalise_block_text(patched_raw):
-            hint = ""
-            if "<script" in patched_raw and "<script" not in stored_raw:
-                hint = " (the <script> block was stripped: this user probably lacks unfiltered_html)"
-            raise PatchError("server response does not reflect the patched content" + hint)
+            # content_save_pre filters may touch bytes outside the blocks; the
+            # blocks themselves must still be exactly what was sent.
+            def shape(raw: str) -> List[Any]:
+                return [b.document if b.document is not None else normalise_block_text(b.text)
+                        for b in find_blocks(raw)]
+            if shape(stored_raw) != shape(patched_raw):
+                hint = ""
+                if "<script" in patched_raw and "<script" not in stored_raw:
+                    hint = " (the <script> block was stripped: this user probably lacks unfiltered_html)"
+                raise PatchError("server response does not reflect the patched content" + hint)
         if mode == "draft" and result.get("status") not in (None, "draft"):
             raise PatchError(f"unexpected status after draft update: {result.get('status')}")
         return mode, content.edit_link

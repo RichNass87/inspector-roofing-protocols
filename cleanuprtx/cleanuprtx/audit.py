@@ -17,6 +17,7 @@ from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
 from . import config
 from .jsonld import (Block, Target, find_blocks, index_by_id, iter_nodes, match_block_in_raw,
                      node_fingerprint, node_types, references_outside, types_by_id)
+from .schema_types import ORG_TYPES, PERSON_TYPES, is_entity_type, is_org_type, is_person_type
 
 CRITICAL = "critical"
 WARNING = "warning"
@@ -28,24 +29,30 @@ SOURCE_HEAD = "head"       # in the document but not in post_content; theme or b
 SOURCE_UNKNOWN = "unknown" # post_content not fetched (no edit rights, read-only kind)
 
 PROFILE_TYPES = {"ProfilePage"}
-PERSON_TYPES = {"Person"}
-ORG_TYPES = {"Organization", "LocalBusiness", "HomeAndConstructionBusiness",
-             "RoofingContractor", "ProfessionalService", "Corporation", "NGO",
-             "EducationalOrganization", "GovernmentOrganization", "OnlineBusiness"}
-PROFILE_ENTITY_TYPES = PERSON_TYPES | ORG_TYPES
+ENTITY = "entity"    # Person or any Organization subtype
+PERSON = "person"
 
 # Fields whose value must be a Person/Organization node (or a reference to one).
 # mainEntity is deliberately absent: its schema.org range is Thing (FAQPage ->
 # Question, WebPage -> Article) and Google constrains it only on ProfilePage,
 # which rule_profile_parent_node handles.
-OBJECT_FIELDS: Dict[str, Set[str]] = {
-    "creator": PERSON_TYPES | ORG_TYPES,
-    "author": PERSON_TYPES | ORG_TYPES,
-    "publisher": ORG_TYPES | PERSON_TYPES,
-    "founder": PERSON_TYPES,
-    "copyrightHolder": PERSON_TYPES | ORG_TYPES,
+OBJECT_FIELDS: Dict[str, str] = {
+    "creator": ENTITY, "author": ENTITY, "publisher": ENTITY,
+    "founder": PERSON, "copyrightHolder": ENTITY,
 }
 DATE_FIELDS = ("dateModified", "datePublished", "dateCreated", "uploadDate")
+# Nodes that stand for the page itself; only these may take the page's own dates.
+PAGE_NODE_TYPES = {"WebPage", "AboutPage", "ContactPage", "ProfilePage", "FAQPage", "CollectionPage",
+                   "ItemPage", "QAPage", "SearchResultsPage", "MedicalWebPage", "CheckoutPage",
+                   "RealEstateListing", "Article", "NewsArticle", "BlogPosting", "TechArticle",
+                   "ScholarlyArticle", "Report", "SocialMediaPosting"}
+SHORT_BODY_GRACE_DAYS = 7
+
+
+def _allowed(family: str, types: Set[str]) -> bool:
+    if family == PERSON:
+        return any(is_person_type(t) for t in types)
+    return any(is_entity_type(t) for t in types)
 
 # schema.org Date / DateTime, including reduced precision (YYYY, YYYY-MM).
 _ISO_PARTS = re.compile(
@@ -149,6 +156,7 @@ class PageContext:
     by_id: Dict[str, Dict[str, Any]]
     types_by_id: Dict[str, Set[str]]
     shared_ids: Set[str]
+    duplicate_ids: Set[Tuple[int, str]] = field(default_factory=set)
 
     def finding(self, rule: str, severity: str, message: str, *, block: int = -1,
                 path: Tuple[Any, ...] = (), node: Optional[Dict[str, Any]] = None,
@@ -161,6 +169,7 @@ class PageContext:
             target = Target(block=block, path=list(path), node_id=node_id or "",
                             node_types=node_types(node), raw_block=self.raw_index.get(block, -1),
                             shared_id=bool(node_id) and node_id in self.shared_ids,
+                            duplicate_id=bool(node_id) and (block, node_id) in self.duplicate_ids,
                             fingerprint="" if node_id else node_fingerprint(node))
         if not hand_edit and source != SOURCE_BODY:
             hand_edit = default_hand_edit(plugin, rule, source)
@@ -210,6 +219,19 @@ def _resolve(ctx: PageContext, value: Any) -> Tuple[Set[str], str]:
     return set(), "not an object"
 
 
+def _has_name(ctx: PageContext, item: Dict[str, Any]) -> bool:
+    """True if the inline node, or any definition of its @id on the page, has a name."""
+    if isinstance(item.get("name"), str) and item["name"].strip():
+        return True
+    ref = item.get("@id")
+    if not isinstance(ref, str):
+        return False
+    for _, _, n in ctx.nodes:
+        if n.get("@id") == ref and n.get("@type") and isinstance(n.get("name"), str) and n["name"].strip():
+            return True
+    return False
+
+
 def _canonical_match(site: Optional[config.Site], value: str) -> Optional[Tuple[str, str, str]]:
     """(canonical_id, name, kind) if value names or links the canonical person
     or organization; kind is 'Person' or 'Organization'."""
@@ -242,27 +264,59 @@ def _object_fix(ctx: PageContext, key: str, value: str) -> Optional[Dict[str, An
     return {"@type": "Organization" if key == "publisher" else "Person", "name": value}
 
 
+def _profile_entity_fix(ctx: PageContext, item: Any) -> Optional[Dict[str, Any]]:
+    """Repair one mainEntity value, keeping the identity the author named.
+
+    A string goes through the same matching as object fields. A dict with a
+    name but no @type gets a type. A wrong @type, or a dangling @id of some
+    other entity, is the author's to decide: report only.
+    """
+    if isinstance(item, str) and item.strip():
+        c = _object_fix(ctx, "mainEntity", item)
+        return c if c is not None and _allowed(ENTITY, _resolve(ctx, c)[0]) else None
+    if not isinstance(item, dict) or item.get("@type"):
+        return None
+    ref, name = item.get("@id"), item.get("name")
+    if ref is not None:
+        if not isinstance(ref, str) or ref in ctx.by_id:
+            return None                      # defined on the page as something else: never retype it
+        if _canonical_match(ctx.site, ref):
+            if isinstance(name, str) and not _canonical_match(ctx.site, name):
+                return None
+            return _profile_entity_fix(ctx, ref)
+        if not isinstance(name, str):
+            return None                      # dangling @id of someone else: report only
+    if not isinstance(name, str) or not name.strip():
+        return None
+    canon = _canonical_match(ctx.site, name)
+    typed = {"@type": canon[2] if canon else "Person"}
+    typed.update(item)
+    return typed
+
+
 def _profile_fix(ctx: PageContext, main_value: Any) -> Optional[Dict[str, Any]]:
     """Repair for a ProfilePage whose mainEntity is missing or wrong.
 
-    Keeps the identity the author named when mainEntity is a string. Otherwise
-    the canonical person is used only on the canonical profile page itself,
-    or when that node is already defined on the page.
+    The canonical person is substituted ONLY when mainEntity is absent, and
+    only on the canonical profile page or where that node is defined on the
+    page. A present value is repaired per item, whole-list-or-nothing.
     """
     site = ctx.site
     canonical = site.canonical_person_id if site else None
-    if isinstance(main_value, str) and main_value.strip():
-        candidate = _object_fix(ctx, "mainEntity", main_value)
-        if candidate is not None and _resolve(ctx, candidate)[0] & PROFILE_ENTITY_TYPES:
-            return {"op": "set", "key": "mainEntity", "expect": main_value, "value": candidate}
-        return None
+    if main_value is not None:
+        items = main_value if isinstance(main_value, list) else [main_value]
+        fixed = [_profile_entity_fix(ctx, i) for i in items]
+        if any(f is None for f in fixed):
+            return None
+        value = fixed if isinstance(main_value, list) else fixed[0]
+        return {"op": "set", "key": "mainEntity", "expect": main_value, "value": value}
     if canonical and canonical in ctx.by_id:
-        return {"op": "set", "key": "mainEntity", "value": {"@id": canonical}, "expect": main_value}
+        return {"op": "set", "key": "mainEntity", "value": {"@id": canonical}, "expect": None}
     if canonical and site and site.canonical_person_name:
         page_base = (ctx.page.link or "").split("#")[0].rstrip("/")
         canonical_base = canonical.split("#")[0].rstrip("/")
         if page_base and page_base.casefold() == canonical_base.casefold():
-            return {"op": "set", "key": "mainEntity", "expect": main_value,
+            return {"op": "set", "key": "mainEntity", "expect": None,
                     "value": {"@type": "Person", "@id": canonical,
                               "name": site.canonical_person_name, "url": canonical_base + "/"}}
     return None
@@ -294,9 +348,12 @@ def rule_profile_parent_node(ctx: PageContext) -> List[Finding]:
                 reasons.append(f"mainEntity is the string {item!r}, not an object")
                 continue
             types, why = _resolve(ctx, item)
-            if types & PROFILE_ENTITY_TYPES:
-                ok = True
-                break
+            if _allowed(ENTITY, types):
+                if _has_name(ctx, item):
+                    ok = True
+                    break
+                reasons.append("mainEntity resolves to an entity with no name")
+                continue
             reasons.append(why or f"mainEntity @type is {sorted(types)}, not Person/Organization")
         if ok:
             continue
@@ -315,7 +372,7 @@ def rule_object_fields(ctx: PageContext) -> List[Finding]:
     """
     out: List[Finding] = []
     for block, path, node in ctx.nodes:
-        for key, allowed in OBJECT_FIELDS.items():
+        for key, family in OBJECT_FIELDS.items():
             if key not in node:
                 continue
             value = node[key]
@@ -327,15 +384,16 @@ def rule_object_fields(ctx: PageContext) -> List[Finding]:
                 if isinstance(item, str):
                     problems.append(f"{key} is the string {item!r}")
                     fix = _object_fix(ctx, key, item)
-                    if fix is None:
+                    if fix is None or not _allowed(family, _resolve(ctx, fix)[0]):
                         fixable = False
+                        fix = None
                     converted.append(fix)
                     continue
                 types, why = _resolve(ctx, item)
-                if isinstance(item, dict) and types & allowed:
+                if isinstance(item, dict) and _allowed(family, types):
                     converted.append(item)
                     continue
-                expected = sorted(allowed & {"Person", "Organization"}) + ["..."]
+                expected = ["Person"] if family == PERSON else ["Person", "Organization (any subtype)"]
                 problems.append(why or f"{key} @type is {sorted(types)}, expected {expected}")
                 fixable = False
                 converted.append(item)
@@ -353,8 +411,31 @@ def rule_object_fields(ctx: PageContext) -> List[Finding]:
     return out
 
 
+def _is_page_node(ctx: PageContext, path: Tuple[Any, ...], node: Dict[str, Any]) -> bool:
+    """Only a top-level node of a page type that does not point at another
+    URL may take the page's own dates."""
+    if not (path == () or (len(path) == 2 and path[0] == "@graph")):
+        return False
+    if not (set(node_types(node)) & PAGE_NODE_TYPES):
+        return False
+    link = (ctx.page.link or "").split("#")[0].rstrip("/").casefold()
+    ids = _urls(node)
+    meop = node.get("mainEntityOfPage")
+    for v in (meop if isinstance(meop, list) else [meop]):
+        if isinstance(v, dict):
+            v = v.get("@id")
+        if isinstance(v, str):
+            ids.add(v.split("#")[0].rstrip("/").casefold())
+    return not ids or link in ids
+
+
 def rule_datetime_values(ctx: PageContext) -> List[Finding]:
-    """Date fields must be real ISO 8601 moments. Google: 'Invalid datetime value'."""
+    """Date fields must be real ISO 8601 moments. Google: 'Invalid datetime value'.
+
+    A repair uses the page's own dates, so it is offered only for the node
+    that stands for the page; a Review or Comment inside the graph has its
+    own date the tool cannot know.
+    """
     out: List[Finding] = []
     page = ctx.page
     for block, path, node in ctx.nodes:
@@ -367,17 +448,23 @@ def rule_datetime_values(ctx: PageContext) -> List[Finding]:
                 reason = ("not ISO 8601" if isinstance(literal, str)
                           else f"a JSON {type(literal).__name__}, not a date string")
                 replacement = None
-                if key == "dateModified":
-                    replacement = _iso_utc(getattr(page, "modified_gmt", ""))
-                elif key == "datePublished":
-                    replacement = _iso_utc(getattr(page, "date_gmt", ""))
+                derived = ""
+                if _is_page_node(ctx, path, node):
+                    if key == "dateModified":
+                        replacement, derived = _iso_utc(getattr(page, "modified_gmt", "")), "modified_gmt"
+                    elif key == "datePublished":
+                        replacement, derived = _iso_utc(getattr(page, "date_gmt", "")), "date_gmt"
                 patch = None
+                hand = ""
                 if replacement and not isinstance(node[key], list):
-                    patch = {"op": "set", "key": key, "value": replacement, "expect": node[key]}
+                    patch = {"op": "set", "key": key, "value": replacement, "expect": node[key], "derived": derived}
+                elif not _is_page_node(ctx, path, node):
+                    hand = ("This date belongs to a nested item (review, comment, video...), not the page; "
+                            "correct it by hand to the item's real date in ISO 8601.")
                 out.append(ctx.finding(
                     "invalid-datetime", WARNING, f'Invalid datetime value for "{key}"',
                     block=block, path=path, node=node,
-                    detail=f"Found {literal!r}: {reason}.", patch=patch))
+                    detail=f"Found {literal!r}: {reason}.", patch=patch, hand_edit=hand))
                 break
     return out
 
@@ -421,28 +508,43 @@ def rule_entity_fragmentation(ctx: PageContext) -> List[Finding]:
     org_url = (site.canonical_org_id or "").split("#")[0].rstrip("/").casefold()
 
     def emit(block: int, path: Tuple[Any, ...], node: Dict[str, Any], node_id: str, new_id: str, what: str) -> None:
-        dangling = references_outside(ctx.blocks, node_id, block)
+        referencing = references_outside(ctx.blocks, node_id, block)
+        follow = [i for i in referencing if ctx.block_sources.get(i, (SOURCE_UNKNOWN, ""))[0] == SOURCE_BODY]
+        dangling = [i for i in referencing if i not in follow]
         patch: Optional[Dict[str, Any]] = {"op": "rename_id", "old": node_id, "new": new_id}
         detail = f"Found {node_id}, expected {new_id}."
+        severity = WARNING
+        hand = ""
+        source, plugin = ctx.block_sources.get(block, (SOURCE_UNKNOWN, ""))
+        if follow:
+            detail += f" References in body block(s) {follow} are renamed with it."
         if dangling:
             patch = None
-            detail += (f" Referenced from block(s) {dangling} that do not define it; renaming here "
-                       "would leave those references dangling, so this must be changed by hand in "
-                       "every block at once.")
+            detail += (f" Referenced from block(s) {dangling} this tool does not own; renaming here "
+                       "would leave those references dangling, so change it by hand everywhere at once.")
+        if source == SOURCE_PLUGIN and what == "person":
+            own_url = (node.get("url") or "").split("#")[0].rstrip("/").casefold()
+            if own_url and own_url == node_id.split("#")[0].rstrip("/").casefold():
+                severity = NOTICE
+                hand = (f"{plugin or 'The SEO plugin'} sets a post author's Person @id to the author archive URL; "
+                        "no plugin screen changes it. Either accept it as the person's id (set "
+                        "canonical_person_id in config.py to it) or point sameAs on the author "
+                        "profile at the canonical URL so the two are linked.")
         out.append(ctx.finding(
-            "entity-fragmentation", WARNING, f"Canonical {what} uses a non-canonical @id",
-            block=block, path=path, node=node, detail=detail, patch=patch))
+            "entity-fragmentation", severity, f"Canonical {what} uses a non-canonical @id",
+            block=block, path=path, node=node, detail=detail, patch=patch, hand_edit=hand))
 
     for block, path, node in ctx.nodes:
         node_id = node.get("@id")
         if not isinstance(node_id, str) or not node.get("@type"):
             continue
         types = set(node_types(node))
-        if site.canonical_person_id and types & PERSON_TYPES and node_id != site.canonical_person_id:
-            if _names(node) & person_names or (person_url and person_url in _urls(node)):
+        if site.canonical_person_id and any(is_person_type(t) for t in types) and node_id != site.canonical_person_id:
+            names = _names(node)
+            if names & person_names or (person_url and person_url in _urls(node) and not names):
                 emit(block, path, node, node_id, site.canonical_person_id, "person")
-        if site.canonical_org_id and types & ORG_TYPES and node_id != site.canonical_org_id:
-            if _names(node) & org_names or (org_url and org_url in _urls(node) and _names(node) & org_names):
+        if site.canonical_org_id and any(is_org_type(t) for t in types) and node_id != site.canonical_org_id:
+            if _names(node) & org_names or (org_url and org_url in _urls(node) and not _names(node)):
                 emit(block, path, node, node_id, site.canonical_org_id, "organization")
     return out
 
@@ -466,9 +568,9 @@ def rule_stale_draft(ctx: PageContext, stale_days: int = 180) -> List[Finding]:
             pass
     if age is not None and age > stale_days:
         reasons.append(f"last edited {age} days ago")
-        if page.date_gmt and page.modified_gmt[:16] == page.date_gmt[:16]:
-            reasons.append("never edited after creation")
-    if not getattr(page, "is_breakdance", False):
+    # WordPress resets post_date on every save of a floating draft, so
+    # date_gmt == modified_gmt is not edit history; it is not used.
+    if not getattr(page, "is_breakdance", False) and (age is None or age > SHORT_BODY_GRACE_DAYS):
         text = re.sub(r"<[^>]+>", "", page.body_rendered or "").strip()
         if len(text) < 200:
             reasons.append(f"{len(text)} characters of body text")
@@ -530,7 +632,7 @@ def classify_blocks(page: Any, blocks: List[Block]) -> Tuple[Dict[int, Tuple[str
         elif raw is None:
             sources[b.index] = (SOURCE_UNKNOWN, "")
         else:
-            match = match_block_in_raw(b, raw)
+            match = match_block_in_raw(b, raw, exclude=set(raw_index.values()))
             if match is None:
                 sources[b.index] = (SOURCE_HEAD, "")
             else:
@@ -568,15 +670,18 @@ def build_context(page: Any, site: Optional[config.Site]) -> PageContext:
             for path, node in iter_nodes(b.document):
                 nodes.append((b.index, path, node))
     flat = [n for _, _, n in nodes]
-    defs: Dict[str, Set[int]] = {}
+    # Identity bookkeeping is over body blocks only: plugin output can change
+    # without touching post_content and must not renumber a repair.
+    defs: Dict[str, List[int]] = {}
     for block, _, node in nodes:
         nid = node.get("@id")
-        if isinstance(nid, str) and node.get("@type"):
-            defs.setdefault(nid, set()).add(block)
+        if isinstance(nid, str) and node.get("@type") and block in raw_index:
+            defs.setdefault(nid, []).append(block)
     return PageContext(
         page=page, site=site, blocks=blocks, block_sources=sources, raw_index=raw_index,
         nodes=nodes, by_id=index_by_id(flat), types_by_id=types_by_id(flat),
-        shared_ids={i for i, bs in defs.items() if len(bs) > 1},
+        shared_ids={i for i, bs in defs.items() if len(set(bs)) > 1},
+        duplicate_ids={(b, i) for i, bs in defs.items() for b in bs if bs.count(b) > 1},
     )
 
 

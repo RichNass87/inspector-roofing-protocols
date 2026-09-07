@@ -12,7 +12,10 @@ from cleanuprtx.jsonld import PatchError, Target, find_blocks
 from tests.helpers import PERSON, SITE, body_page, ld, page
 
 PP = {"@type": "ProfilePage", "@id": "https://inspector-roofing.com/richard-nasser/#pp", "name": "R"}
-PATCH = {"op": "set", "key": "mainEntity", "value": {"@id": PERSON}}
+# The repair embeds a Person definition: a bare {"@id"} reference is only written
+# when that node is defined on the page, and these fixtures do not define it.
+PATCH_VALUE = {"@type": "Person", "@id": PERSON, "name": "Richard Amir Nasser"}
+PATCH = {"op": "set", "key": "mainEntity", "value": PATCH_VALUE}
 
 
 class Recorder:
@@ -64,7 +67,7 @@ class TestStageBlockRepair(unittest.TestCase):
         self.assertEqual(set(call["body"]), {"content"}, "only content may ever be sent")
         self.assertNotIn("status", json.dumps(call["body"]).lower().split('"content"')[0])
         patched = find_blocks(call["body"]["content"])[0].document
-        self.assertEqual(patched["mainEntity"], {"@id": PERSON})
+        self.assertEqual(patched["mainEntity"], PATCH_VALUE)
         self.assertIn("<!-- wp:html -->", call["body"]["content"], "surrounding bytes preserved")
         self.assertIn("post.php?post=41&action=edit", link)
 
@@ -174,18 +177,26 @@ class TestStageBlockRepair(unittest.TestCase):
 
 
 class TestVerifyDiagnosis(unittest.TestCase):
-    def _fail(self, code, status=401, probe_code=None):
+    def _fail(self, code, status=401, probe_code=None, index=None):
         responses = [HttpError(status, "u", json.dumps({"code": code, "message": "m"}))]
         if probe_code is not None:
             responses.append(HttpError(401, "u", json.dumps({"code": probe_code})))
+        if index is not None:
+            responses.append(index)
         rec = Recorder(responses)
         with mock.patch.object(wordpress, "request_json", rec), self.assertRaises(wordpress.AuthDiagnosis) as cm:
             client().verify()
         return str(cm.exception)
 
     def test_stripped_header(self):
-        msg = self._fail("rest_not_logged_in", probe_code="rest_not_logged_in")
+        index = {"authentication": {"application-passwords": {"endpoints": {"authorization": "https://x/wp-admin/authorize-application.php"}}}}
+        msg = self._fail("rest_not_logged_in", probe_code="rest_not_logged_in", index=index)
         self.assertIn("SetEnvIf", msg)
+
+    def test_app_passwords_unavailable_is_named_not_blamed_on_the_host(self):
+        msg = self._fail("rest_not_logged_in", probe_code="rest_not_logged_in", index={"authentication": {}})
+        self.assertIn("unavailable", msg)
+        self.assertNotIn("SetEnvIf", msg)
 
     def test_header_seen_but_rejected(self):
         msg = self._fail("rest_not_logged_in", probe_code="incorrect_password")

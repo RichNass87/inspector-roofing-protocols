@@ -10,6 +10,8 @@ from __future__ import annotations
 import subprocess
 from typing import Optional
 
+from .invocation import prog
+
 SECURITY = "/usr/bin/security"
 
 
@@ -60,8 +62,8 @@ def read_secret(service: str, account: Optional[str] = None) -> str:
             raise KeychainError(
                 f"No Keychain item named {service!r}"
                 + (f" for account {account!r}" if account else "")
-                + ". Run 'cleanuprtx doctor' to see which items are expected, "
-                "or 'cleanuprtx auth' to create them."
+                + f". Run '{prog()} doctor' to see which items are expected, "
+                f"or '{prog()} auth' to create them."
             )
         raise KeychainError(
             f"Keychain refused to release {service!r} (locked, or access was "

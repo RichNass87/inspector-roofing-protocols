@@ -11,13 +11,15 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from . import __version__, config, report
-from .approvals import APPROVED, PENDING, Ledger, LedgerError
-from .audit import AuditResult, audit_pages
+from .approvals import APPLIED, APPROVED, PENDING, Ledger, LedgerError
+from .audit import AuditResult, audit_pages, scan_source
 from .gsc import ScopeError, SearchConsoleClient
 from .http import HttpError, fetch_text
-from .jsonld import AlreadyApplied, PatchError, Target, find_blocks, locate, page_title
+from .invocation import prog
+from .jsonld import (AlreadyApplied, PatchError, Target, find_blocks, locate, match_block_in_raw,
+                     node_fingerprint, page_title)
 from .keychain import KeychainError, item_exists
-from .wordpress import AUDIT_CAPS, WRITE_CAPS, AuthDiagnosis, Content, WordPressClient
+from .wordpress import AUDIT_CAPS, WRITE_CAPS, AuthDiagnosis, Content, OwnershipLost, WordPressClient
 
 SEO_PLUGINS = {"seo-by-rank-math": "Rank Math", "seo-by-rank-math-pro": "Rank Math Pro",
                "wordpress-seo": "Yoast SEO", "wordpress-seo-premium": "Yoast SEO Premium",
@@ -30,12 +32,14 @@ NS_HINTS = {"rankmath/v1": "Rank Math", "yoast/v1": "Yoast SEO", "breakdance/v1"
 CACHE_DIR = Path.home() / ".cleanuprtx" / "cache"
 
 
-def prog() -> str:
-    """How to invoke this tool, as the owner actually ran it."""
-    argv0 = os.path.basename(sys.argv[0] or "")
-    if argv0 in ("__main__.py", "") or argv0.endswith("__main__.py"):
-        return "python3 -m cleanuprtx"
-    return "cleanuprtx"
+def _positive_int(text: str) -> int:
+    try:
+        value = int(text)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"expected a positive integer, got {text!r}")
+    if value < 1:
+        raise argparse.ArgumentTypeError(f"expected a positive integer, got {value}")
+    return value
 
 
 def _site(name: str) -> config.Site:
@@ -65,51 +69,71 @@ def _warn(msg: str) -> None:
 # --- front-end cache ------------------------------------------------------
 
 class FrontCache:
-    """Live-page HTML keyed by (link, modified_gmt), so an interrupted audit
-    resumes where it stopped and an unchanged page is not fetched twice."""
+    """Live-page HTML, append-only, one JSON line per fetch, keyed by
+    (link, modified_gmt). An interrupted audit resumes where it stopped.
+    Read only under --resume; every put is O(one page)."""
 
     def __init__(self, site_slug: str) -> None:
-        self.path = CACHE_DIR / f"{site_slug}.json"
+        self.path = CACHE_DIR / f"{site_slug}.jsonl"
         self.data: Dict[str, Dict[str, Any]] = {}
-        self._dirty = 0
+        self._loaded = False
+        self._fh = None
+
+    def load(self) -> None:
+        self._loaded = True
         try:
-            self.data = json.loads(self.path.read_text(encoding="utf-8"))
-            if not isinstance(self.data, dict):
-                self.data = {}
-        except (OSError, ValueError):
-            self.data = {}
+            with open(self.path, encoding="utf-8") as fh:
+                for line in fh:
+                    try:
+                        entry = json.loads(line)
+                    except ValueError:
+                        continue
+                    if isinstance(entry, dict) and entry.get("link"):
+                        self.data[entry["link"]] = entry          # last line wins
+        except OSError:
+            pass
 
     def get(self, page: Content, max_age_s: float = 24 * 3600) -> Optional[Dict[str, Any]]:
-        """A cached page is reused only within max_age: plugin or theme changes
-        alter the head schema without touching modified_gmt."""
+        """Reused only within max_age (plugin or theme changes alter the head
+        schema without touching modified_gmt) and only when it carries a
+        result: a failed fetch is always retried - that is what --resume is for."""
         import time as _time
+        if not self._loaded:
+            self.load()
         entry = self.data.get(page.link)
-        if (entry and entry.get("modified_gmt") == page.modified_gmt
-                and _time.time() - float(entry.get("at", 0)) < max_age_s):
-            return entry
-        return None
+        if not entry or entry.get("modified_gmt") != page.modified_gmt:
+            return None
+        if _time.time() - float(entry.get("at", 0)) >= max_age_s:
+            return None
+        if entry.get("html") is None and not entry.get("redirected_to"):
+            return None
+        return entry
 
     def put(self, page: Content) -> None:
         import time as _time
-        self.data[page.link] = {"modified_gmt": page.modified_gmt, "status": page.front_status,
-                                "html": page.front_html, "redirected_to": page.front_redirected_to,
-                                "at": _time.time()}
-        self._dirty += 1
-        if self._dirty >= 25:
-            self.flush()
-
-    def flush(self) -> None:
-        if not self._dirty:
-            return
+        entry = {"link": page.link, "modified_gmt": page.modified_gmt, "status": page.front_status,
+                 "html": page.front_html, "redirected_to": page.front_redirected_to, "at": _time.time()}
         try:
-            self.path.parent.mkdir(parents=True, exist_ok=True)
-            tmp = self.path.with_suffix(".tmp")
-            tmp.write_text(json.dumps(self.data), encoding="utf-8")
-            os.chmod(tmp, 0o600)
-            os.replace(tmp, self.path)
+            if self._fh is None:
+                self.path.parent.mkdir(parents=True, exist_ok=True)
+                try:
+                    self.path.parent.chmod(0o700)
+                except OSError:
+                    pass
+                self._fh = open(self.path, "a", encoding="utf-8")
+                os.chmod(self.path, 0o600)
+            self._fh.write(json.dumps(entry, ensure_ascii=False) + "\n")
+            self._fh.flush()
         except OSError:
             pass
-        self._dirty = 0
+
+    def flush(self) -> None:
+        if self._fh is not None:
+            try:
+                self._fh.close()
+            except OSError:
+                pass
+            self._fh = None
 
 
 # --- doctor -------------------------------------------------------------
@@ -118,13 +142,14 @@ def cmd_doctor(args: argparse.Namespace) -> int:
     print(f"cleanuprtx {__version__}\n")
     problems = 0
 
+    sites = [config.SITES[args.site]] if args.site != "all" else list(config.SITES.values())
     print("Keychain items")
-    for slug, site in sorted(config.SITES.items()):
+    for site in sorted(sites, key=lambda x: x.slug):
         ok = item_exists(site.wp_keychain_service, site.wp_account)
         problems += 0 if ok else 1
-        print(f"  [{'ok     ' if ok else 'MISSING'}] WordPress app password - {slug} (login {site.wp_account})")
+        print(f"  [{'ok     ' if ok else 'MISSING'}] WordPress app password - {site.slug} (login {site.wp_account})")
         if not ok:
-            print(f"            {prog()} auth wordpress --site {slug}")
+            print(f"            {prog()} auth wordpress --site {site.slug}")
     for service, label in ((config.KC_GOOGLE_CLIENT_ID, "Google OAuth client ID"),
                            (config.KC_GOOGLE_CLIENT_SECRET, "Google OAuth client secret"),
                            (config.KC_GOOGLE_REFRESH_TOKEN, "Google refresh token")):
@@ -134,7 +159,6 @@ def cmd_doctor(args: argparse.Namespace) -> int:
     if not item_exists(config.KC_GOOGLE_REFRESH_TOKEN):
         print(f"            {prog()} auth google-client   then   {prog()} auth google")
 
-    sites = [config.SITES[args.site]] if args.site != "all" else list(config.SITES.values())
     for site in sites:
         print(f"\nWordPress - {site.slug} ({site.wp_base_url}, as {site.wp_account})")
         client = WordPressClient(site)
@@ -160,23 +184,35 @@ def cmd_doctor(args: argparse.Namespace) -> int:
 
         info = client.discover()
         plugins = {p["slug"]: p for p in info.get("plugins", [])}
+        namespaces = info.get("namespaces", [])
+        refused = info.get("plugins_error", "")
+        seo_names = [SEO_PLUGINS[s] for s in SEO_PLUGINS if s in plugins]
         seo = [f"{SEO_PLUGINS[s]} {plugins[s]['version']}" for s in SEO_PLUGINS if s in plugins]
+        if not seo_names:
+            seo_names = [NS_HINTS[n] for n in namespaces if n in NS_HINTS
+                         and NS_HINTS[n] in ("Rank Math", "Yoast SEO", "All in One SEO")]
+            seo = list(seo_names)
         waf = [WAF_PLUGINS[s] for s in WAF_PLUGINS if s in plugins]
-        if not seo:
-            seo = [NS_HINTS[n] for n in info.get("namespaces", []) if n in NS_HINTS
-                   and NS_HINTS[n] in ("Rank Math", "Yoast SEO", "All in One SEO")]
-        builder = "breakdance" in plugins or "breakdance/v1" in info.get("namespaces", [])
-        print(f"  SEO plugin   {', '.join(seo) or 'none detected (schema comes from theme/hand-written blocks)'}")
-        print(f"  Page builder {'Breakdance ' + plugins.get('breakdance', {}).get('version', '') if builder else 'none detected'}")
-        if builder != site.breakdance:
+        if not waf and "wordfence/v1" in namespaces:
+            waf = ["Wordfence"]
+        builder_seen = "breakdance" in plugins or "breakdance/v1" in namespaces
+        unknown = " (plugin list unavailable: " + refused + ")" if refused else ""
+        print(f"  SEO plugin   {', '.join(seo) or ('unknown' + unknown if refused else 'none detected (schema comes from theme/hand-written blocks)')}")
+        if builder_seen:
+            print(f"  Page builder Breakdance {plugins.get('breakdance', {}).get('version', '')}".rstrip())
+        elif refused:
+            print(f"  Page builder unknown{unknown}")
+        else:
+            print("  Page builder none detected")
+        if not refused and builder_seen != site.breakdance:
             print(f"  [WARN   ] config says breakdance={site.breakdance} but the site "
-                  f"{'has' if builder else 'does not have'} Breakdance")
+                  f"{'has' if builder_seen else 'does not have'} Breakdance")
         if waf:
             print(f"  Security     {', '.join(waf)}  " + ("<- likely source of Googlebot 403s" if site.slug != "inspector-roofing" else ""))
-        if info.get("plugins_error"):
-            print(f"  {'':12} plugin list unavailable ({info['plugins_error']})")
-        if seo and any(s.startswith("Rank Math") or s.startswith("Yoast") for s in seo):
-            print(f"  {'':12} note: schema generated by {seo[0].split(' ')[0]} is report-only; "
+        elif refused:
+            print(f"  Security     unknown{unknown}")
+        if seo_names and seo_names[0] in ("Rank Math", "Rank Math Pro", "Yoast SEO", "Yoast SEO Premium"):
+            print(f"  {'':12} note: schema generated by {seo_names[0]} is report-only; "
                   "the audit names the plugin screen to fix it in")
 
     print("\nGoogle Search Console")
@@ -278,7 +314,10 @@ def cmd_audit(args: argparse.Namespace) -> int:
     except HttpError as exc:
         partial = str(exc)
     except KeyboardInterrupt:
-        partial = "interrupted during inventory"
+        # Nothing has been fetched or cached yet, so there is nothing to keep.
+        print(f"\n  interrupted during inventory after {len(pages)} items; nothing fetched yet",
+              file=sys.stderr)
+        return 130
     print(file=sys.stderr)
     if partial:
         print(f"  inventory stopped early: {partial}\n  auditing the {len(pages)} items fetched so far",
@@ -333,12 +372,21 @@ def cmd_audit(args: argparse.Namespace) -> int:
 
     if args.propose:
         ledger = Ledger()
-        before = set(ledger.repairs)
-        for finding in result.auto_fixable:
-            ledger.propose(site.slug, finding)
-        added = len(set(ledger.repairs) - before)
-        ledger.save()
-        print(f"\n{added} new repair(s) proposed ({len(ledger.in_state(PENDING, site.slug))} pending). "
+        with ledger.lock():            # re-reads under the lock: an apply may have saved since
+            before = set(ledger.repairs)
+            reported = set()
+            for finding in result.auto_fixable:
+                r = ledger.propose(site.slug, finding)
+                if r is not None:
+                    reported.add(r.repair_id)
+            added = len(set(ledger.repairs) - before)
+            # Pages whose scan source we actually read: a row for them that this
+            # audit did not reproduce is no longer a defect.
+            audited = {(p.kind, p.id) for p in pages if scan_source(p)[0]}
+            retired = ledger.retire_unreported(site.slug, audited, reported) if not partial else []
+            ledger.save()
+        print(f"\n{added} new repair(s) proposed ({len(ledger.in_state(PENDING, site.slug))} pending"
+              + (f", {len(retired)} retired as no longer reported" if retired else "") + "). "
               f"Review with:  {prog()} pending")
     return 1 if partial else 0
 
@@ -382,7 +430,7 @@ def cmd_pending(args: argparse.Namespace) -> int:
 def _decide(ids: List[str], approved: bool) -> int:
     ledger = Ledger()
     verb = "Approved" if approved else "Rejected"
-    with ledger.lock():
+    with ledger.lock():                # re-reads the ledger once held
         for repair_id in ids:
             try:
                 r = ledger.decide(repair_id, approved)
@@ -405,50 +453,73 @@ def cmd_reject(args: argparse.Namespace) -> int:
 
 
 def _resolve_front_block(page: Content, r: Any) -> Tuple[Optional[Any], Target]:
-    """Find the live block holding the repair's node. Never by position alone:
-    plugins emit blocks ahead of the body block and shift indices."""
+    """Find the block holding the repair's node in the document the audit read.
+
+    Never by position alone: plugins emit blocks ahead of the body block and
+    shift indices. For id-less nodes the stored fingerprint must match, and
+    where post_content is known the candidate must map to the same
+    post_content block the repair was keyed on.
+    """
     target = Target.from_dict(r.target)
-    blocks = [b for b in find_blocks(page.front_html or "") if not b.plugin]
+    html = page.front_html if page.is_public else page.content_raw
+    blocks = [b for b in find_blocks(html or "") if not b.plugin]
 
     def holds(b: Any) -> bool:
         if b.document is None:
             return False
         try:
-            locate(b.document, target)
-            return True
+            _, node = locate(b.document, target)
         except PatchError:
             return False
+        if not target.node_id and target.fingerprint:
+            return node_fingerprint(node) == target.fingerprint
+        return True
 
-    at_index = next((b for b in blocks if b.index == r.block_index), None)
-    if at_index is not None and holds(at_index):
-        return at_index, target
-    return next((b for b in blocks if holds(b)), None), target
+    candidates = [b for b in blocks if holds(b)]
+    if not candidates:
+        return None, target
+    if target.raw_block >= 0 and page.content_raw:
+        owned = [b for b in candidates
+                 if (m := match_block_in_raw(b, page.content_raw)) is not None and m.index == target.raw_block]
+        if len(owned) == 1:
+            return owned[0], target
+        if not owned:
+            return None, target
+        candidates = owned
+    at_index = next((b for b in candidates if b.index == r.block_index), None)
+    return (at_index or candidates[0]), target
 
 
 def cmd_apply(args: argparse.Namespace) -> int:
     """Stage approved repairs, one write per page. Never publishes."""
     color = report.use_color(args.no_color)
     ledger = Ledger()
-    approved = ledger.in_state(APPROVED, _sites_arg(args.site))
+    site_filter = _sites_arg(args.site)
+    approved = ledger.in_state(APPROVED, site_filter)
     if not approved:
         print("No approved repairs to apply.")
         return 0
-
-    print(f"{len(approved)} approved repair(s).")
     if args.dry_run:
-        print("Dry run - nothing will be written.\n")
+        print(f"{len(approved)} approved repair(s).\nDry run - nothing will be written.\n")
         report.print_repairs(approved, color=color)
         return 0
 
-    # Group by page: WordPress keeps ONE autosave per post per user, so every
-    # repair on a page must fold into a single write.
-    groups: "OrderedDict[Tuple[str, str, int], List[Any]]" = OrderedDict()
-    for r in approved:
-        groups.setdefault((r.site, r.kind, r.page_id), []).append(r)
-
     clients: Dict[str, WordPressClient] = {}
     applied = skipped = failed = 0
-    with ledger.lock():
+    with ledger.lock():                      # re-reads the ledger once held
+        approved = ledger.in_state(APPROVED, site_filter)
+        print(f"{len(approved)} approved repair(s).")
+        # Group by page: WordPress keeps ONE autosave per post per user, so every
+        # repair on a page - this run's and any staged earlier but not yet
+        # restored - must fold into a single write.
+        groups: "OrderedDict[Tuple[str, str, int], List[Any]]" = OrderedDict()
+        for r in approved:
+            groups.setdefault((r.site, r.kind, r.page_id), []).append(r)
+        carried: Dict[Tuple[str, str, int], List[Any]] = {}
+        for r in ledger.repairs.values():
+            key = (r.site, r.kind, r.page_id)
+            if key in groups and r.state == APPLIED and str(r.result).startswith("autosave:"):
+                carried.setdefault(key, []).append(r)
         try:
             for (site_slug, kind, page_id), repairs in groups.items():
                 site = config.SITES.get(site_slug)
@@ -467,12 +538,23 @@ def cmd_apply(args: argparse.Namespace) -> int:
                             print(f"  {r.repair_id}: {kind}/{page_id} no longer exists - marked stale")
                         skipped += len(repairs)
                         continue
-                    if not page.is_public:
-                        raise PatchError(f"page is now '{page.status}', not published; retried once it is")
-                    client.load_front_html(page)
-                    if page.front_html is None:
-                        raise HttpError(page.front_status, page.link,
-                                        "live page could not be fetched; repairs stay queued")
+                    if page.is_public:
+                        client.load_front_html(page)
+                        if page.front_html is None:
+                            raise HttpError(page.front_status, page.link,
+                                            "live page could not be fetched; repairs stay queued")
+                    elif page.writable:
+                        # Unpublished: the audit read post_content (--include-drafts),
+                        # so the block is resolved there. Also refreshes status.
+                        client.load_content_raw(page)
+                        if not page.writable:
+                            raise PatchError(f"{kind}/{page_id} is now '{page.status}'; not written")
+                    else:
+                        for r in repairs:
+                            ledger.mark_stale(r.repair_id, f"{kind}/{page_id} is {page.status}; not written")
+                            print(f"  {r.repair_id}: {kind}/{page_id} is {page.status} - marked stale")
+                        skipped += len(repairs)
+                        continue
                 except (HttpError, PatchError, KeychainError, AuthDiagnosis) as exc:
                     for r in repairs:
                         ledger.mark_failed(r.repair_id, str(exc))
@@ -480,27 +562,57 @@ def cmd_apply(args: argparse.Namespace) -> int:
                     failed += len(repairs)
                     continue
 
+                # A rename changes the @id a later set on the same node is located
+                # by, and a set may write a reference that only a later rename
+                # rewrites: fold every set before any rename.
+                ordered = sorted(repairs, key=lambda r: (r.patch or {}).get("op") == "rename_id")
+                recarry = sorted(carried.get((site_slug, kind, page_id), []),
+                                 key=lambda r: (r.patch or {}).get("op") == "rename_id")
                 working: Optional[str] = None
                 folded: List[Any] = []
-                for r in repairs:
+                recarried: List[Any] = []
+                blocked = ""
+                for r in recarry + ordered:
+                    is_carry = r.state == APPLIED
+                    if not isinstance(r.target, dict) or not isinstance(r.patch, dict):
+                        why = "malformed repair row (target/patch is not an object); re-run 'audit --propose'"
+                        ledger.mark_stale(r.repair_id, why)
+                        print(f"  {r.repair_id}: {why} - marked stale")
+                        skipped += 1
+                        continue
                     try:
                         front_block, target = _resolve_front_block(page, r)
                         if front_block is None:
-                            ledger.mark_stale(r.repair_id, "JSON-LD block no longer on the live page")
-                            print(f"  {r.repair_id}: block no longer present - marked stale")
-                            skipped += 1
-                            continue
+                            raise OwnershipLost("JSON-LD block no longer in the page's schema")
                         working = client.prepare_block_repair(page, front_block, target, r.patch, working)
-                        folded.append(r)
+                        (recarried if is_carry else folded).append(r)
                     except AlreadyApplied as exc:
                         ledger.mark_applied(r.repair_id, f"already correct: {exc}")
-                        print(f"  {r.repair_id}: already correct on the page - marked applied")
-                        applied += 1
-                    except (HttpError, PatchError, KeychainError, AuthDiagnosis) as exc:
-                        ledger.mark_failed(r.repair_id, str(exc))
-                        print(f"  {r.repair_id}: FAILED - {exc}")
-                        failed += 1
-
+                        if is_carry:
+                            print(f"  {r.repair_id}: earlier staged repair is now on the page")
+                        else:
+                            print(f"  {r.repair_id}: already correct on the page - marked applied")
+                            applied += 1
+                    except (HttpError, PatchError, ValueError, KeychainError, AuthDiagnosis) as exc:
+                        if is_carry:
+                            # Never stage a page without a repair it already holds.
+                            blocked = f"earlier staged repair {r.repair_id} cannot be re-carried ({exc})"
+                            break
+                        if isinstance(exc, OwnershipLost):
+                            ledger.mark_stale(r.repair_id, str(exc))
+                            print(f"  {r.repair_id}: {exc} - marked stale")
+                            skipped += 1
+                        else:
+                            ledger.mark_failed(r.repair_id, str(exc))
+                            print(f"  {r.repair_id}: FAILED - {exc}")
+                            failed += 1
+                if blocked:
+                    for r in ordered:
+                        if r.state in (APPROVED, "failed"):
+                            ledger.mark_failed(r.repair_id, blocked)
+                            print(f"  {r.repair_id}: FAILED - {blocked}")
+                            failed += 1
+                    continue
                 if not folded or working is None:
                     continue
                 try:
@@ -515,7 +627,11 @@ def cmd_apply(args: argparse.Namespace) -> int:
                 for r in folded:
                     ledger.mark_applied(r.repair_id, f"{mode}: {link}")
                     print(f"  {r.repair_id}: {what} - review at {link}")
+                for r in recarried:
+                    ledger.mark_applied(r.repair_id, f"{mode}: {link}")
                 applied += len(folded)
+                if recarried:
+                    print(f"  ({len(recarried)} earlier staged repair(s) carried into the same {mode})")
         finally:
             ledger.save()
 
@@ -696,8 +812,8 @@ def build_parser() -> argparse.ArgumentParser:
     add_site(p)
     p.add_argument("--property", help="override the Search Console property")
     p.add_argument("--from-search-console", action="store_true", help="inspect URLs with impressions, most first")
-    p.add_argument("--max", type=int, default=200, help="cap for --from-search-console (quota is 2,000/day)")
-    p.add_argument("--days", type=int, default=90)
+    p.add_argument("--max", type=_positive_int, default=200, help="cap for --from-search-console, 1-2000 (quota is 2,000/day)")
+    p.add_argument("--days", type=_positive_int, default=90)
     p.add_argument("urls", nargs="*", metavar="URL")
     p.set_defaults(func=cmd_indexing)
 

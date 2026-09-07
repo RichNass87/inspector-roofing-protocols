@@ -191,10 +191,15 @@ class TestEntityFragmentation(unittest.TestCase):
         r = audit_pages([body_page(graph({"@type": "Person", "@id": "https://inspector-roofing.com/author/colten/#author", "name": "Colten"}))], SITE)
         self.assertEqual(findings(r, "entity-fragmentation"), [])
 
-    def test_match_by_url(self):
+    def test_match_by_url_only_when_unnamed(self):
+        """A url pointing at the profile identifies an unnamed node; a node carrying a
+        different name is somebody's deliberate statement and is left alone."""
+        f = findings(audit_pages([body_page(graph({"@type": "Person", "@id": "https://standards.inspector-roofing.com/#richard-nasser",
+                                                   "url": "https://inspector-roofing.com/richard-nasser/"}))], SITE), "entity-fragmentation")
+        self.assertEqual(len(f), 1)
         f = findings(audit_pages([body_page(graph({"@type": "Person", "@id": "https://standards.inspector-roofing.com/#richard-nasser",
                                                    "name": "R. Nasser", "url": "https://inspector-roofing.com/richard-nasser/"}))], SITE), "entity-fragmentation")
-        self.assertEqual(len(f), 1)
+        self.assertEqual(f, [])
 
     def test_canonical_org_by_name(self):
         f = findings(audit_pages([body_page(graph({"@type": "RoofingContractor", "@id": "https://inspector-roofing.com/#local", "name": "Inspector Roofing and Restoration"}))], SITE), "entity-fragmentation")
@@ -223,9 +228,9 @@ class TestStaleDraft(unittest.TestCase):
         self.assertEqual(f[0].reasons, ["untitled"])
         self.assertEqual(f[0].to_dict()["reasons"], ["untitled"])
 
-    def test_never_edited_counts_only_when_old(self):
-        """Floating drafts make date_gmt track modified_gmt on every save, so
-        equality alone means nothing; it is a reason only past stale_days."""
+    def test_age_is_the_only_history_signal(self):
+        """WordPress resets post_date on every save of a floating draft, so
+        date_gmt == modified_gmt is not edit history; only age counts."""
         recent = page(None, status="draft", breakdance=True, title="Storm checklist",
                       created="2026-08-30T12:00:00", modified="2026-08-30T12:00:00")
         self.assertEqual(findings(audit_pages([recent], SITE), "stale-draft"), [])
@@ -233,10 +238,13 @@ class TestStaleDraft(unittest.TestCase):
                    created="2024-01-01T12:00:00", modified="2024-01-01T12:00:00")
         f = findings(audit_pages([old], SITE), "stale-draft")
         self.assertEqual(len(f), 1)
-        self.assertIn("never edited after creation", f[0].reasons)
+        self.assertEqual(len(f[0].reasons), 1)
+        self.assertTrue(f[0].reasons[0].startswith("last edited"))
 
-    def test_non_breakdance_short_body_is_flagged(self):
-        r = audit_pages([page(None, status="draft", body="<p>hi</p>", modified="2026-08-30T12:00:00")], SITE)
+    def test_non_breakdance_short_body_is_flagged_after_a_grace_period(self):
+        fresh = audit_pages([page(None, status="draft", body="<p>hi</p>", modified="2026-09-06T12:00:00")], SITE)
+        self.assertEqual(findings(fresh, "stale-draft"), [], "a draft started yesterday is not abandoned")
+        r = audit_pages([page(None, status="draft", body="<p>hi</p>", modified="2026-07-30T12:00:00")], SITE)
         self.assertEqual(len(findings(r, "stale-draft")), 1)
 
 
