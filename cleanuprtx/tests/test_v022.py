@@ -50,7 +50,7 @@ class TestReCarryAcrossRuns(ApplyHarness):
         self.assertEqual({led.repairs[rid_a].state, led.repairs[rid_b].state}, {APPLIED})
         self.assertIn("carried", out)
 
-    def test_carry_that_cannot_be_reapplied_blocks_the_page(self):
+    def test_page_rewritten_by_hand_absorbs_the_carry_and_retires_the_new_row(self):
         doc = graph({"@type": "ProfilePage", "@id": PP_ID, "dateModified": "yesterday"})
         content = body_page(doc)
         (rid_a,) = self.propose_all(content, rule="profile-parent-node")
@@ -60,9 +60,32 @@ class TestReCarryAcrossRuns(ApplyHarness):
         changed = body_page(graph({"@type": "Article", "@id": "https://x/#a", "dateModified": "yesterday"}))
         site = Site41(changed.front_html, changed.content_raw)
         rc, out = self.run_apply(site)
+        self.assertEqual(site.writes, [], "nothing on the page matches either repair; nothing is written")
+        led = self.ledger()
+        self.assertEqual(led.repairs[rid_a].state, APPLIED)
+        self.assertIn("absorbed", led.repairs[rid_a].result, "the audit no longer reports A on this page")
+        self.assertEqual(led.repairs[rid_b].state, STALE, "B's node is gone; a re-audit proposes the new defect")
+
+    def test_transient_failure_on_a_carried_repair_blocks_the_page(self):
+        doc = graph({"@type": "ProfilePage", "@id": PP_ID, "dateModified": "yesterday"})
+        content = body_page(doc)
+        (rid_a,) = self.propose_all(content, rule="profile-parent-node")
+        self.run_apply(Site41(content.front_html, content.content_raw))
+        (rid_b,) = self.propose_all(content, rule="invalid-datetime")
+        site = Site41(content.front_html, content.content_raw)
+        real_prepare = wordpress.WordPressClient.prepare_block_repair
+
+        def flaky(self_, content_, front_block, target, patch, working_raw=None, raw_block_index=None):
+            if patch.get("key") == "mainEntity":
+                raise HttpError(503, "u", "gateway timeout")
+            return real_prepare(self_, content_, front_block, target, patch, working_raw, raw_block_index)
+
+        with mock.patch.object(wordpress.WordPressClient, "prepare_block_repair", flaky):
+            rc, out = self.run_apply(site)
         self.assertEqual(site.writes, [], "never stage a page without a repair it already holds")
         led = self.ledger()
-        self.assertEqual(led.repairs[rid_a].state, APPLIED, "the earlier row keeps its state")
+        self.assertEqual(led.repairs[rid_a].state, APPLIED)
+        self.assertTrue(led.repairs[rid_a].result.startswith("autosave:"), "still to be carried next run")
         self.assertEqual(led.repairs[rid_b].state, FAILED)
         self.assertIn("cannot be re-carried", led.repairs[rid_b].result)
 

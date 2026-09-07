@@ -276,6 +276,8 @@ def _profile_entity_fix(ctx: PageContext, item: Any) -> Optional[Dict[str, Any]]
         return c if c is not None and _allowed(ENTITY, _resolve(ctx, c)[0]) else None
     if not isinstance(item, dict) or item.get("@type"):
         return None
+    if "@type" in item and item["@type"] in (None, "", []):
+        pass   # an empty @type is repaired like a missing one
     ref, name = item.get("@id"), item.get("name")
     if ref is not None:
         if not isinstance(ref, str) or ref in ctx.by_id:
@@ -289,8 +291,8 @@ def _profile_entity_fix(ctx: PageContext, item: Any) -> Optional[Dict[str, Any]]
     if not isinstance(name, str) or not name.strip():
         return None
     canon = _canonical_match(ctx.site, name)
-    typed = {"@type": canon[2] if canon else "Person"}
-    typed.update(item)
+    typed = dict(item)
+    typed["@type"] = canon[2] if canon else "Person"
     return typed
 
 
@@ -305,6 +307,8 @@ def _profile_fix(ctx: PageContext, main_value: Any) -> Optional[Dict[str, Any]]:
     canonical = site.canonical_person_id if site else None
     if main_value is not None:
         items = main_value if isinstance(main_value, list) else [main_value]
+        if not items:
+            return None
         fixed = [_profile_entity_fix(ctx, i) for i in items]
         if any(f is None for f in fixed):
             return None
@@ -414,18 +418,26 @@ def rule_object_fields(ctx: PageContext) -> List[Finding]:
 def _is_page_node(ctx: PageContext, path: Tuple[Any, ...], node: Dict[str, Any]) -> bool:
     """Only a top-level node of a page type that does not point at another
     URL may take the page's own dates."""
-    if not (path == () or (len(path) == 2 and path[0] == "@graph")):
+    top_level = (path == () or (len(path) == 1 and isinstance(path[0], int))
+                 or (len(path) == 2 and path[0] == "@graph"))
+    if not top_level:
         return False
     if not (set(node_types(node)) & PAGE_NODE_TYPES):
         return False
-    link = (ctx.page.link or "").split("#")[0].rstrip("/").casefold()
-    ids = _urls(node)
+
+    def norm(u: str) -> str:
+        u = u.split("#")[0].rstrip("/").casefold()
+        u = u.replace("https://", "").replace("http://", "")
+        return u[4:] if u.startswith("www.") else u
+
+    link = norm(ctx.page.link or "")
+    ids = {norm(u) for u in _urls(node)}
     meop = node.get("mainEntityOfPage")
     for v in (meop if isinstance(meop, list) else [meop]):
         if isinstance(v, dict):
             v = v.get("@id")
         if isinstance(v, str):
-            ids.add(v.split("#")[0].rstrip("/").casefold())
+            ids.add(norm(v))
     return not ids or link in ids
 
 
@@ -562,7 +574,9 @@ def rule_stale_draft(ctx: PageContext, stale_days: int = 180) -> List[Finding]:
     age = None
     if page.modified_gmt:
         try:
-            modified = _dt.datetime.fromisoformat(page.modified_gmt.replace("Z", ""))
+            modified = _dt.datetime.fromisoformat(page.modified_gmt.replace("Z", "+00:00"))
+            if modified.tzinfo is not None:
+                modified = modified.astimezone(_dt.timezone.utc).replace(tzinfo=None)
             age = (_dt.datetime.utcnow() - modified).days
         except ValueError:
             pass

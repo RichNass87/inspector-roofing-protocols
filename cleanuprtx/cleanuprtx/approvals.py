@@ -55,6 +55,7 @@ class Repair:
     applied_at: str = ""
     result: str = ""
     attempts: int = 0
+    staged_modified_gmt: str = ""   # the page's modified_gmt when the autosave was staged
 
 
 def _now() -> str:
@@ -71,7 +72,7 @@ def patch_identity(patch: Dict[str, Any]) -> Dict[str, Any]:
     if op == "set":
         return {"op": "set", "key": patch.get("key")}
     if op == "rename_id":
-        return {"op": "rename_id", "old": patch.get("old")}
+        return {"op": "rename_id", "old": patch.get("old"), "new": patch.get("new")}
     return dict(patch)
 
 
@@ -104,7 +105,11 @@ class _Lock:
             os.close(self._fd)
             self._fd = None
             raise LedgerError("another cleanuprtx command holds the ledger; wait for it to finish") from exc
-        self.ledger.load()
+        try:
+            self.ledger.load()
+        except BaseException:
+            self.__exit__()
+            raise
         return self
 
     def __exit__(self, *exc: Any) -> None:
@@ -191,7 +196,24 @@ class Ledger:
             existing.target = target
             existing.message = finding.message
             if existing.state == REJECTED:
-                return existing                            # a rejection is final
+                if existing.patch.get("expect") != (finding.patch or {}).get("expect"):
+                    # The defect itself changed since the rejection: decide again.
+                    existing.state, existing.decided_at = PENDING, ""
+                    existing.result = "the defect changed since it was rejected; decide again"
+                    existing.patch = finding.patch
+                return existing                            # otherwise a rejection is final
+            if existing.state == APPLIED:
+                if str(existing.result).startswith("autosave:"):
+                    # Staged, not yet restored: the live page still shows the defect.
+                    # Keep the row; refresh the patch so a derived value is current.
+                    existing.patch = finding.patch
+                    return existing
+                # Restored/absorbed earlier and reported again: a regression.
+                existing.state, existing.decided_at, existing.applied_at = PENDING, "", ""
+                existing.result = "reported again after being applied; re-approve"
+                existing.attempts = 0
+                existing.patch = finding.patch
+                return existing
             if existing.state == STALE:
                 # The defect is back on the live page: ask for a fresh decision.
                 existing.state, existing.decided_at, existing.applied_at = PENDING, "", ""
@@ -225,9 +247,10 @@ class Ledger:
         repair.decided_at = _now()
         return repair
 
-    def mark_applied(self, repair_id: str, result: str) -> None:
+    def mark_applied(self, repair_id: str, result: str, staged_modified_gmt: str = "") -> None:
         r = self.repairs[repair_id]
         r.state, r.applied_at, r.result = APPLIED, _now(), result
+        r.staged_modified_gmt = staged_modified_gmt
 
     def mark_failed(self, repair_id: str, result: str) -> None:
         r = self.repairs[repair_id]

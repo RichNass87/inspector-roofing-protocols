@@ -11,7 +11,9 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from . import __version__, config, report
-from .approvals import APPLIED, APPROVED, PENDING, Ledger, LedgerError
+from datetime import datetime, timezone
+
+from .approvals import APPLIED, APPROVED, PENDING, Ledger, LedgerError, make_repair_id
 from .audit import AuditResult, audit_pages, scan_source
 from .gsc import ScopeError, SearchConsoleClient
 from .http import HttpError, fetch_text
@@ -120,8 +122,8 @@ class FrontCache:
                     self.path.parent.chmod(0o700)
                 except OSError:
                     pass
-                self._fh = open(self.path, "a", encoding="utf-8")
-                os.chmod(self.path, 0o600)
+                fd = os.open(str(self.path), os.O_CREAT | os.O_APPEND | os.O_WRONLY, 0o600)
+                self._fh = os.fdopen(fd, "a", encoding="utf-8")
             self._fh.write(json.dumps(entry, ensure_ascii=False) + "\n")
             self._fh.flush()
         except OSError:
@@ -134,6 +136,23 @@ class FrontCache:
             except OSError:
                 pass
             self._fh = None
+
+    def compact(self, keep_links: set) -> None:
+        """After a complete audit, rewrite the file with one line per page
+        that still exists, so it does not grow by a site snapshot per run."""
+        self.flush()
+        if not self._loaded:
+            self.load()
+        try:
+            tmp = self.path.with_suffix(".tmp")
+            fd = os.open(str(tmp), os.O_CREAT | os.O_TRUNC | os.O_WRONLY, 0o600)
+            with os.fdopen(fd, "w", encoding="utf-8") as fh:
+                for link, entry in self.data.items():
+                    if link in keep_links:
+                        fh.write(json.dumps(entry, ensure_ascii=False) + "\n")
+            os.replace(tmp, self.path)
+        except OSError:
+            pass
 
 
 # --- doctor -------------------------------------------------------------
@@ -304,6 +323,8 @@ def cmd_audit(args: argparse.Namespace) -> int:
     client = WordPressClient(site)
     kinds = [k.strip() for k in args.types.split(",") if k.strip()] if args.types else None
     cache = FrontCache(site.slug)   # always written, so an interrupted run can resume
+    if args.propose:
+        Ledger()                    # surface a corrupt or locked ledger before a long run
 
     print(f"Inventory from {site.wp_base_url} ...", file=sys.stderr)
     pages = []
@@ -352,19 +373,24 @@ def cmd_audit(args: argparse.Namespace) -> int:
     need_raw = [p for p in public if p.front_html and _needs_post_content(p)]
     if args.include_drafts:
         need_raw += [p for p in pages if not p.is_public and p.writable]
+    raw_failed = 0
     if need_raw:
         print(f"Reading post_content for {len(need_raw)} items ...", file=sys.stderr)
         try:
             for page in need_raw:
                 try:
                     client.load_content_raw(page)
-                except HttpError:
+                except HttpError as exc:
                     page.content_raw = None
+                    raw_failed += 1
+                    print(f"  post_content unreadable for {page.kind}/{page.id}: {exc}", file=sys.stderr)
         except KeyboardInterrupt:
             partial = partial or "interrupted while reading post_content"
 
     result = audit_pages(pages, site=site, stale_days=args.stale_days)
     report.print_audit(result, site.slug, color=color, limit=args.limit)
+    if not partial:
+        cache.compact({p.link for p in public})
 
     if args.json:
         report.write_json(result, args.json)
@@ -380,9 +406,11 @@ def cmd_audit(args: argparse.Namespace) -> int:
                 if r is not None:
                     reported.add(r.repair_id)
             added = len(set(ledger.repairs) - before)
-            # Pages whose scan source we actually read: a row for them that this
-            # audit did not reproduce is no longer a defect.
-            audited = {(p.kind, p.id) for p in pages if scan_source(p)[0]}
+            # A page counts as audited for retirement only when its scan source was
+            # read AND post_content was read where a body block could exist; a
+            # failed context=edit read says nothing about the rows on that page.
+            audited = {(p.kind, p.id) for p in pages
+                       if scan_source(p)[0] and (p.content_raw is not None or not _needs_post_content(p))}
             retired = ledger.retire_unreported(site.slug, audited, reported) if not partial else []
             ledger.save()
         print(f"\n{added} new repair(s) proposed ({len(ledger.in_state(PENDING, site.slug))} pending"
@@ -452,17 +480,34 @@ def cmd_reject(args: argparse.Namespace) -> int:
     return _decide(args.repair_ids, False)
 
 
-def _resolve_front_block(page: Content, r: Any) -> Tuple[Optional[Any], Target]:
+def _live_to_raw(blocks: List[Any], raw: Optional[str]) -> Dict[int, int]:
+    """Map live blocks to post_content blocks one-to-one, in order, exactly as
+    the audit does - identical twins each get their own raw block."""
+    mapping: Dict[int, int] = {}
+    if not raw:
+        return mapping
+    claimed: set = set()
+    for b in blocks:
+        m = match_block_in_raw(b, raw, exclude=claimed)
+        if m is not None:
+            claimed.add(m.index)
+            mapping[b.index] = m.index
+    return mapping
+
+
+def _resolve_front_block(page: Content, r: Any) -> Tuple[Optional[Any], Target, Optional[int]]:
     """Find the block holding the repair's node in the document the audit read.
 
     Never by position alone: plugins emit blocks ahead of the body block and
     shift indices. For id-less nodes the stored fingerprint must match, and
     where post_content is known the candidate must map to the same
-    post_content block the repair was keyed on.
+    post_content block the repair was keyed on. Returns the live block, the
+    target, and the post_content index the block maps to.
     """
     target = Target.from_dict(r.target)
     html = page.front_html if page.is_public else page.content_raw
     blocks = [b for b in find_blocks(html or "") if not b.plugin]
+    raw_map = _live_to_raw(blocks, page.content_raw)
 
     def holds(b: Any) -> bool:
         if b.document is None:
@@ -477,17 +522,28 @@ def _resolve_front_block(page: Content, r: Any) -> Tuple[Optional[Any], Target]:
 
     candidates = [b for b in blocks if holds(b)]
     if not candidates:
-        return None, target
+        return None, target, None
     if target.raw_block >= 0 and page.content_raw:
-        owned = [b for b in candidates
-                 if (m := match_block_in_raw(b, page.content_raw)) is not None and m.index == target.raw_block]
-        if len(owned) == 1:
-            return owned[0], target
+        owned = [b for b in candidates if raw_map.get(b.index) == target.raw_block]
         if not owned:
-            return None, target
+            return None, target, None
         candidates = owned
     at_index = next((b for b in candidates if b.index == r.block_index), None)
-    return (at_index or candidates[0]), target
+    chosen = at_index or candidates[0]
+    return chosen, target, raw_map.get(chosen.index)
+
+
+def _saved_since_staging(page: Content, r: Any) -> bool:
+    """An autosave never changes the parent's modified_gmt, so any change since
+    staging is a later save - after which WordPress no longer offers the older
+    autosave and the staged repair may no longer fit."""
+    if getattr(r, "staged_modified_gmt", ""):
+        return page.modified_gmt != r.staged_modified_gmt
+    try:
+        modified = datetime.fromisoformat(page.modified_gmt.replace("Z", "")).replace(tzinfo=timezone.utc)
+        return modified > datetime.fromisoformat(r.applied_at)
+    except (ValueError, TypeError):
+        return False
 
 
 def cmd_apply(args: argparse.Namespace) -> int:
@@ -543,6 +599,8 @@ def cmd_apply(args: argparse.Namespace) -> int:
                         if page.front_html is None:
                             raise HttpError(page.front_status, page.link,
                                             "live page could not be fetched; repairs stay queued")
+                        if page.writable:
+                            client.load_content_raw(page)   # ownership mapping needs it; refreshes status
                     elif page.writable:
                         # Unpublished: the audit read post_content (--include-drafts),
                         # so the block is resolved there. Also refreshes status.
@@ -562,29 +620,61 @@ def cmd_apply(args: argparse.Namespace) -> int:
                     failed += len(repairs)
                     continue
 
+                # Which of the repairs staged earlier for this page are still
+                # defects on it? Ask the rules. A carried row the audit no longer
+                # reports has been absorbed (restored and published, or fixed by
+                # hand); one it still reports must be re-carried, with the fresh
+                # patch the audit just built.
+                carries = carried.get((site_slug, kind, page_id), [])
+                if carries:
+                    reported = {}
+                    for f in audit_pages([page], site=site).auto_fixable:
+                        reported[make_repair_id(site_slug, f.kind, f.page_id, f.rule, f.target.key(), f.patch)] = f
+                    still: List[Any] = []
+                    for r in carries:
+                        f = reported.get(r.repair_id)
+                        if f is None:
+                            ledger.mark_applied(r.repair_id, "absorbed: no longer reported on the page")
+                            print(f"  {r.repair_id}: earlier staged repair is now on the page")
+                        else:
+                            r.patch, r.target, r.block_index = f.patch, f.target.to_dict(), f.block_index
+                            still.append(r)
+                    carries = still
+
                 # A rename changes the @id a later set on the same node is located
                 # by, and a set may write a reference that only a later rename
-                # rewrites: fold every set before any rename.
-                ordered = sorted(repairs, key=lambda r: (r.patch or {}).get("op") == "rename_id")
-                recarry = sorted(carried.get((site_slug, kind, page_id), []),
-                                 key=lambda r: (r.patch or {}).get("op") == "rename_id")
+                # rewrites: fold every set (carried or new) before any rename.
+                ordered = sorted(carries + repairs, key=lambda r: (r.patch or {}).get("op") == "rename_id")
                 working: Optional[str] = None
                 folded: List[Any] = []
                 recarried: List[Any] = []
                 blocked = ""
-                for r in recarry + ordered:
+                for r in ordered:
                     is_carry = r.state == APPLIED
                     if not isinstance(r.target, dict) or not isinstance(r.patch, dict):
                         why = "malformed repair row (target/patch is not an object); re-run 'audit --propose'"
                         ledger.mark_stale(r.repair_id, why)
                         print(f"  {r.repair_id}: {why} - marked stale")
                         skipped += 1
+                        if is_carry:
+                            blocked = f"earlier staged repair {r.repair_id} is malformed"
+                            break
+                        continue
+                    tgt = Target.from_dict(r.target)
+                    if tgt.raw_block < 0 or (not tgt.node_id and not tgt.fingerprint):
+                        why = "repair predates this version's identity checks; re-run 'audit --propose'"
+                        ledger.mark_stale(r.repair_id, why)
+                        print(f"  {r.repair_id}: {why} - marked stale")
+                        skipped += 1
+                        if is_carry:
+                            blocked = f"earlier staged repair {r.repair_id} cannot be verified"
+                            break
                         continue
                     try:
-                        front_block, target = _resolve_front_block(page, r)
+                        front_block, target, raw_hint = _resolve_front_block(page, r)
                         if front_block is None:
                             raise OwnershipLost("JSON-LD block no longer in the page's schema")
-                        working = client.prepare_block_repair(page, front_block, target, r.patch, working)
+                        working = client.prepare_block_repair(page, front_block, target, r.patch, working, raw_hint)
                         (recarried if is_carry else folded).append(r)
                     except AlreadyApplied as exc:
                         ledger.mark_applied(r.repair_id, f"already correct: {exc}")
@@ -595,7 +685,15 @@ def cmd_apply(args: argparse.Namespace) -> int:
                             applied += 1
                     except (HttpError, PatchError, ValueError, KeychainError, AuthDiagnosis) as exc:
                         if is_carry:
-                            # Never stage a page without a repair it already holds.
+                            if isinstance(exc, (OwnershipLost, PatchError)) and not isinstance(exc, HttpError) \
+                                    and _saved_since_staging(page, r):
+                                # The page was saved after staging: WordPress no longer
+                                # offers that autosave and the repair no longer fits.
+                                ledger.mark_stale(r.repair_id, f"earlier staged repair no longer fits after a later save ({exc})")
+                                print(f"  {r.repair_id}: earlier staged repair no longer fits the page - marked stale")
+                                continue
+                            # Transient, or the page is unchanged and something else is
+                            # wrong: never stage a page without a repair it already holds.
                             blocked = f"earlier staged repair {r.repair_id} cannot be re-carried ({exc})"
                             break
                         if isinstance(exc, OwnershipLost):
@@ -607,7 +705,7 @@ def cmd_apply(args: argparse.Namespace) -> int:
                             print(f"  {r.repair_id}: FAILED - {exc}")
                             failed += 1
                 if blocked:
-                    for r in ordered:
+                    for r in repairs:
                         if r.state in (APPROVED, "failed"):
                             ledger.mark_failed(r.repair_id, blocked)
                             print(f"  {r.repair_id}: FAILED - {blocked}")
@@ -625,10 +723,10 @@ def cmd_apply(args: argparse.Namespace) -> int:
                     continue
                 what = "autosave revision staged" if mode == "autosave" else "draft updated"
                 for r in folded:
-                    ledger.mark_applied(r.repair_id, f"{mode}: {link}")
+                    ledger.mark_applied(r.repair_id, f"{mode}: {link}", page.modified_gmt)
                     print(f"  {r.repair_id}: {what} - review at {link}")
                 for r in recarried:
-                    ledger.mark_applied(r.repair_id, f"{mode}: {link}")
+                    ledger.mark_applied(r.repair_id, f"{mode}: {link}", page.modified_gmt)
                 applied += len(folded)
                 if recarried:
                     print(f"  ({len(recarried)} earlier staged repair(s) carried into the same {mode})")

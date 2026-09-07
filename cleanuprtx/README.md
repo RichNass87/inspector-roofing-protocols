@@ -38,9 +38,13 @@ update sends `content` only. Both are asserted in code and in tests.
 page per user, so every approved repair on a page is folded into one patched
 `post_content` and staged with one request — and a later run re-carries the
 repairs it staged earlier and you have not yet restored, so approving repairs
-one at a time never loses one. If an earlier staged repair can no longer be
-re-applied (the page changed by hand), the page is not written at all and the
-new repairs are marked failed with the reason.
+one at a time never loses one. Before re-carrying, `apply` re-runs the audit
+rules on the page as it is now: a repair the rules no longer report has been
+absorbed (you restored and published it, or fixed it by hand) and is marked
+so; one they still report is re-carried with the patch the rules build now.
+If the page was saved after an earlier repair was staged and that repair no
+longer fits, it is retired and the others proceed; a transient failure on a
+carried repair blocks the page for that run rather than writing without it.
 
 Nothing is published, deleted, or written to post meta. Search Console access is
 read-only: the token is requested with, and verified to carry, exactly the
@@ -222,7 +226,7 @@ already fixed by hand is marked applied rather than retried forever.
 python3 -m unittest discover -s tests -t .
 ```
 
-287 tests, no network and no Keychain. They include every write-path guard (the
+307 tests, no network and no Keychain. They include every write-path guard (the
 body is only ever `content` plus the echoed `title`/`excerpt` on autosaves;
 published pages go to `/autosaves`; media and Breakdance templates are refused; a
 block that is not in `post_content`, or only inside an HTML comment, is

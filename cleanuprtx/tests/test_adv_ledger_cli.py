@@ -111,7 +111,7 @@ class StubWordPress:
         return self.stage_content(content, self.prepare_block_repair(content, front_block, target, patch))
 
     # v0.2.1: cmd_apply folds every repair on a page into one write.
-    def prepare_block_repair(self, content, front_block, target, patch, working_raw=None):
+    def prepare_block_repair(self, content, front_block, target, patch, working_raw=None, raw_block_index=None):
         self.staged.append({"id": content.id, "block": front_block.index, "target": target.to_dict(), "patch": patch})
         if self.stage_error:
             raise self.stage_error
