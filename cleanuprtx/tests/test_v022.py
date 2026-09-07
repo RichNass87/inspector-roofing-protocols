@@ -16,6 +16,7 @@ from cleanuprtx.jsonld import Target, find_blocks
 from cleanuprtx.wordpress import OwnershipLost
 from tests.helpers import PERSON, SITE, body_page, findings, ld, page
 from tests.test_adv_writepath import ApplyHarness, Site41, LINK
+from tests.test_v023 import Site41M
 
 PP_ID = "https://inspector-roofing.com/richard-nasser/#pp"
 OLD = "https://inspector-roofing.com/#author"
@@ -56,9 +57,10 @@ class TestReCarryAcrossRuns(ApplyHarness):
         (rid_a,) = self.propose_all(content, rule="profile-parent-node")
         self.run_apply(Site41(content.front_html, content.content_raw))
         (rid_b,) = self.propose_all(content, rule="invalid-datetime")
-        # post_content was rewritten by hand: the ProfilePage node is gone.
-        changed = body_page(graph({"@type": "Article", "@id": "https://x/#a", "dateModified": "yesterday"}))
-        site = Site41(changed.front_html, changed.content_raw)
+        # post_content was rewritten by hand (a save, so modified_gmt moved): the ProfilePage node is gone.
+        changed = body_page(graph({"@type": "Article", "@id": "https://x/#a", "dateModified": "yesterday"}),
+                            modified="2026-09-04T09:00:00")
+        site = Site41M(changed.front_html, changed.content_raw, modified="2026-09-04T09:00:00")
         rc, out = self.run_apply(site)
         self.assertEqual(site.writes, [], "nothing on the page matches either repair; nothing is written")
         led = self.ledger()

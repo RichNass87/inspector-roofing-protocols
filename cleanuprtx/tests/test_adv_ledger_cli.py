@@ -263,10 +263,18 @@ class TestStateMachine(Harness):
         rid2 = self.propose(body_page(PP, pid=42), approve=True)
         led = self.ledger()
         led.mark_applied(rid2, "autosave: link")
+        with self.assertRaises(ValueError):
+            led.decide(rid2, True)                     # never re-queued
+        led.decide(rid2, False)                        # a staged autosave may still be withdrawn
+        self.assertEqual(led.repairs[rid2].state, REJECTED)
+        self.assertEqual(led.repairs[rid2].result, "withdrawn after staging")
+        self.assertEqual(led.in_state(APPROVED), [], "applied is terminal, never re-queued")
+        rid3 = self.propose(body_page(PP, pid=43), approve=True)
+        led = self.ledger()
+        led.mark_applied(rid3, "already correct: x")   # live on the page: nothing to withdraw
         for verdict in (True, False):
             with self.assertRaises(ValueError):
-                led.decide(rid2, verdict)
-        self.assertEqual(led.in_state(APPROVED), [], "applied is terminal, never re-queued")
+                led.decide(rid3, verdict)
 
     def test_stale_is_terminal_and_out_of_every_queue(self):
         rid = self.propose(body_page(PP), approve=True)

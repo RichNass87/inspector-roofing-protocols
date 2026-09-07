@@ -41,10 +41,20 @@ repairs it staged earlier and you have not yet restored, so approving repairs
 one at a time never loses one. Before re-carrying, `apply` re-runs the audit
 rules on the page as it is now: a repair the rules no longer report has been
 absorbed (you restored and published it, or fixed it by hand) and is marked
-so; one they still report is re-carried with the patch the rules build now.
-If the page was saved after an earlier repair was staged and that repair no
-longer fits, it is retired and the others proceed; a transient failure on a
-carried repair blocks the page for that run rather than writing without it.
+so — but only if the page was saved since staging, since an autosave never
+changes `modified_gmt` and an unsaved page cannot have absorbed anything. One
+they still report is re-carried with the patch the rules build now, found by
+the defect itself (rule, node, kind of patch) so a block inserted ahead of an
+id-less node does not lose it. One they still report but can no longer repair
+(a plugin block now references the old `@id`) blocks the page rather than
+being written around; after a later save it is retired and the others
+proceed. A transient failure on a carried repair blocks the page for that run.
+
+A staged repair whose page you save again by hand (WordPress drops the older
+autosave) with the defect still there comes back as `pending` on the next
+`audit --propose`; one whose defect is gone after such a save is marked
+absorbed there too. `reject` withdraws a staged repair you looked at and do
+not want: it leaves the carried set and is never written again.
 
 Nothing is published, deleted, or written to post meta. Search Console access is
 read-only: the token is requested with, and verified to carry, exactly the
@@ -218,7 +228,8 @@ different nodes never collide, and a rejection is final. If a re-audit changes
 what an approved repair would write, it goes back to pending for re-approval.
 Rows for pages the audit read but no longer reports are retired as `stale`,
 and any stale row comes back as `pending` if the defect reappears; a repair
-already fixed by hand is marked applied rather than retried forever.
+already fixed by hand is marked applied rather than retried forever. Rename
+rows recorded by v0.2.2 (hashed by the old `@id` alone) are re-keyed on load.
 
 ## Tests
 

@@ -13,7 +13,8 @@ from typing import Any, Dict, List, Optional, Tuple
 from . import __version__, config, report
 from datetime import datetime, timezone
 
-from .approvals import APPLIED, APPROVED, PENDING, Ledger, LedgerError, make_repair_id
+from .approvals import (APPLIED, APPROVED, PENDING, Ledger, LedgerError, defect_keys, is_staged,
+                        make_repair_id, saved_since_staging)
 from .audit import AuditResult, audit_pages, scan_source
 from .gsc import ScopeError, SearchConsoleClient
 from .http import HttpError, fetch_text
@@ -73,7 +74,7 @@ def _warn(msg: str) -> None:
 class FrontCache:
     """Live-page HTML, append-only, one JSON line per fetch, keyed by
     (link, modified_gmt). An interrupted audit resumes where it stopped.
-    Read only under --resume; every put is O(one page)."""
+    Read only under --resume; every put is O(one page); compaction streams."""
 
     def __init__(self, site_slug: str) -> None:
         self.path = CACHE_DIR / f"{site_slug}.jsonl"
@@ -138,18 +139,30 @@ class FrontCache:
             self._fh = None
 
     def compact(self, keep_links: set) -> None:
-        """After a complete audit, rewrite the file with one line per page
-        that still exists, so it does not grow by a site snapshot per run."""
+        """After a complete, unrestricted audit, rewrite the file with one line
+        per page that still exists (the last line written for it wins), so it
+        does not grow by a site snapshot per run. Streams the file by byte
+        offset, twice: no page's HTML is held in memory."""
         self.flush()
-        if not self._loaded:
-            self.load()
         try:
+            last: Dict[str, Tuple[int, int]] = {}      # link -> (offset, length) of its last line
+            with open(self.path, "rb") as fh:
+                offset = 0
+                for raw in fh:
+                    n = len(raw)
+                    try:
+                        entry = json.loads(raw)
+                    except ValueError:
+                        entry = None
+                    if isinstance(entry, dict) and entry.get("link") in keep_links:
+                        last[entry["link"]] = (offset, n)
+                    offset += n
             tmp = self.path.with_suffix(".tmp")
             fd = os.open(str(tmp), os.O_CREAT | os.O_TRUNC | os.O_WRONLY, 0o600)
-            with os.fdopen(fd, "w", encoding="utf-8") as fh:
-                for link, entry in self.data.items():
-                    if link in keep_links:
-                        fh.write(json.dumps(entry, ensure_ascii=False) + "\n")
+            with open(self.path, "rb") as src, os.fdopen(fd, "wb") as dst:
+                for offset, n in sorted(last.values()):
+                    src.seek(offset)
+                    dst.write(src.read(n))
             os.replace(tmp, self.path)
         except OSError:
             pass
@@ -324,7 +337,7 @@ def cmd_audit(args: argparse.Namespace) -> int:
     kinds = [k.strip() for k in args.types.split(",") if k.strip()] if args.types else None
     cache = FrontCache(site.slug)   # always written, so an interrupted run can resume
     if args.propose:
-        Ledger()                    # surface a corrupt or locked ledger before a long run
+        Ledger()                    # surface a corrupt ledger before a long run
 
     print(f"Inventory from {site.wp_base_url} ...", file=sys.stderr)
     pages = []
@@ -389,7 +402,7 @@ def cmd_audit(args: argparse.Namespace) -> int:
 
     result = audit_pages(pages, site=site, stale_days=args.stale_days)
     report.print_audit(result, site.slug, color=color, limit=args.limit)
-    if not partial:
+    if not partial and kinds is None:      # compact can only keep the links it is told about
         cache.compact({p.link for p in public})
 
     if args.json:
@@ -401,8 +414,9 @@ def cmd_audit(args: argparse.Namespace) -> int:
         with ledger.lock():            # re-reads under the lock: an apply may have saved since
             before = set(ledger.repairs)
             reported = set()
+            modified = {(p.kind, p.id): p.modified_gmt for p in pages}
             for finding in result.auto_fixable:
-                r = ledger.propose(site.slug, finding)
+                r = ledger.propose(site.slug, finding, modified_gmt=modified.get((finding.kind, finding.page_id), ""))
                 if r is not None:
                     reported.add(r.repair_id)
             added = len(set(ledger.repairs) - before)
@@ -412,6 +426,14 @@ def cmd_audit(args: argparse.Namespace) -> int:
             audited = {(p.kind, p.id) for p in pages
                        if scan_source(p)[0] and (p.content_raw is not None or not _needs_post_content(p))}
             retired = ledger.retire_unreported(site.slug, audited, reported) if not partial else []
+            if not partial:
+                # Staged repairs whose page was saved since and whose defect is gone
+                # were restored or fixed by hand: record that, so a regression
+                # re-proposes them instead of hiding behind the old autosave row.
+                defects: set = set()
+                for f in result.findings:
+                    defects |= defect_keys(f.rule, f.target, f.patch)
+                ledger.absorb_unreported(site.slug, audited, reported, defects, modified)
             ledger.save()
         print(f"\n{added} new repair(s) proposed ({len(ledger.in_state(PENDING, site.slug))} pending"
               + (f", {len(retired)} retired as no longer reported" if retired else "") + "). "
@@ -537,13 +559,7 @@ def _saved_since_staging(page: Content, r: Any) -> bool:
     """An autosave never changes the parent's modified_gmt, so any change since
     staging is a later save - after which WordPress no longer offers the older
     autosave and the staged repair may no longer fit."""
-    if getattr(r, "staged_modified_gmt", ""):
-        return page.modified_gmt != r.staged_modified_gmt
-    try:
-        modified = datetime.fromisoformat(page.modified_gmt.replace("Z", "")).replace(tzinfo=timezone.utc)
-        return modified > datetime.fromisoformat(r.applied_at)
-    except (ValueError, TypeError):
-        return False
+    return saved_since_staging(r, page.modified_gmt)
 
 
 def cmd_apply(args: argparse.Namespace) -> int:
@@ -574,7 +590,7 @@ def cmd_apply(args: argparse.Namespace) -> int:
         carried: Dict[Tuple[str, str, int], List[Any]] = {}
         for r in ledger.repairs.values():
             key = (r.site, r.kind, r.page_id)
-            if key in groups and r.state == APPLIED and str(r.result).startswith("autosave:"):
+            if key in groups and is_staged(r):
                 carried.setdefault(key, []).append(r)
         try:
             for (site_slug, kind, page_id), repairs in groups.items():
@@ -626,19 +642,65 @@ def cmd_apply(args: argparse.Namespace) -> int:
                 # hand); one it still reports must be re-carried, with the fresh
                 # patch the audit just built.
                 carries = carried.get((site_slug, kind, page_id), [])
+                blocked = ""
                 if carries:
-                    reported = {}
-                    for f in audit_pages([page], site=site).auto_fixable:
+                    fresh = audit_pages([page], site=site)
+                    reported: Dict[str, Any] = {}
+                    # An id-less node is keyed by its block in post_content plus path,
+                    # so the same live defect hashes to a new id when a block or a
+                    # sibling node is inserted ahead of it: index by the defect too.
+                    by_defect: Dict[Any, Any] = {}
+                    for f in fresh.auto_fixable:
                         reported[make_repair_id(site_slug, f.kind, f.page_id, f.rule, f.target.key(), f.patch)] = f
+                        for k in defect_keys(f.rule, f.target, f.patch):
+                            by_defect.setdefault(k, f)
+                    # Defects still reported but no longer repairable here (patch
+                    # withdrawn because a block this tool does not own now refers
+                    # to the @id, or the block left post_content). Built from the
+                    # non-fixable findings only, so a still-fixable sibling repair on
+                    # the same node cannot match.
+                    withdrawn: Dict[Any, Any] = {}
+                    for f in fresh.findings:
+                        if f.target is not None and not f.is_auto_fixable:
+                            for k in defect_keys(f.rule, f.target, None):
+                                withdrawn.setdefault(k, f)
                     still: List[Any] = []
                     for r in carries:
                         f = reported.get(r.repair_id)
                         if f is None:
-                            ledger.mark_applied(r.repair_id, "absorbed: no longer reported on the page")
-                            print(f"  {r.repair_id}: earlier staged repair is now on the page")
-                        else:
+                            for k in defect_keys(r.rule, r.target, r.patch):
+                                f = by_defect.get(k)
+                                if f is not None:
+                                    break
+                        if f is not None:
                             r.patch, r.target, r.block_index = f.patch, f.target.to_dict(), f.block_index
                             still.append(r)
+                            continue
+                        w = None
+                        for k in defect_keys(r.rule, r.target, None):
+                            w = withdrawn.get(k)
+                            if w is not None:
+                                break
+                        saved = _saved_since_staging(page, r)
+                        if w is not None:
+                            why = (f"earlier staged repair {r.repair_id} is still reported but can no longer "
+                                   f"be applied by this tool ({w.detail or w.hand_edit or w.message})")
+                            if saved:
+                                ledger.mark_stale(r.repair_id, f"no longer fits after a later save: {why}")
+                                print(f"  {r.repair_id}: earlier staged repair no longer fits the page - marked stale")
+                                continue
+                            blocked = why            # never stage a page without a repair it already holds
+                            break
+                        if saved:
+                            # The page was saved since staging and the rules no longer
+                            # report the defect: restored and published, or fixed by hand.
+                            ledger.mark_applied(r.repair_id, "absorbed: no longer reported on the page after a later save")
+                            print(f"  {r.repair_id}: earlier staged repair is now on the page")
+                            continue
+                        # Not saved since staging, so nothing can have been absorbed: the
+                        # id changed for another reason. Carry the stored patch as it is
+                        # and let the resolution below verify it against the page.
+                        still.append(r)
                     carries = still
 
                 # A rename changes the @id a later set on the same node is located
@@ -648,8 +710,7 @@ def cmd_apply(args: argparse.Namespace) -> int:
                 working: Optional[str] = None
                 folded: List[Any] = []
                 recarried: List[Any] = []
-                blocked = ""
-                for r in ordered:
+                for r in ([] if blocked else ordered):
                     is_carry = r.state == APPLIED
                     if not isinstance(r.target, dict) or not isinstance(r.patch, dict):
                         why = "malformed repair row (target/patch is not an object); re-run 'audit --propose'"
@@ -677,6 +738,20 @@ def cmd_apply(args: argparse.Namespace) -> int:
                         working = client.prepare_block_repair(page, front_block, target, r.patch, working, raw_hint)
                         (recarried if is_carry else folded).append(r)
                     except AlreadyApplied as exc:
+                        if working is not None:
+                            # Judged against the fold so far: is the value on the LIVE
+                            # page, or did an earlier repair in this fold produce it? If
+                            # the latter, the row must ride the write and share its fate.
+                            try:
+                                client.prepare_block_repair(page, front_block, target, r.patch, None, raw_hint)
+                            except AlreadyApplied:
+                                pass                                       # on the page itself
+                            except PatchError:
+                                (recarried if is_carry else folded).append(r)  # the fold produced it
+                                continue
+                            else:
+                                (recarried if is_carry else folded).append(r)  # the fold produced it
+                                continue
                         ledger.mark_applied(r.repair_id, f"already correct: {exc}")
                         if is_carry:
                             print(f"  {r.repair_id}: earlier staged repair is now on the page")

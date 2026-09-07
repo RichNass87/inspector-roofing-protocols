@@ -87,6 +87,49 @@ def make_repair_id(site: str, kind: str, page_id: int, rule: str,
     return digest[:8]
 
 
+def defect_keys(rule: str, target: Any, patch: Optional[Dict[str, Any]] = None) -> set:
+    """Identity of a defect independent of the repair id: the rule, what the
+    patch changes (when known), and the node - by @id, or by the content
+    fingerprint for id-less nodes, whose key() moves when a block or a
+    sibling node is inserted ahead of it in post_content."""
+    from .jsonld import Target   # jsonld does not import approvals
+    if isinstance(target, dict):
+        try:
+            target = Target.from_dict(target)
+        except (TypeError, KeyError, ValueError):
+            return set()
+    if target is None:
+        return set()
+    what = json.dumps(patch_identity(patch), sort_keys=True) if isinstance(patch, dict) else ""
+    keys = {(rule, what, target.key())}
+    node = target.node_id or target.fingerprint
+    if node:
+        keys.add((rule, what, node))
+    return keys
+
+
+def is_staged(repair: "Repair") -> bool:
+    """An applied row whose write was an autosave the owner has not restored:
+    the repair is approved and staged, not on the live page."""
+    return repair.state == APPLIED and str(repair.result).startswith("autosave:")
+
+
+def saved_since_staging(repair: "Repair", modified_gmt: str) -> bool:
+    """An autosave never changes the parent's modified_gmt, so any change since
+    staging is a later save - after which WordPress no longer offers the older
+    autosave and the staged repair may no longer fit. Rows staged before
+    staged_modified_gmt was recorded fall back to the time of staging."""
+    if not modified_gmt:
+        return False
+    if getattr(repair, "staged_modified_gmt", ""):
+        return modified_gmt != repair.staged_modified_gmt
+    try:
+        modified = datetime.fromisoformat(modified_gmt.replace("Z", "")).replace(tzinfo=timezone.utc)
+        return modified > datetime.fromisoformat(repair.applied_at)
+    except (ValueError, TypeError):
+        return False
+
+
 class _Lock:
     """Advisory lock; on acquisition the ledger is re-read from disk so the
     holder works from the state it is about to replace."""
@@ -154,6 +197,38 @@ class Ledger:
                 self.repairs[key] = Repair(**clean)
             except TypeError:
                 continue   # a row from an incompatible older version
+        self._migrate_ids()
+
+    def _migrate_ids(self) -> None:
+        """v0.2.2 keyed a rename by its old @id only; v0.2.3 keys it by old and
+        new. Re-derive every rename row's id from its stored fields and re-key
+        it when it differs, so apply finds the row among the fresh findings
+        instead of declaring it absorbed. Idempotent for current rows."""
+        from .jsonld import Target   # jsonld does not import approvals
+
+        def rank(r: Repair) -> int:
+            if is_staged(r):
+                return 2                                   # names a staged write; must be carried
+            return 0 if r.state in (PENDING, STALE) else 1  # carries a decision
+
+        for old_id, r in list(self.repairs.items()):
+            if not isinstance(r.patch, dict) or r.patch.get("op") != "rename_id" \
+                    or not isinstance(r.target, dict):
+                continue                                   # malformed rows are handled by apply
+            try:
+                new_id = make_repair_id(r.site, r.kind, r.page_id, r.rule,
+                                        Target.from_dict(r.target).key(), r.patch)
+            except (TypeError, KeyError, ValueError):
+                continue
+            if new_id == old_id:
+                continue
+            other = self.repairs.get(new_id)
+            if other is not None and rank(other) >= rank(r):
+                del self.repairs[old_id]                   # the newer row already holds the decision
+                continue
+            del self.repairs[old_id]
+            r.repair_id = new_id
+            self.repairs[new_id] = r
 
     def lock(self):
         """Advisory lock so 'audit --propose', 'approve'/'reject' and 'apply'
@@ -183,8 +258,12 @@ class Ledger:
                 pass
             raise
 
-    def propose(self, site: str, finding: Any) -> Optional[Repair]:
-        """Record an auto-fixable finding. Existing decisions are kept."""
+    def propose(self, site: str, finding: Any, modified_gmt: str = "") -> Optional[Repair]:
+        """Record an auto-fixable finding. Existing decisions are kept.
+
+        modified_gmt is the page's current modified_gmt when known: a staged
+        repair whose page was saved since staging lost its autosave and is
+        re-opened for a fresh decision rather than silently kept."""
         if not finding.is_auto_fixable:
             return None
         target = finding.target.to_dict()
@@ -196,7 +275,8 @@ class Ledger:
             existing.target = target
             existing.message = finding.message
             if existing.state == REJECTED:
-                if existing.patch.get("expect") != (finding.patch or {}).get("expect"):
+                old_patch = existing.patch if isinstance(existing.patch, dict) else {}
+                if old_patch.get("expect") != (finding.patch or {}).get("expect"):
                     # The defect itself changed since the rejection: decide again.
                     existing.state, existing.decided_at = PENDING, ""
                     existing.result = "the defect changed since it was rejected; decide again"
@@ -204,6 +284,14 @@ class Ledger:
                 return existing                            # otherwise a rejection is final
             if existing.state == APPLIED:
                 if str(existing.result).startswith("autosave:"):
+                    if saved_since_staging(existing, modified_gmt):
+                        # WordPress dropped the autosave when the page was saved
+                        # again, and the defect is still there: decide afresh.
+                        existing.state, existing.decided_at, existing.applied_at = PENDING, "", ""
+                        existing.result = "autosave superseded by a later save; re-approve"
+                        existing.attempts, existing.staged_modified_gmt = 0, ""
+                        existing.patch = finding.patch
+                        return existing
                     # Staged, not yet restored: the live page still shows the defect.
                     # Keep the row; refresh the patch so a derived value is current.
                     existing.patch = finding.patch
@@ -241,6 +329,14 @@ class Ledger:
         repair = self.repairs.get(repair_id)
         if repair is None:
             raise KeyError(f"No repair with ID {repair_id!r}")
+        if is_staged(repair) and not approved:
+            # Staged as an autosave, not live: the owner may still withdraw it. It
+            # leaves the carried set; the autosave itself is never deleted by this
+            # tool - the next write on the page supersedes it, or WordPress drops
+            # it after the owner's next save.
+            repair.state, repair.decided_at = REJECTED, _now()
+            repair.result = "withdrawn after staging"
+            return repair
         if repair.state in TERMINAL:
             raise ValueError(f"Repair {repair_id} is {repair.state} and cannot be changed.")
         repair.state = APPROVED if approved else REJECTED
@@ -270,6 +366,33 @@ class Ledger:
                 self.mark_stale(r.repair_id, "no longer reported by the audit")
                 retired.append(r.repair_id)
         return retired
+
+    def absorb_unreported(self, site: str, audited_pages: set, reported_ids: set,
+                          still_defects: set, modified: Dict[Any, str]) -> List[str]:
+        """Staged rows (applied as an autosave, not yet restored) on audited pages
+        whose page was saved since staging and whose defect this audit no longer
+        reports have been absorbed: the owner restored the autosave and
+        published, or fixed the page by hand. Mark them so a later regression
+        re-proposes them. A staged row still reported under another id, or
+        reported but no longer repairable, lost its autosave to that save and is
+        retired instead. A page not saved since staging still holds the autosave:
+        its rows are left alone. still_defects: defect_keys() of every finding
+        with a target, patched or not."""
+        done = []
+        for r in self.repairs.values():
+            if not (r.site == site and is_staged(r) and (r.kind, r.page_id) in audited_pages):
+                continue
+            if r.repair_id in reported_ids:
+                continue
+            if not saved_since_staging(r, modified.get((r.kind, r.page_id), "")):
+                continue
+            if (defect_keys(r.rule, r.target, r.patch) | defect_keys(r.rule, r.target, None)) & still_defects:
+                self.mark_stale(r.repair_id, "earlier staged repair no longer fits after a later save; "
+                                             "the defect is still reported")
+            else:
+                self.mark_applied(r.repair_id, "absorbed: no longer reported by the audit after a later save")
+            done.append(r.repair_id)
+        return done
 
     def in_state(self, state: str, site: Optional[str] = None) -> List[Repair]:
         states = {APPROVED, FAILED} if state == APPROVED else {state}

@@ -130,7 +130,7 @@ class TestCrossRunOrder(ApplyHarness):
 
 
 class TestSavedSinceStaging(ApplyHarness):
-    def test_carry_that_no_longer_fits_after_a_save_is_retired_and_others_proceed(self):
+    def test_carry_absorbed_when_hand_edit_removes_the_defect_and_new_repair_stages(self):
         doc = graph({"@type": "ProfilePage", "@id": PP_ID, "dateModified": "yesterday"})
         content = body_page(doc)
         (rid_a,) = self.propose_all(content, rule="profile-parent-node")

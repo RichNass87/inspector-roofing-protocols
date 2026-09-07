@@ -58,7 +58,7 @@ ORG_TYPES = frozenset({
 # "Service", "Station", "Group", "Office", "Center", "Club", "Team" also name
 # Services, Places and Products and are deliberately absent.
 _ORG_SUFFIX = re.compile(
-    r"(Organization|Organisation|Business|Store|Shop|Company|Contractor|Agency|Dealer|"
+    r"(Organization|Business|Store|Shop|Company|Contractor|Agency|Dealer|"
     r"Restaurant|School|University|College|Hospital|Hotel|Bank|Firm)$"
 )
 

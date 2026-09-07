@@ -189,8 +189,11 @@ def default_hand_edit(plugin: str, rule: str, source: str = "") -> str:
             return ("Rank Math > Titles & Meta > Authors (enable author archives / Person "
                     "schema), or the page's Schema tab: set ProfilePage mainEntity.")
         if rule == "entity-fragmentation":
-            return ("Rank Math > Titles & Meta > Local SEO (Person/Organization name and "
-                    "URL); author @ids derive from the author archive URL.")
+            return ("Rank Math fixes the site publisher's @id to the home URL plus /#organization "
+                    "or /#person; Titles & Meta > Local SEO only sets its name, logo and url. Either "
+                    "accept that @id (canonical_*_id in config.py) or override it with a "
+                    "rank_math/json_ld PHP filter. A node added on the page's Schema tab (Schema "
+                    "Generator) is edited there. Author @ids derive from the author archive URL.")
         return "Rank Math > edit the page > Schema tab (Schema Generator)."
     if plugin == "Yoast SEO":
         return "Yoast SEO > Search Appearance (Organization/Person), or the page's Schema tab."
@@ -210,6 +213,8 @@ def _resolve(ctx: PageContext, value: Any) -> Tuple[Set[str], str]:
     if isinstance(value, dict):
         if value.get("@type"):
             return set(node_types(value)), ""
+        if value.get("@type") not in (None, "", []):
+            return set(), "invalid @type value"
         ref = value.get("@id")
         if isinstance(ref, str):
             if ref not in ctx.by_id:
@@ -274,10 +279,10 @@ def _profile_entity_fix(ctx: PageContext, item: Any) -> Optional[Dict[str, Any]]
     if isinstance(item, str) and item.strip():
         c = _object_fix(ctx, "mainEntity", item)
         return c if c is not None and _allowed(ENTITY, _resolve(ctx, c)[0]) else None
-    if not isinstance(item, dict) or item.get("@type"):
+    if not isinstance(item, dict):
         return None
-    if "@type" in item and item["@type"] in (None, "", []):
-        pass   # an empty @type is repaired like a missing one
+    if item.get("@type") not in (None, "", []):
+        return None                      # a present @type, even a wrong one, is report-only
     ref, name = item.get("@id"), item.get("name")
     if ref is not None:
         if not isinstance(ref, str) or ref in ctx.by_id:
@@ -418,8 +423,10 @@ def rule_object_fields(ctx: PageContext) -> List[Finding]:
 def _is_page_node(ctx: PageContext, path: Tuple[Any, ...], node: Dict[str, Any]) -> bool:
     """Only a top-level node of a page type that does not point at another
     URL may take the page's own dates."""
-    top_level = (path == () or (len(path) == 1 and isinstance(path[0], int))
-                 or (len(path) == 2 and path[0] == "@graph"))
+    # A block may be one document or an array of documents, each of which may
+    # carry its own @graph: a leading list index is not nesting.
+    p = path[1:] if path and isinstance(path[0], int) else path
+    top_level = p == () or (len(p) == 2 and p[0] == "@graph")
     if not top_level:
         return False
     if not (set(node_types(node)) & PAGE_NODE_TYPES):
@@ -427,7 +434,7 @@ def _is_page_node(ctx: PageContext, path: Tuple[Any, ...], node: Dict[str, Any])
 
     def norm(u: str) -> str:
         u = u.split("#")[0].rstrip("/").casefold()
-        u = u.replace("https://", "").replace("http://", "")
+        u = re.sub(r"^(?:https?:)?//", "", u)      # scheme or protocol-relative, leading only
         return u[4:] if u.startswith("www.") else u
 
     link = norm(ctx.page.link or "")
@@ -535,8 +542,8 @@ def rule_entity_fragmentation(ctx: PageContext) -> List[Finding]:
             detail += (f" Referenced from block(s) {dangling} this tool does not own; renaming here "
                        "would leave those references dangling, so change it by hand everywhere at once.")
         if source == SOURCE_PLUGIN and what == "person":
-            own_url = (node.get("url") or "").split("#")[0].rstrip("/").casefold()
-            if own_url and own_url == node_id.split("#")[0].rstrip("/").casefold():
+            own_urls = _urls({"url": node.get("url")})
+            if node_id.split("#")[0].rstrip("/").casefold() in own_urls:
                 severity = NOTICE
                 hand = (f"{plugin or 'The SEO plugin'} sets a post author's Person @id to the author archive URL; "
                         "no plugin screen changes it. Either accept it as the person's id (set "
